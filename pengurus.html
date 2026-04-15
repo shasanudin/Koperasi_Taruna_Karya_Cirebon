@@ -28,16 +28,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(10px);
+  background: #0f172a;
   padding: 12px 40px;
   color: white;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   position: sticky;
   top: 0;
   z-index: 1000;
-  transition: all 0.3s ease;
-  border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+  border-bottom: 1px solid #1e293b;
 }
 
 .logo-container {
@@ -71,11 +69,7 @@ body {
 .logo-title {
   font-size: 1.2rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #ffffff, #38bdf8, #818cf8);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: white;
   letter-spacing: -0.3px;
 }
 
@@ -194,8 +188,9 @@ body {
 }
 
 .page-header p {
-  color: #64748b;
+  color: #475569;
   font-size: 1rem;
+  font-weight: 500;
 }
 
 /* Section Styling */
@@ -210,27 +205,27 @@ body {
 }
 
 .section-title.ketua {
-  border-image: linear-gradient(135deg, #f59e0b, #d97706);
-  border-image-slice: 1;
-  color: #d97706;
+  border-bottom-color: #f59e0b;
+  color: #b45309;
 }
 
 .section-title.sekretaris {
-  border-image: linear-gradient(135deg, #10b981, #059669);
-  border-image-slice: 1;
-  color: #059669;
+  border-bottom-color: #10b981;
+  color: #047857;
 }
 
 .section-title.bendahara {
-  border-image: linear-gradient(135deg, #8b5cf6, #7c3aed);
-  border-image-slice: 1;
-  color: #7c3aed;
+  border-bottom-color: #8b5cf6;
+  color: #6d28d9;
 }
 
 .section-title.anggota {
-  border-image: linear-gradient(135deg, #3b82f6, #2563eb);
-  border-image-slice: 1;
-  color: #2563eb;
+  border-bottom-color: #3b82f6;
+  color: #1d4ed8;
+}
+
+.section-title i {
+  margin-right: 10px;
 }
 
 /* Grid Layout */
@@ -279,8 +274,7 @@ body {
   position: absolute;
   top: 15px;
   right: 15px;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(5px);
+  background: #10b981;
   color: white;
   padding: 5px 12px;
   border-radius: 30px;
@@ -288,6 +282,7 @@ body {
   font-weight: 600;
   letter-spacing: 0.5px;
   z-index: 2;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .card-content {
@@ -298,7 +293,7 @@ body {
 .card-content h3 {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #0f172a;
   margin-bottom: 6px;
 }
 
@@ -316,15 +311,20 @@ body {
 .card-content .contact-info {
   margin-top: 12px;
   font-size: 0.75rem;
-  color: #64748b;
+  color: #475569;
   display: flex;
   justify-content: center;
   gap: 15px;
 }
 
+.card-content .contact-info span {
+  color: #475569;
+}
+
 .card-content .contact-info i {
   margin-right: 4px;
   font-size: 0.7rem;
+  color: #3b82f6;
 }
 
 /* Empty State */
@@ -333,13 +333,18 @@ body {
   padding: 60px 20px;
   background: white;
   border-radius: 20px;
-  color: #94a3b8;
+  color: #64748b;
 }
 
 .empty-state i {
   font-size: 3rem;
   margin-bottom: 15px;
-  opacity: 0.5;
+  color: #94a3b8;
+}
+
+.empty-state p {
+  color: #64748b;
+  font-weight: 500;
 }
 
 /* ========== MODAL POPUP ========== */
@@ -350,7 +355,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(8px);
   justify-content: center;
   align-items: center;
@@ -387,8 +392,9 @@ body {
 
 .modal-header {
   position: relative;
-  height: 200px;
+  height: 220px;
   overflow: hidden;
+  background: #e2e8f0;
 }
 
 .modal-header img {
@@ -404,7 +410,7 @@ body {
 .modal-body h3 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #0f172a;
   margin-bottom: 5px;
 }
 
@@ -422,24 +428,29 @@ body {
 .modal-info {
   text-align: left;
   margin: 20px 0;
-  background: #f8fafc;
+  background: #f1f5f9;
   padding: 15px;
   border-radius: 16px;
 }
 
 .modal-info p {
-  margin: 10px 0;
+  margin: 12px 0;
   font-size: 0.9rem;
-  color: #334155;
+  color: #1e293b;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .modal-info p i {
   width: 24px;
   color: #2563eb;
   font-size: 1rem;
+}
+
+.modal-info p span {
+  color: #334155;
+  font-weight: 500;
 }
 
 .close-modal {
@@ -466,7 +477,7 @@ body {
 
 /* Footer */
 footer {
-  background: #0b1120;
+  background: #0f172a;
   color: #cbd5e1;
   padding: 32px 24px 24px;
   margin-top: 60px;
@@ -482,6 +493,12 @@ footer {
 
 .footer-content p {
   margin: 8px 0;
+  color: #94a3b8;
+}
+
+.footer-content p:first-child {
+  color: #cbd5e1;
+  font-weight: 500;
 }
 
 /* Responsive */
@@ -512,8 +529,7 @@ footer {
     right: -100%;
     width: 280px;
     height: 100vh;
-    background: rgba(15, 23, 42, 0.98);
-    backdrop-filter: blur(20px);
+    background: #0f172a;
     flex-direction: column;
     justify-content: center;
     gap: 20px;
@@ -648,7 +664,6 @@ fetch('navbar.html')
   })
   .then(data => {
     document.getElementById('navbar').innerHTML = data;
-    // Set active menu
     setTimeout(() => {
       const currentPage = window.location.pathname.split('/').pop() || 'pengurus.html';
       document.querySelectorAll('.menu a').forEach(link => {
@@ -661,7 +676,6 @@ fetch('navbar.html')
     }, 100);
   })
   .catch(() => {
-    // Fallback navbar
     document.getElementById('navbar').innerHTML = `
       <nav class="navbar">
         <a href="index.html" class="logo-container">
@@ -772,7 +786,7 @@ function renderPengurus() {
         <div class="card" onclick='openModal(${JSON.stringify(p).replace(/'/g, "&#39;")})'>
           <div class="card-image">
             <img src="${p.foto || 'https://via.placeholder.com/400x300?text=Foto'}" alt="${p.nama || 'Pengurus'}">
-            <div class="card-badge"><i class="fas fa-certificate"></i> Verified</div>
+            <div class="card-badge"><i class="fas fa-check-circle"></i> Verified</div>
           </div>
           <div class="card-content">
             <h3>${p.nama || 'Tidak tersedia'}</h3>
@@ -792,7 +806,7 @@ function renderPengurus() {
     });
     
     // Show empty state if no data
-    if (!hasData) {
+    if (ketuaDiv.innerHTML === "" && sekretarisDiv.innerHTML === "" && bendaharaDiv.innerHTML === "" && anggotaDiv.innerHTML === "") {
       const emptyHtml = `<div class="empty-state"><i class="fas fa-users-slash"></i><p>Belum ada pengurus yang terdaftar</p></div>`;
       ketuaDiv.innerHTML = emptyHtml;
     }
