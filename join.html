@@ -1,66 +1,48 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Gabung Koperasi</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Gabung Koperasi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      background: #f1f5f9;
-    }
+<style>
+body {margin:0;font-family:Arial;background:#f1f5f9}
 
-    .container {
-      max-width: 600px;
-      margin: 40px auto;
-      padding: 20px;
-    }
+/* NAVBAR fallback */
+.navbar {
+  background:#1e293b;
+  padding:15px;
+  text-align:center;
+}
+.navbar a {
+  color:white;
+  margin:0 10px;
+  text-decoration:none;
+}
 
-    .card {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-      text-align: center;
-    }
-
-    label {
-      margin-top: 10px;
-      display: block;
-      font-weight: bold;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      background: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #1d4ed8;
-    }
-  </style>
+/* FORM */
+.container {max-width:600px;margin:40px auto;padding:20px}
+.card {
+  background:white;
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1)
+}
+h2{text-align:center}
+label{margin-top:10px;display:block;font-weight:bold}
+input,select,textarea{
+  width:100%;padding:10px;margin-top:5px;border-radius:8px;border:1px solid #ccc
+}
+button{
+  margin-top:20px;width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:8px;cursor:pointer
+}
+</style>
 </head>
 
 <body>
+
+<!-- NAVBAR -->
+<div id="navbar"></div>
 
 <div class="container">
   <div class="card">
@@ -79,6 +61,9 @@
 
       <label>Alamat</label>
       <textarea id="alamat" required></textarea>
+
+      <label>Foto</label>
+      <input type="file" id="foto" accept="image/*" required>
 
       <label>Daftar Sebagai</label>
       <select id="role">
@@ -102,46 +87,78 @@
 </div>
 
 <script type="module">
-  // FIREBASE IMPORT
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-storage.js";
 
-  // CONFIG KAMU
-  const firebaseConfig = {
-    apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
-    authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
-    projectId: "koperasi-taruna-karya-cirebon",
-    storageBucket: "koperasi-taruna-karya-cirebon.firebasestorage.app",
-  };
+/* LOAD NAVBAR */
+fetch("navbar.html")
+  .then(res => res.text())
+  .then(data => {
+    document.getElementById("navbar").innerHTML = data;
+  })
+  .catch(() => {
+    document.getElementById("navbar").innerHTML = `
+      <div class="navbar">
+        <a href="index.html">Beranda</a>
+        <a href="barang.html">Barang</a>
+        <a href="jasa.html">Jasa</a>
+        <a href="pengurus.html">Pengurus</a>
+        <a href="kontak.html">Kontak</a>
+        <a href="join.html">Gabung</a>
+        <a href="login.html">Login</a>
+      </div>
+    `;
+  });
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+/* FIREBASE */
+const config = {
+  apiKey:"AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
+  authDomain:"koperasi-taruna-karya-cirebon.firebaseapp.com",
+  projectId:"koperasi-taruna-karya-cirebon",
+  storageBucket:"koperasi-taruna-karya-cirebon.firebasestorage.app",
+};
 
-  // SUBMIT FORM
-  document.getElementById("form").addEventListener("submit", async (e) => {
-    e.preventDefault();
+const app = initializeApp(config);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+/* SUBMIT */
+document.getElementById("form").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+
+  try{
+    const file = foto.files[0];
+    const refStorage = ref(storage,"foto/"+Date.now()+"_"+file.name);
+
+    await uploadBytes(refStorage,file);
+    const fotoURL = await getDownloadURL(refStorage);
 
     const data = {
-      nama: nama.value,
-      email: email.value,
-      wa: wa.value,
-      alamat: alamat.value,
-      role: role.value,
-      jabatan: jabatan.value || null,
-      status: "pending",
-      createdAt: new Date()
+      nama:nama.value,
+      email:email.value,
+      wa:wa.value,
+      alamat:alamat.value,
+      role:role.value,
+      jabatan:jabatan.value || null,
+      foto:fotoURL,
+      status:"pending",
+      createdAt:new Date()
     };
 
-    // SIMPAN KE COLLECTION BERBEDA
-    if (role.value === "anggota") {
-      await addDoc(collection(db, "anggota"), data);
+    if(role.value==="anggota"){
+      await addDoc(collection(db,"anggota"),data);
     } else {
-      await addDoc(collection(db, "pengurus"), data);
+      await addDoc(collection(db,"pengurus"),data);
     }
 
-    alert("Pendaftaran berhasil! Menunggu approval admin.");
-    document.getElementById("form").reset();
-  });
+    alert("Berhasil daftar, tunggu approval!");
+    form.reset();
+
+  }catch(err){
+    alert("Error: "+err.message);
+  }
+});
 </script>
 
 </body>
