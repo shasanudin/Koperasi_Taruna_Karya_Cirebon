@@ -2,165 +2,751 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Gabung Koperasi</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gabung Koperasi - Koperasi Taruna Karya Cirebon</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<!-- Font Awesome 6 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
 
 <style>
-body{margin:0;font-family:Arial;background:#f1f5f9}
-.container{max-width:600px;margin:40px auto;padding:20px}
-.card{background:white;padding:25px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
-label{margin-top:10px;display:block}
-input,select,textarea{width:100%;padding:10px;margin-top:5px;border-radius:8px;border:1px solid #ccc}
-button{margin-top:20px;width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:8px}
-img{width:100%;margin-top:10px;display:none;border-radius:8px}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+/* ========== NAVBAR STYLING ========== */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 12px 40px;
+  color: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  text-decoration: none;
+}
+
+.logo-container:hover {
+  transform: scale(1.02);
+}
+
+.logo-img {
+  height: 45px;
+  width: auto;
+  border-radius: 12px;
+  object-fit: contain;
+  background: white;
+  padding: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff, #38bdf8, #818cf8);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.3px;
+}
+
+.logo-subtitle {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu a {
+  color: #e2e8f0;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.menu a:hover {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+  transform: translateY(-2px);
+}
+
+.menu a.active {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+}
+
+.btn-nav {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  padding: 8px 22px;
+  border-radius: 12px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-nav:hover {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  transform: translateY(-2px);
+}
+
+.login-nav {
+  border: 1.5px solid rgba(56, 189, 248, 0.6);
+  padding: 8px 22px;
+  border-radius: 12px;
+  background: rgba(56, 189, 248, 0.05);
+}
+
+.login-nav:hover {
+  background: #38bdf8;
+  color: #0f172a !important;
+}
+
+.menu a i {
+  margin-right: 8px;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 5px;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.hamburger span {
+  width: 28px;
+  height: 2.5px;
+  background: white;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  backdrop-filter: blur(4px);
+}
+
+/* ========== FORM STYLING ========== */
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 28px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.card-header {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  padding: 30px 32px;
+  text-align: center;
+  color: white;
+}
+
+.card-header h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.card-header p {
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+
+.card-body {
+  padding: 32px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 0.9rem;
+}
+
+.form-group label i {
+  margin-right: 8px;
+  color: #2563eb;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s ease;
+  background: #f8fafc;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* File upload styling */
+.file-upload {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.file-upload input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.file-upload-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border: 2px dashed #cbd5e1;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.file-upload-label:hover {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.file-upload-label i {
+  font-size: 1.5rem;
+  color: #2563eb;
+}
+
+.file-upload-label span {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.preview-container {
+  margin-top: 12px;
+  position: relative;
+  display: inline-block;
+}
+
+#preview {
+  max-width: 120px;
+  max-height: 120px;
+  border-radius: 16px;
+  object-fit: cover;
+  border: 3px solid #2563eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+/* Row untuk role & jabatan */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Tombol submit */
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+}
+
+/* Info tambahan */
+.info-text {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.info-text a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+/* Footer */
+footer {
+  background: #0b1120;
+  color: #cbd5e1;
+  padding: 32px 24px 24px;
+  margin-top: 40px;
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+}
+
+.footer-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-content p {
+  margin: 8px 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 12px 20px;
+  }
+  
+  .logo-title {
+    font-size: 0.9rem;
+  }
+  
+  .logo-img {
+    height: 35px;
+  }
+  
+  .logo-subtitle {
+    display: none;
+  }
+  
+  .hamburger {
+    display: flex;
+  }
+  
+  .menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    transition: right 0.3s ease;
+    z-index: 1001;
+    padding: 40px 20px;
+  }
+  
+  .menu.active {
+    right: 0;
+  }
+  
+  .menu a {
+    width: 100%;
+    text-align: center;
+    padding: 12px 20px;
+  }
+  
+  .menu-overlay.active {
+    display: block;
+  }
+  
+  .hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+  }
+  
+  .hamburger.active span:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  .card-header h2 {
+    font-size: 1.4rem;
+  }
+  
+  .card-body {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .card-body {
+    padding: 20px;
+  }
+}
 </style>
 </head>
-
 <body>
 
+<!-- Navbar -->
+<nav class="navbar">
+  <a href="index.html" class="logo-container">
+    <img class="logo-img" 
+         src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" 
+         alt="Logo Koperasi"
+         onerror="this.src='https://placehold.co/200x200?text=Koperasi'">
+    <div class="logo-text">
+      <span class="logo-title">Koperasi Taruna Karya</span>
+      <span class="logo-subtitle">Cirebon</span>
+    </div>
+  </a>
+  
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <div class="menu" id="menu">
+    <a href="index.html"><i class="fas fa-home"></i> Beranda</a>
+    <a href="barang.html"><i class="fas fa-box"></i> Barang</a>
+    <a href="jasa.html"><i class="fas fa-briefcase"></i> Jasa</a>
+    <a href="pengurus.html"><i class="fas fa-users"></i> Pengurus</a>
+    <a href="kontak.html"><i class="fas fa-envelope"></i> Kontak</a>
+    <a href="join.html" class="btn-nav"><i class="fas fa-user-plus"></i> Gabung</a>
+    <a href="login.html" class="login-nav"><i class="fas fa-sign-in-alt"></i> Login</a>
+  </div>
+</nav>
+
+<div class="menu-overlay" id="overlay"></div>
+
+<!-- Form Container -->
 <div class="container">
   <div class="card">
-    <h2>Form Pendaftaran</h2>
+    <div class="card-header">
+      <h2><i class="fas fa-handshake"></i> Gabung Menjadi Anggota</h2>
+      <p>Bergabunglah bersama keluarga besar Koperasi Taruna Karya Cirebon</p>
+    </div>
+    <div class="card-body">
+      <form id="form">
+        <div class="form-group">
+          <label><i class="fas fa-user"></i> Nama Lengkap</label>
+          <input type="text" id="nama" placeholder="Masukkan nama lengkap" required>
+        </div>
 
-    <form id="form">
-      <label>Nama</label>
-      <input id="nama" required>
+        <div class="form-group">
+          <label><i class="fas fa-envelope"></i> Email</label>
+          <input type="email" id="email" placeholder="email@example.com" required>
+        </div>
 
-      <label>Email</label>
-      <input type="email" id="email" required>
+        <div class="form-group">
+          <label><i class="fab fa-whatsapp"></i> Nomor WhatsApp</label>
+          <input type="tel" id="wa" placeholder="08xx-xxxx-xxxx" required>
+        </div>
 
-      <label>WhatsApp</label>
-      <input id="wa" required>
+        <div class="form-group">
+          <label><i class="fas fa-map-marker-alt"></i> Alamat</label>
+          <textarea id="alamat" placeholder="Masukkan alamat lengkap"></textarea>
+        </div>
 
-      <label>Alamat</label>
-      <textarea id="alamat"></textarea>
+        <div class="form-group">
+          <label><i class="fas fa-camera"></i> Foto Diri</label>
+          <div class="file-upload">
+            <input type="file" id="foto" accept="image/*" required>
+            <div class="file-upload-label">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span>Klik untuk upload foto</span>
+            </div>
+          </div>
+          <div class="preview-container">
+            <img id="preview" alt="Preview Foto">
+          </div>
+        </div>
 
-      <label>Foto</label>
-      <input type="file" id="foto" required>
-      <img id="preview">
+        <div class="form-row">
+          <div class="form-group">
+            <label><i class="fas fa-tag"></i> Role</label>
+            <select id="role">
+              <option value="anggota">Anggota</option>
+              <option value="pengurus">Pengurus</option>
+            </select>
+          </div>
 
-      <label>Role</label>
-      <select id="role">
-        <option value="anggota">Anggota</option>
-        <option value="pengurus">Pengurus</option>
-      </select>
+          <div class="form-group">
+            <label><i class="fas fa-briefcase"></i> Jabatan</label>
+            <select id="jabatan">
+              <option value="">- Pilih Jabatan -</option>
+              <option>Ketua</option>
+              <option>Sekretaris</option>
+              <option>Bendahara</option>
+              <option>Anggota Pengurus</option>
+            </select>
+          </div>
+        </div>
 
-      <label>Jabatan</label>
-      <select id="jabatan">
-        <option value="">-</option>
-        <option>Ketua</option>
-        <option>Sekretaris</option>
-        <option>Bendahara</option>
-      </select>
-
-      <button type="submit">Daftar</button>
-    </form>
+        <button type="submit" class="btn-submit">
+          <i class="fas fa-paper-plane"></i> Daftar Sekarang
+        </button>
+        
+        <div class="info-text">
+          <i class="fas fa-lock"></i> Data Anda aman dan terenkripsi |
+          <a href="#">Syarat & Ketentuan</a>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-content">
+    <p>© 2026 Koperasi Taruna Karya Cirebon</p>
+    <p><i class="fas fa-heart" style="color: #ef4444;"></i> Membangun kemandirian ekonomi bersama</p>
+  </div>
+</footer>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-/* 🔥 CONFIG */
+/* 🔥 FIREBASE CONFIG */
+const firebaseConfig = {
+  apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
+  authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
+  projectId: "koperasi-taruna-karya-cirebon",
+};
+
+/* GITHUB CONFIG */
 const GITHUB_TOKEN = "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";
 const REPO = "shasanudin/Koperasi_Taruna_Karya_Cirebon";
 const BRANCH = "main";
 
-/* FIREBASE */
-const config = {
-  apiKey:"AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
-  authDomain:"koperasi-taruna-karya-cirebon.firebaseapp.com",
-  projectId:"koperasi-taruna-karya-cirebon",
-};
-
-const app = initializeApp(config);
+const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* PREVIEW */
-foto.addEventListener("change", ()=>{
-  preview.src = URL.createObjectURL(foto.files[0]);
-  preview.style.display="block";
+/* PREVIEW FOTO */
+const fotoInput = document.getElementById('foto');
+const preview = document.getElementById('preview');
+
+fotoInput.addEventListener("change", () => {
+  if (fotoInput.files && fotoInput.files[0]) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      preview.src = e.target.result;
+      preview.style.display = "block";
+    };
+    reader.readAsDataURL(fotoInput.files[0]);
+  }
 });
 
 /* UPLOAD KE GITHUB */
-async function uploadToGitHub(file){
-  const reader = new FileReader();
-
-  return new Promise((resolve,reject)=>{
-    reader.onload = async ()=>{
-      try{
+async function uploadToGitHub(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
         const base64 = reader.result.split(",")[1];
-        const fileName = Date.now()+"_"+file.name;
-
+        const fileName = Date.now() + "_" + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+        
         const res = await fetch(
           `https://api.github.com/repos/${REPO}/contents/images/${fileName}`,
           {
-            method:"PUT",
-            headers:{
-              "Authorization":`Bearer ${GITHUB_TOKEN}`,
-              "Content-Type":"application/json"
+            method: "PUT",
+            headers: {
+              "Authorization": `Bearer ${GITHUB_TOKEN}`,
+              "Content-Type": "application/json"
             },
             body: JSON.stringify({
-              message:"upload image",
+              message: "Upload image from registration form",
               content: base64,
               branch: BRANCH
             })
           }
         );
-
+        
         const data = await res.json();
-
-        if(data.error) throw new Error(data.error);
-
+        if (data.error) throw new Error(data.error);
+        
         const url = `https://raw.githubusercontent.com/${REPO}/${BRANCH}/images/${fileName}`;
-
         resolve(url);
-
-      }catch(err){
+      } catch (err) {
         reject(err);
       }
     };
-
+    reader.onerror = reject;
     reader.readAsDataURL(file);
   });
 }
 
-/* SUBMIT */
-form.addEventListener("submit", async (e)=>{
+/* SUBMIT FORM */
+const form = document.getElementById('form');
+
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
-
-  try{
-    const file = foto.files[0];
-
+  
+  const submitBtn = document.querySelector('.btn-submit');
+  const originalText = submitBtn.innerHTML;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Memproses...';
+  submitBtn.disabled = true;
+  
+  try {
+    const file = fotoInput.files[0];
+    if (!file) throw new Error("Foto harus diupload");
+    
     const fotoURL = await uploadToGitHub(file);
-
+    
     const data = {
-      nama:nama.value,
-      email:email.value,
-      wa:wa.value,
-      alamat:alamat.value,
-      role:role.value,
-      jabatan:jabatan.value || null,
-      foto:fotoURL,
-      status:"pending",
-      createdAt:new Date()
+      nama: document.getElementById('nama').value,
+      email: document.getElementById('email').value,
+      wa: document.getElementById('wa').value,
+      alamat: document.getElementById('alamat').value,
+      role: document.getElementById('role').value,
+      jabatan: document.getElementById('jabatan').value || null,
+      foto: fotoURL,
+      status: "pending",
+      createdAt: new Date()
     };
-
-    if(role.value==="anggota"){
-      await addDoc(collection(db,"anggota"),data);
-    }else{
-      await addDoc(collection(db,"pengurus"),data);
+    
+    if (data.role === "anggota") {
+      await addDoc(collection(db, "anggota"), data);
+    } else {
+      await addDoc(collection(db, "pengurus"), data);
     }
-
-    alert("Berhasil daftar!");
+    
+    alert("🎉 Pendaftaran berhasil! Admin akan segera memproses data Anda.");
     form.reset();
-    preview.style.display="none";
-
-  }catch(err){
-    alert("Error: "+err.message);
+    preview.style.display = "none";
+    preview.src = "";
+    
+  } catch (err) {
+    alert("❌ Error: " + err.message);
+    console.error(err);
+  } finally {
+    submitBtn.innerHTML = originalText;
+    submitBtn.disabled = false;
   }
 });
+
+/* NAVBAR MOBILE MENU */
+const hamburger = document.getElementById('hamburger');
+const menu = document.getElementById('menu');
+const overlay = document.getElementById('overlay');
+
+function toggleMenu() {
+  hamburger.classList.toggle('active');
+  menu.classList.toggle('active');
+  overlay.classList.toggle('active');
+  document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+}
+
+hamburger.addEventListener('click', toggleMenu);
+overlay.addEventListener('click', toggleMenu);
+
+document.querySelectorAll('.menu a').forEach(link => {
+  link.addEventListener('click', () => {
+    if (menu.classList.contains('active')) toggleMenu();
+  });
+});
+
+// Active link highlight
+const currentPage = window.location.pathname.split('/').pop() || 'join.html';
+document.querySelectorAll('.menu a').forEach(link => {
+  const href = link.getAttribute('href');
+  if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+    link.classList.add('active');
+  }
+});
+
+// Logo image fallback
+const logoImg = document.querySelector('.logo-img');
+if (logoImg) {
+  logoImg.addEventListener('error', function() {
+    this.src = 'https://placehold.co/200x200?text=Koperasi';
+  });
+}
 </script>
 
 </body>
