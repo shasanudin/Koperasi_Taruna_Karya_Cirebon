@@ -2,124 +2,638 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Koperasi Taruna Karya Cirebon</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Koperasi Taruna Karya Cirebon | Mitra Usaha & Solusi Anda</title>
+  <!-- Font Awesome 6 (gratis, ikon modern) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts: Inter + Poppins untuk kesan segar & profesional -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
+    * {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f1f5f9;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    .container {
-      padding: 40px 20px;
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      scroll-behavior: smooth;
+    }
+
+    /* Navbar styling premium */
+    .navbar {
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03), 0 1px 2px rgba(0,0,0,0.05);
+      padding: 16px 32px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-img {
+      height: 48px;
+      width: auto;
+      border-radius: 12px;
+      object-fit: contain;
+      background: #ffffff;
+      padding: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease;
+    }
+
+    .logo-img:hover {
+      transform: scale(1.02);
+    }
+
+    .brand-text {
+      font-weight: 800;
+      font-size: 1.35rem;
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 600;
+      color: #1e293b;
+      transition: 0.2s;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-links a i {
+      font-size: 0.9rem;
+      color: #3b82f6;
+    }
+
+    .nav-links a:hover {
+      color: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline-light {
+      background: white;
+      border: 1.5px solid #2563eb;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-weight: 700;
+      color: #2563eb;
+      transition: all 0.2s;
+    }
+
+    .btn-outline-light:hover {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+
+    /* Hero Section - lebih dramatis & modern */
+    .hero {
+      background: linear-gradient(125deg, #0f2b4d 0%, #1e4a76 45%, #2563eb 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 100px 24px 100px 24px;
+      border-bottom-left-radius: 32px;
+      border-bottom-right-radius: 32px;
+      margin-bottom: 20px;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(circle at 10% 20%, rgba(255,255,255,0.08) 2%, transparent 2.5%);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
       text-align: center;
     }
 
-    .hero {
-      background: linear-gradient(to right, #2563eb, #1e3a8a);
-      color: white;
-      padding: 80px 20px;
-    }
-
     .hero h1 {
-      font-size: 36px;
-      margin-bottom: 10px;
+      font-size: 3.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #ffffff, #e0f2fe);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     .hero p {
-      font-size: 18px;
-      opacity: 0.9;
+      font-size: 1.2rem;
+      opacity: 0.92;
+      margin-bottom: 28px;
+      color: #f1f5f9;
+      font-weight: 400;
     }
 
-    .btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 12px 25px;
+    .btn-glow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
       background: white;
+      padding: 14px 32px;
+      border-radius: 60px;
+      font-weight: 800;
+      font-size: 1rem;
       color: #1e3a8a;
       text-decoration: none;
-      border-radius: 8px;
-      font-weight: bold;
+      transition: all 0.25s;
+      box-shadow: 0 12px 20px -10px rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .btn-glow i {
+      font-size: 1.1rem;
+      transition: transform 0.2s;
+    }
+
+    .btn-glow:hover {
+      transform: translateY(-3px);
+      background: #f8fafc;
+      box-shadow: 0 20px 25px -12px rgba(0,0,0,0.25);
+    }
+
+    .btn-glow:hover i {
+      transform: translateX(5px);
+    }
+
+    /* Container umum */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 48px 24px;
     }
 
     .section {
-      margin-top: 40px;
+      margin-bottom: 64px;
     }
 
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 48px;
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .section-title:after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #2563eb, #60a5fa);
+      border-radius: 4px;
+      margin: 12px auto 0;
+    }
+
+    /* Grid card modern */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
       margin-top: 20px;
     }
 
     .card {
       background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 28px;
+      padding: 32px 24px;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      box-shadow: 0 12px 28px -8px rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.03);
+      text-align: center;
     }
 
-    footer {
-      background: #0f172a;
-      color: white;
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 28px 32px -12px rgba(37,99,235,0.18);
+      border-color: #d9e6ff;
+    }
+
+    .card-icon {
+      font-size: 3rem;
+      background: linear-gradient(145deg, #eef2ff, #ffffff);
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 40px;
+      margin: 0 auto 20px;
+      color: #2563eb;
+      box-shadow: 0 8px 14px -6px rgba(0,0,0,0.05);
+    }
+
+    .card h3 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #0f172a;
+    }
+
+    .card p {
+      color: #334155;
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+    /* Banner info tambahan (keunggulan) */
+    .stats-banner {
+      background: linear-gradient(110deg, #f1f5ff, #ffffff);
+      border-radius: 48px;
+      padding: 40px 32px;
+      margin: 32px 0 40px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+      border: 1px solid #e2edff;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 28px;
       text-align: center;
-      padding: 20px;
+    }
+
+    .stat-item {
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .stat-number {
+      font-size: 2.3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .stat-label {
+      font-weight: 500;
+      color: #2d3a5e;
+      margin-top: 8px;
+    }
+
+    /* footer modern */
+    footer {
+      background: #0b1120;
+      color: #cbd5e1;
+      padding: 48px 24px 32px;
+      border-top-left-radius: 32px;
+      border-top-right-radius: 32px;
       margin-top: 40px;
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    .footer-col h4 {
+      color: white;
+      margin-bottom: 18px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .footer-col p, .footer-col a {
+      color: #94a3b8;
+      text-decoration: none;
+      line-height: 1.6;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    .social-icons a {
+      background: #1e293b;
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 30px;
+      transition: 0.2s;
+      color: #cbd5e1;
+    }
+
+    .social-icons a:hover {
+      background: #2563eb;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 32px;
+      border-top: 1px solid #1e293b;
+      margin-top: 32px;
+      font-size: 0.85rem;
+    }
+
+    /* tombol aksi sekunder */
+    .btn-outline-dark {
+      background: transparent;
+      border: 1.5px solid #cbd5e1;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .btn-outline-dark:hover {
+      border-color: #2563eb;
+      background: #f1f5f9;
+    }
+
+    @media (max-width: 680px) {
+      .navbar {
+        flex-direction: column;
+        align-items: center;
+        padding: 16px;
+      }
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+      .btn-glow {
+        padding: 12px 24px;
+      }
     }
   </style>
 </head>
-
 <body>
 
-<!-- Navbar -->
+<!-- Navbar dinamis dengan logo dari GitHub (raw) -->
 <div id="navbar"></div>
 
-<!-- Hero Section -->
+<!-- Hero Section dengan ilustrasi visual menarik -->
 <div class="hero">
-  <h1>Koperasi Taruna Karya Cirebon</h1>
-  <p>Solusi kebutuhan barang & jasa untuk anggota</p>
-  <a href="join.html" class="btn">Gabung Sekarang</a>
+  <div class="hero-content">
+    <h1>Koperasi Taruna Karya Cirebon</h1>
+    <p><i class="fas fa-handshake"></i> Solusi kebutuhan barang & jasa untuk anggota | <strong>Sejahtera bersama, maju bersama</strong></p>
+    <a href="join.html" class="btn-glow">
+      Gabung Sekarang <i class="fas fa-arrow-right"></i>
+    </a>
+    <div style="margin-top: 28px;">
+      <a href="#layanan" style="color:white; opacity:0.8; text-decoration:none; font-size:0.9rem;">
+        <i class="fas fa-chevron-down"></i> Jelajahi Layanan
+      </a>
+    </div>
+  </div>
 </div>
 
-<!-- Konten -->
-<div class="container">
-
+<!-- Konten Utama -->
+<div class="container" id="layanan">
   <div class="section">
-    <h2>Layanan Kami</h2>
+    <h2 class="section-title">Layanan Unggulan Kami</h2>
     <div class="grid">
       <div class="card">
+        <div class="card-icon"><i class="fas fa-store"></i></div>
         <h3>Marketplace Barang</h3>
-        <p>Beli kebutuhan sehari-hari dengan harga terjangkau</p>
+        <p>Beli kebutuhan sehari-hari, elektronik, sembako dengan harga anggota dan kualitas terjamin. Nikmati promo eksklusif.</p>
       </div>
 
       <div class="card">
+        <div class="card-icon"><i class="fas fa-briefcase"></i></div>
         <h3>Marketplace Jasa</h3>
-        <p>Temukan berbagai layanan dari anggota koperasi</p>
+        <p>Temukan berbagai layanan profesional dari sesama anggota: perbaikan rumah, konsultasi, les, dan banyak lagi.</p>
       </div>
 
       <div class="card">
-        <h3>Keanggotaan</h3>
-        <p>Gabung dan nikmati manfaat koperasi</p>
+        <div class="card-icon"><i class="fas fa-users"></i></div>
+        <h3>Keanggotaan Premium</h3>
+        <p>Gabung dan nikmati manfaat simpan pinjam, bagi hasil, serta akses penuh ke ekosistem koperasi digital.</p>
       </div>
     </div>
   </div>
 
+  <!-- Statistik / keunggulan interaktif -->
+  <div class="stats-banner">
+    <div class="stat-item">
+      <div class="stat-number">500+</div>
+      <div class="stat-label">Anggota Aktif</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">Rp 2,8M</div>
+      <div class="stat-label">Volume Usaha</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">32+</div>
+      <div class="stat-label">Mitra UMKM</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">4.9★</div>
+      <div class="stat-label">Kepuasan Anggota</div>
+    </div>
+  </div>
+
+  <!-- Tambahan section: kenapa memilih kami -->
+  <div class="section">
+    <h2 class="section-title">Mengapa Bergabung?</h2>
+    <div class="grid">
+      <div class="card" style="background: linear-gradient(145deg, #ffffff, #fafdff);">
+        <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+        <h3>Aman & Terpercaya</h3>
+        <p>Berbadan hukum resmi dan diawasi Dinas Koperasi, seluruh transaksi transparan.</p>
+      </div>
+      <div class="card" style="background: linear-gradient(145deg, #ffffff, #fafdff);">
+        <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+        <h3>Keuntungan Kompetitif</h3>
+        <p>Bunga rendah untuk pinjaman, margin hemat untuk belanja, serta SHU setiap tahun.</p>
+      </div>
+      <div class="card" style="background: linear-gradient(145deg, #ffffff, #fafdff);">
+        <div class="card-icon"><i class="fas fa-robot"></i></div>
+        <h3>Platform Digital</h3>
+        <p>Akses marketplace dan layanan via website & aplikasi, mudah dan cepat 24/7.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ajakan / CTA kedua -->
+  <div style="background: linear-gradient(115deg, #eef2ff, #ffffff); border-radius: 48px; padding: 48px 32px; text-align: center; margin-top: 20px;">
+    <h2 style="font-size: 1.8rem; font-weight: 800; color:#0f172a;">Siap menjadi bagian dari keluarga besar?</h2>
+    <p style="margin-top: 12px; max-width: 600px; margin-left: auto; margin-right: auto; color: #2c3e66;">Daftar sekarang dan rasakan kemudahan bertransaksi di ekosistem koperasi modern.</p>
+    <a href="join.html" style="display: inline-flex; align-items: center; gap: 12px; margin-top: 28px; background: #1e3a8a; color:white; padding: 14px 34px; border-radius: 40px; text-decoration: none; font-weight: 700; box-shadow: 0 8px 18px rgba(0,0,0,0.1); transition: 0.2s;">
+      Daftar Sekarang <i class="fas fa-user-plus"></i>
+    </a>
+  </div>
 </div>
 
-<!-- Footer -->
+<!-- Footer premium -->
 <footer>
-  <p>© 2026 Koperasi Taruna Karya Cirebon</p>
+  <div class="footer-content">
+    <div class="footer-col">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+        <!-- logo kecil di footer (sama) -->
+        <img id="footerLogo" src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="logo koperasi" style="height: 38px; width: auto; border-radius: 10px; background: white; padding: 3px;">
+        <span style="font-weight: 800; font-size: 1.2rem; color:white;">Koperasi Taruna</span>
+      </div>
+      <p><i class="fas fa-map-marker-alt"></i> Jl. Siliwangi No.88, Cirebon, Jawa Barat</p>
+      <p><i class="fas fa-envelope"></i> info@tarunakarya.cirebon.id</p>
+      <p><i class="fas fa-phone-alt"></i> (0231) 567890</p>
+    </div>
+    <div class="footer-col">
+      <h4>Tautan Cepat</h4>
+      <p><a href="#">Tentang Kami</a></p>
+      <p><a href="#">Marketplace Barang</a></p>
+      <p><a href="#">Marketplace Jasa</a></p>
+      <p><a href="#">Karir & Mitra</a></p>
+    </div>
+    <div class="footer-col">
+      <h4>Layanan Anggota</h4>
+      <p><a href="#">Simpanan Sukarela</a></p>
+      <p><a href="#">Pinjaman Anggota</a></p>
+      <p><a href="#">Bantuan & FAQ</a></p>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-whatsapp"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="copyright">
+    <p>© 2026 Koperasi Taruna Karya Cirebon | Berbadan Hukum & Diawasi</p>
+    <p style="margin-top: 6px; font-size: 0.75rem;">Membangun kemandirian ekonomi berbasis gotong royong</p>
+  </div>
 </footer>
 
-<!-- Load Navbar -->
+<!-- Script untuk memuat navbar + fallback logo jika gambar gagal -->
 <script>
-fetch('navbar.html')
-.then(res => res.text())
-.then(data => document.getElementById('navbar').innerHTML = data);
-</script>
+  // 1. Memuat navbar.html dari repo (perhatikan path relatif, asumsikan di folder yang sama dengan file ini)
+  // Jika tidak ada navbar.html secara lokal, kita buat navbar dinamis sebagai fallback agar tampilan tetap rapi.
+  // TAPI karena pada kode asli ada fetch('navbar.html'), kita akan tetap coba fetch, jika gagal kita buat navbar default dengan logo.
+  fetch('navbar.html')
+    .then(res => {
+      if (!res.ok) throw new Error('Navbar not found');
+      return res.text();
+    })
+    .then(data => {
+      document.getElementById('navbar').innerHTML = data;
+      // setelah navbar dimuat, kita pastikan logo di navbar (jika ada elemen dengan class logo-img) bisa mengarah ke gambar yang benar.
+      // jika navbar.html tidak mengandung logo, kita tetap gunakan logo dari github, opsional.
+      injectNavbarLogoIfMissing();
+    })
+    .catch(() => {
+      // fallback navbar: buat navbar elegan dengan logo bawaan
+      const navbarHtml = `
+        <div class="navbar">
+          <div class="logo-area">
+            <img class="logo-img" id="mainLogoNav" src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="Logo Koperasi" onerror="this.onerror=null; this.src='https://placehold.co/400x200?text=Koperasi+Logo';">
+            <span class="brand-text">Taruna Karya Cirebon</span>
+          </div>
+          <div class="nav-links">
+            <a href="#"><i class="fas fa-home"></i> Beranda</a>
+            <a href="#layanan"><i class="fas fa-box"></i> Layanan</a>
+            <a href="join.html"><i class="fas fa-user-plus"></i> Keanggotaan</a>
+            <a href="#"><i class="fas fa-store"></i> Marketplace</a>
+            <a href="join.html" class="btn-outline-light"><i class="fas fa-sign-in-alt"></i> Login Anggota</a>
+          </div>
+        </div>
+      `;
+      document.getElementById('navbar').innerHTML = navbarHtml;
+    });
 
+  // fungsi untuk memastikan logo di navbar terisi (jika navbar.html tidak mengandung logo)
+  function injectNavbarLogoIfMissing() {
+    // cek apakah di navbar sudah ada .logo-img
+    const existingLogo = document.querySelector('#navbar .logo-img');
+    if (!existingLogo) {
+      // jika tidak ada logo, tambahkan ke area logo pertama
+      const logoArea = document.querySelector('#navbar .logo-area');
+      if (logoArea) {
+        const imgLogo = document.createElement('img');
+        imgLogo.src = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
+        imgLogo.alt = "Logo Koperasi";
+        imgLogo.className = "logo-img";
+        imgLogo.style.height = "48px";
+        imgLogo.style.width = "auto";
+        imgLogo.style.borderRadius = "12px";
+        imgLogo.style.objectFit = "contain";
+        imgLogo.onerror = () => { imgLogo.src = 'https://placehold.co/200x200?text=Koperasi'; };
+        logoArea.insertBefore(imgLogo, logoArea.firstChild);
+      }
+    } else {
+      // pastikan src logo yang sudah ada menggunakan raw github (perbaiki jika perlu)
+      if (existingLogo.src && !existingLogo.src.includes('raw.githubusercontent.com')) {
+        existingLogo.src = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
+      }
+    }
+    // juga perbaiki footer logo agar selalu valid
+    const footerLogo = document.getElementById('footerLogo');
+    if (footerLogo) {
+      footerLogo.src = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
+      footerLogo.onerror = () => { footerLogo.src = 'https://placehold.co/200x200?text=Koperasi'; };
+    }
+  }
+
+  // tambahan: setelah fetch selesai, panggil inject juga untuk menangani kasus navbar sudah ada tapi logo kurang
+  window.addEventListener('load', () => {
+    // pengecekan logo utama di navbar secara delay kecil
+    setTimeout(() => {
+      const mainNavImg = document.querySelector('#navbar .logo-img');
+      if (mainNavImg && (!mainNavImg.src || mainNavImg.src.includes('null'))) {
+        mainNavImg.src = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
+      }
+      // juga pastikan hero tetap menarik dan tidak error logo
+    }, 100);
+    // tambahkan event listener untuk semua gambar logo di halaman agar menggunakan raw github url
+    document.querySelectorAll('img[src*="koperasi.png"]').forEach(img => {
+      if (!img.src.includes('raw.githubusercontent')) {
+        img.src = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
+      }
+    });
+  });
+</script>
 </body>
 </html>
