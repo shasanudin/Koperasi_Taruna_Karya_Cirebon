@@ -2,184 +2,184 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard Admin</title>
+  <title>Dashboard Koperasi PRO</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      background: #f1f5f9;
+    body {margin:0;font-family:Arial;background:#f1f5f9}
+
+    .sidebar {
+      width:220px;
+      background:#0f172a;
+      color:white;
+      height:100vh;
+      position:fixed;
+      padding:20px;
     }
 
-    .header {
-      background: #1e293b;
-      color: white;
-      padding: 15px;
-      display: flex;
-      justify-content: space-between;
+    .sidebar h2 {font-size:18px}
+    .sidebar button {
+      width:100%;margin-top:10px;padding:10px;border:none;background:#1e293b;color:white;cursor:pointer
     }
 
-    .container {
-      padding: 20px;
+    .main {
+      margin-left:240px;
+      padding:20px;
     }
 
     .card {
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      background:white;padding:20px;border-radius:10px;margin-bottom:20px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.1)
     }
 
     input, select {
-      width: 100%;
-      padding: 10px;
-      margin: 5px 0;
+      width:100%;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:6px
     }
 
-    button {
-      padding: 10px;
-      background: #2563eb;
-      color: white;
-      border: none;
-      cursor: pointer;
-      margin-top: 10px;
+    button.primary {
+      background:#2563eb;color:white;padding:10px;border:none;border-radius:6px;cursor:pointer
     }
 
-    button:hover {
-      background: #1d4ed8;
-    }
+    img {width:80px;border-radius:8px}
+
+    .grid {display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
   </style>
 </head>
-
 <body>
 
-<div class="header">
-  <h3>Dashboard Admin Koperasi</h3>
+<div class="sidebar">
+  <h2>Admin Panel</h2>
   <button onclick="logout()">Logout</button>
 </div>
 
-<div class="container">
+<div class="main">
+
+  <!-- STATISTIK -->
+  <div class="card">
+    <h3>Statistik</h3>
+    <p id="statBarang"></p>
+    <p id="statJasa"></p>
+    <p id="statAnggota"></p>
+  </div>
 
   <!-- INPUT BARANG -->
   <div class="card">
-    <h3>Input Barang</h3>
-    <input id="namaBarang" placeholder="Nama Barang">
+    <h3>Tambah Barang</h3>
+    <input id="namaBarang" placeholder="Nama">
     <input id="hargaBarang" placeholder="Harga">
-    <button onclick="tambahBarang()">Simpan Barang</button>
+    <input type="file" id="gambarBarang">
+    <button class="primary" onclick="tambahBarang()">Simpan</button>
   </div>
 
-  <!-- INPUT JASA -->
   <div class="card">
-    <h3>Input Jasa</h3>
-    <input id="namaJasa" placeholder="Nama Jasa">
-    <input id="hargaJasa" placeholder="Harga">
-    <button onclick="tambahJasa()">Simpan Jasa</button>
+    <h3>Data Barang</h3>
+    <div id="listBarang" class="grid"></div>
   </div>
 
-  <!-- INPUT PENGURUS -->
+  <!-- ANGGOTA APPROVAL -->
   <div class="card">
-    <h3>Input Pengurus</h3>
-    <input id="namaPengurus" placeholder="Nama">
-    
-    <select id="jabatan">
-      <option>Ketua</option>
-      <option>Sekretaris</option>
-      <option>Bendahara</option>
-      <option>Anggota</option>
-    </select>
-
-    <button onclick="tambahPengurus()">Simpan Pengurus</button>
-  </div>
-
-  <!-- INPUT ANGGOTA -->
-  <div class="card">
-    <h3>Input Anggota</h3>
-    <input id="namaAnggota" placeholder="Nama">
-    <input id="emailAnggota" placeholder="Email">
-    <button onclick="tambahAnggota()">Simpan Anggota</button>
+    <h3>Approval Anggota</h3>
+    <div id="listAnggota"></div>
   </div>
 
 </div>
 
 <script type="module">
-  // IMPORT FIREBASE V12
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-storage.js";
 
-  // CONFIG KAMU
-  const firebaseConfig = {
-    apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
-    authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
-    databaseURL: "https://koperasi-taruna-karya-cirebon-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "koperasi-taruna-karya-cirebon",
-    storageBucket: "koperasi-taruna-karya-cirebon.firebasestorage.app",
-    messagingSenderId: "573396276351",
-    appId: "1:573396276351:web:3fcf1d78bfa5ad9a189b4a",
-    measurementId: "G-RH91DN1KT8"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
+  authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
+  projectId: "koperasi-taruna-karya-cirebon",
+  storageBucket: "koperasi-taruna-karya-cirebon.firebasestorage.app",
+};
 
-  // INIT
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
 
-  // PROTEKSI LOGIN
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      window.location.href = "login.html";
-    }
+onAuthStateChanged(auth, user => {
+  if (!user) location.href = "login.html";
+});
+
+window.logout = () => signOut(auth);
+
+// TAMBAH BARANG + UPLOAD GAMBAR
+window.tambahBarang = async () => {
+  const file = gambarBarang.files[0];
+  let url = "";
+
+  if(file){
+    const storageRef = ref(storage, "barang/" + file.name);
+    await uploadBytes(storageRef, file);
+    url = await getDownloadURL(storageRef);
+  }
+
+  await addDoc(collection(db, "barang"), {
+    nama: namaBarang.value,
+    harga: hargaBarang.value,
+    gambar: url
   });
 
-  // LOGOUT
-  window.logout = function(){
-    signOut(auth).then(() => {
-      window.location.href = "login.html";
-    });
-  }
+  loadBarang();
+}
 
-  // TAMBAH BARANG
-  window.tambahBarang = async function(){
-    await addDoc(collection(db, "barang"), {
-      nama: namaBarang.value,
-      harga: hargaBarang.value,
-      createdAt: new Date()
-    });
-    alert("Barang berhasil ditambahkan");
-  }
+// LOAD BARANG + DELETE
+async function loadBarang(){
+  const snap = await getDocs(collection(db, "barang"));
+  listBarang.innerHTML="";
 
-  // TAMBAH JASA
-  window.tambahJasa = async function(){
-    await addDoc(collection(db, "jasa"), {
-      nama: namaJasa.value,
-      harga: hargaJasa.value,
-      createdAt: new Date()
-    });
-    alert("Jasa berhasil ditambahkan");
-  }
+  snap.forEach(d => {
+    const b = d.data();
+    listBarang.innerHTML += `
+      <div class='card'>
+        <img src='${b.gambar || ""}'>
+        <h4>${b.nama}</h4>
+        <p>${b.harga}</p>
+        <button onclick="hapusBarang('${d.id}')">Hapus</button>
+      </div>
+    `;
+  });
 
-  // TAMBAH PENGURUS
-  window.tambahPengurus = async function(){
-    await addDoc(collection(db, "pengurus"), {
-      nama: namaPengurus.value,
-      jabatan: jabatan.value,
-      createdAt: new Date()
-    });
-    alert("Pengurus berhasil ditambahkan");
-  }
+  statBarang.innerText = "Total Barang: " + snap.size;
+}
 
-  // TAMBAH ANGGOTA
-  window.tambahAnggota = async function(){
-    await addDoc(collection(db, "anggota"), {
-      nama: namaAnggota.value,
-      email: emailAnggota.value,
-      createdAt: new Date()
-    });
-    alert("Anggota berhasil ditambahkan");
-  }
+window.hapusBarang = async (id) => {
+  await deleteDoc(doc(db, "barang", id));
+  loadBarang();
+}
 
+// LOAD ANGGOTA + APPROVAL
+async function loadAnggota(){
+  const snap = await getDocs(collection(db, "anggota"));
+  listAnggota.innerHTML="";
+
+  snap.forEach(d => {
+    const a = d.data();
+    listAnggota.innerHTML += `
+      <div class='card'>
+        <h4>${a.nama}</h4>
+        <p>${a.email}</p>
+        <button onclick="approve('${d.id}')">Approve</button>
+      </div>
+    `;
+  });
+
+  statAnggota.innerText = "Total Anggota: " + snap.size;
+}
+
+window.approve = async (id) => {
+  await updateDoc(doc(db, "anggota", id), {status: "approved"});
+  loadAnggota();
+}
+
+// INIT
+loadBarang();
+loadAnggota();
 </script>
 
 </body>
