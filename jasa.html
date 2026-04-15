@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Marketplace Jasa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .search-box {
+      margin-bottom: 20px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .card h3 {
+      margin: 10px 0 5px;
+    }
+
+    .price {
+      color: #16a34a;
+      font-weight: bold;
+    }
+
+    .desc {
+      font-size: 14px;
+      color: #555;
+    }
+
+    button {
+      margin-top: 10px;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background: #16a34a;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #15803d;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<div id="navbar"></div>
+
+<div class="container">
+  <h2>Marketplace Jasa</h2>
+
+  <!-- Search -->
+  <div class="search-box">
+    <input type="text" id="search" placeholder="Cari jasa...">
+  </div>
+
+  <!-- List -->
+  <div class="grid" id="service-list"></div>
+</div>
+
+<script>
+/* Load Navbar */
+fetch('navbar.html')
+.then(res => res.text())
+.then(data => document.getElementById('navbar').innerHTML = data);
+
+/* Data contoh */
+const jasa = [
+  {
+    nama: "Servis Motor",
+    harga: 50000,
+    deskripsi: "Servis ringan & ganti oli",
+    gambar: "https://via.placeholder.com/300"
+  },
+  {
+    nama: "Desain Grafis",
+    harga: 100000,
+    deskripsi: "Logo, banner, dll",
+    gambar: "https://via.placeholder.com/300"
+  },
+  {
+    nama: "Jasa Cuci Motor",
+    harga: 20000,
+    deskripsi: "Cuci bersih & cepat",
+    gambar: "https://via.placeholder.com/300"
+  }
+];
+
+const list = document.getElementById("service-list");
+
+/* Render */
+function tampilkanJasa(data){
+  list.innerHTML = "";
+  data.forEach(j => {
+    list.innerHTML += `
+      <div class="card">
+        <img src="${j.gambar}">
+        <h3>${j.nama}</h3>
+        <p class="desc">${j.deskripsi}</p>
+        <p class="price">Rp ${j.harga}</p>
+        <button>Pesan</button>
+      </div>
+    `;
+  });
+}
+
+tampilkanJasa(jasa);
+
+/* Search */
+document.getElementById("search").addEventListener("input", function(){
+  const keyword = this.value.toLowerCase();
+  const hasil = jasa.filter(j => j.nama.toLowerCase().includes(keyword));
+  tampilkanJasa(hasil);
+});
+</script>
+
+</body>
+</html>
