@@ -256,25 +256,50 @@ body {
   font-size: 0.85rem;
 }
 
-.form-group input {
+.form-group label i {
+  margin-right: 8px;
+  color: #2563eb;
+}
+
+.form-group input, .form-group textarea {
   width: 100%;
   padding: 12px 15px;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   font-size: 0.9rem;
   transition: all 0.3s;
+  font-family: 'Inter', sans-serif;
 }
 
-.form-group input:focus {
+.form-group input:focus, .form-group textarea:focus {
   outline: none;
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 15px;
+}
+
+/* Preview Gambar URL */
+.image-url-preview {
+  margin-top: 10px;
+  display: none;
+}
+
+.image-url-preview img {
+  max-width: 100%;
+  max-height: 150px;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  object-fit: cover;
 }
 
 .btn-simpan {
@@ -508,7 +533,7 @@ body {
   </div>
 </div>
 
-<!-- BARANG -->
+<!-- BARANG - Menggunakan Input URL Gambar -->
 <div id="barang" class="card" style="display:none">
   <h3><i class="fas fa-plus-circle"></i> Tambah Barang</h3>
   <div class="form-row">
@@ -522,8 +547,11 @@ body {
     </div>
   </div>
   <div class="form-group">
-    <label><i class="fas fa-image"></i> Gambar Barang</label>
-    <input type="file" id="gambarBarang" accept="image/*">
+    <label><i class="fas fa-image"></i> URL Gambar Barang</label>
+    <input type="url" id="gambarBarangUrl" placeholder="https://example.com/gambar.jpg">
+    <div class="image-url-preview" id="previewContainer">
+      <img id="imagePreview" src="" alt="Preview Gambar">
+    </div>
   </div>
   <button class="btn-simpan" onclick="tambahBarang()"><i class="fas fa-save"></i> Simpan Barang</button>
   
@@ -574,7 +602,6 @@ body {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-storage.js";
 
 const config = {
   apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
@@ -586,11 +613,32 @@ const config = {
 const app = initializeApp(config);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
 /* AUTH */
 onAuthStateChanged(auth, (u) => { if (!u) location.href = "login.html" });
 window.logout = () => signOut(auth);
+
+/* PREVIEW GAMBAR URL */
+const gambarUrlInput = document.getElementById('gambarBarangUrl');
+const previewContainer = document.getElementById('previewContainer');
+const imagePreview = document.getElementById('imagePreview');
+
+if (gambarUrlInput) {
+  gambarUrlInput.addEventListener('input', (e) => {
+    const url = e.target.value;
+    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+      imagePreview.src = url;
+      previewContainer.style.display = 'block';
+      imagePreview.onerror = () => {
+        imagePreview.src = '';
+        previewContainer.style.display = 'none';
+      };
+    } else {
+      previewContainer.style.display = 'none';
+      imagePreview.src = '';
+    }
+  });
+}
 
 /* NAVIGASI */
 window.show = (id) => {
@@ -609,24 +657,29 @@ window.show = (id) => {
   if (id === 'approval') document.getElementById('btnApproval').classList.add('active');
 }
 
-/* TAMBAH BARANG */
+/* TAMBAH BARANG - Menggunakan URL Gambar */
 window.tambahBarang = async () => {
-  const file = document.getElementById("gambarBarang").files[0];
-  let url = "";
-  if (file) {
-    const r = ref(storage, "barang/" + Date.now() + "_" + file.name);
-    await uploadBytes(r, file);
-    url = await getDownloadURL(r);
+  const gambarUrl = document.getElementById("gambarBarangUrl").value;
+  const nama = document.getElementById("namaBarang").value;
+  const harga = document.getElementById("hargaBarang").value;
+  
+  if (!nama || !harga) {
+    alert("Nama dan harga barang harus diisi!");
+    return;
   }
+  
   await addDoc(collection(db, "barang"), {
-    nama: document.getElementById("namaBarang").value,
-    harga: document.getElementById("hargaBarang").value,
-    gambar: url
+    nama: nama,
+    harga: harga,
+    gambar: gambarUrl || ""
   });
+  
   alert("Barang berhasil ditambahkan!");
   document.getElementById("namaBarang").value = "";
   document.getElementById("hargaBarang").value = "";
-  document.getElementById("gambarBarang").value = "";
+  document.getElementById("gambarBarangUrl").value = "";
+  previewContainer.style.display = "none";
+  imagePreview.src = "";
   loadAll();
 }
 
@@ -638,9 +691,9 @@ async function loadBarang() {
     const b = d.data();
     list.innerHTML += `
       <div class="item-card">
-        ${b.gambar ? `<img src="${b.gambar}" alt="${b.nama}">` : '<div style="height:140px;background:#e2e8f0;border-radius:12px;display:flex;align-items:center;justify-content:center"><i class="fas fa-image" style="font-size:40px;color:#94a3b8"></i></div>'}
-        <b contenteditable="true" onblur="edit('${d.id}','barang','nama',this.innerText)">${b.nama}</b>
-        <p contenteditable="true" onblur="edit('${d.id}','barang','harga',this.innerText)">${b.harga}</p>
+        ${b.gambar ? `<img src="${b.gambar}" alt="${b.nama}" onerror="this.src='https://placehold.co/400x300?text=No+Image'">` : '<div style="height:140px;background:#e2e8f0;border-radius:12px;display:flex;align-items:center;justify-content:center"><i class="fas fa-image" style="font-size:40px;color:#94a3b8"></i></div>'}
+        <b contenteditable="true" onblur="edit('${d.id}','barang','nama',this.innerText)">${escapeHtml(b.nama)}</b>
+        <p contenteditable="true" onblur="edit('${d.id}','barang','harga',this.innerText)">${escapeHtml(b.harga)}</p>
         <button class="btn-hapus" onclick="hapus('barang','${d.id}')"><i class="fas fa-trash"></i> Hapus</button>
       </div>
     `;
@@ -650,9 +703,17 @@ async function loadBarang() {
 
 /* TAMBAH JASA */
 window.tambahJasa = async () => {
+  const nama = document.getElementById("namaJasa").value;
+  const harga = document.getElementById("hargaJasa").value;
+  
+  if (!nama || !harga) {
+    alert("Nama dan harga jasa harus diisi!");
+    return;
+  }
+  
   await addDoc(collection(db, "jasa"), {
-    nama: document.getElementById("namaJasa").value,
-    harga: document.getElementById("hargaJasa").value
+    nama: nama,
+    harga: harga
   });
   alert("Jasa berhasil ditambahkan!");
   document.getElementById("namaJasa").value = "";
@@ -669,13 +730,21 @@ async function loadJasa() {
     list.innerHTML += `
       <div class="item-card">
         <i class="fas fa-briefcase" style="font-size:50px;color:#2563eb;margin:20px auto;display:block;text-align:center"></i>
-        <b contenteditable="true" onblur="edit('${d.id}','jasa','nama',this.innerText)">${j.nama}</b>
-        <p contenteditable="true" onblur="edit('${d.id}','jasa','harga',this.innerText)">${j.harga}</p>
+        <b contenteditable="true" onblur="edit('${d.id}','jasa','nama',this.innerText)">${escapeHtml(j.nama)}</b>
+        <p contenteditable="true" onblur="edit('${d.id}','jasa','harga',this.innerText)">${escapeHtml(j.harga)}</p>
         <button class="btn-hapus" onclick="hapus('jasa','${d.id}')"><i class="fas fa-trash"></i> Hapus</button>
       </div>
     `;
   });
   return snap.size;
+}
+
+// Helper function to escape HTML
+function escapeHtml(text) {
+  if (!text) return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
 /* EDIT */
@@ -703,8 +772,8 @@ window.loadApproval = async () => {
     if (status === "all" || p.status === status) {
       listPengurus.innerHTML += `
         <div class="approval-card ${p.status || 'pending'}">
-          <div class="nama"><i class="fas fa-user-tie"></i> ${p.nama || 'Tidak ada nama'}</div>
-          <div class="detail">Jabatan: ${p.jabatan || '-'} | Email: ${p.email || '-'}</div>
+          <div class="nama"><i class="fas fa-user-tie"></i> ${escapeHtml(p.nama || 'Tidak ada nama')}</div>
+          <div class="detail">Jabatan: ${escapeHtml(p.jabatan || '-')} | Email: ${escapeHtml(p.email || '-')}</div>
           <div class="status status-${p.status || 'pending'}">${p.status || 'pending'}</div>
           <div style="margin-top: 10px;">
             <button class="btn-approve" onclick="approve('pengurus','${d.id}')"><i class="fas fa-check"></i> Approve</button>
@@ -723,8 +792,8 @@ window.loadApproval = async () => {
     if (status === "all" || a.status === status) {
       listAnggota.innerHTML += `
         <div class="approval-card ${a.status || 'pending'}">
-          <div class="nama"><i class="fas fa-user"></i> ${a.nama || 'Tidak ada nama'}</div>
-          <div class="detail">WA: ${a.wa || '-'} | Email: ${a.email || '-'}</div>
+          <div class="nama"><i class="fas fa-user"></i> ${escapeHtml(a.nama || 'Tidak ada nama')}</div>
+          <div class="detail">WA: ${escapeHtml(a.wa || '-')} | Email: ${escapeHtml(a.email || '-')}</div>
           <div class="status status-${a.status || 'pending'}">${a.status || 'pending'}</div>
           <div style="margin-top: 10px;">
             <button class="btn-approve" onclick="approve('anggota','${d.id}')"><i class="fas fa-check"></i> Approve</button>
