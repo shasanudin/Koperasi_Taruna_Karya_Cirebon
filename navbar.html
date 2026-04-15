@@ -1,0 +1,76 @@
+<nav class="navbar">
+  <div class="logo">Koperasi Taruna Karya Cirebon</div>
+
+  <div class="menu">
+    <a href="index.html">Beranda</a>
+    <a href="barang.html">Barang</a>
+    <a href="jasa.html">Jasa</a>
+    <a href="pengurus.html">Pengurus</a>
+    <a href="kontak.html">Kontak</a>
+    <a href="join.html" class="btn">Gabung</a>
+    <a href="login.html" class="login">Login</a>
+  </div>
+</nav>
+
+<style>
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #0f172a;
+  padding: 15px 30px;
+  color: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.menu a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.menu a:hover {
+  color: #38bdf8;
+}
+
+.btn {
+  background: #2563eb;
+  padding: 8px 15px;
+  border-radius: 5px;
+}
+
+.btn:hover {
+  background: #1d4ed8;
+}
+
+.login {
+  border: 1px solid white;
+  padding: 8px 15px;
+  border-radius: 5px;
+}
+
+.login:hover {
+  background: white;
+  color: #0f172a;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .menu {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+</style>
