@@ -32,7 +32,7 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
 
-    input {
+    input, select {
       width: 100%;
       padding: 10px;
       margin: 5px 0;
@@ -44,6 +44,11 @@
       color: white;
       border: none;
       cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #1d4ed8;
     }
   </style>
 </head>
@@ -51,78 +56,130 @@
 <body>
 
 <div class="header">
-  <h3>Dashboard Admin</h3>
+  <h3>Dashboard Admin Koperasi</h3>
   <button onclick="logout()">Logout</button>
 </div>
 
 <div class="container">
 
-  <!-- Tambah Barang -->
+  <!-- INPUT BARANG -->
   <div class="card">
-    <h3>Tambah Barang</h3>
+    <h3>Input Barang</h3>
     <input id="namaBarang" placeholder="Nama Barang">
     <input id="hargaBarang" placeholder="Harga">
-    <button onclick="tambahBarang()">Tambah</button>
+    <button onclick="tambahBarang()">Simpan Barang</button>
   </div>
 
-  <!-- Tambah Jasa -->
+  <!-- INPUT JASA -->
   <div class="card">
-    <h3>Tambah Jasa</h3>
+    <h3>Input Jasa</h3>
     <input id="namaJasa" placeholder="Nama Jasa">
     <input id="hargaJasa" placeholder="Harga">
-    <button onclick="tambahJasa()">Tambah</button>
+    <button onclick="tambahJasa()">Simpan Jasa</button>
+  </div>
+
+  <!-- INPUT PENGURUS -->
+  <div class="card">
+    <h3>Input Pengurus</h3>
+    <input id="namaPengurus" placeholder="Nama">
+    
+    <select id="jabatan">
+      <option>Ketua</option>
+      <option>Sekretaris</option>
+      <option>Bendahara</option>
+      <option>Anggota</option>
+    </select>
+
+    <button onclick="tambahPengurus()">Simpan Pengurus</button>
+  </div>
+
+  <!-- INPUT ANGGOTA -->
+  <div class="card">
+    <h3>Input Anggota</h3>
+    <input id="namaAnggota" placeholder="Nama">
+    <input id="emailAnggota" placeholder="Email">
+    <button onclick="tambahAnggota()">Simpan Anggota</button>
   </div>
 
 </div>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
+<script type="module">
+  // IMPORT FIREBASE V12
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-<script>
-const firebaseConfig = {
-  apiKey: "API_KEY",
-  authDomain: "PROJECT.firebaseapp.com",
-  projectId: "PROJECT_ID",
-};
+  // CONFIG KAMU
+  const firebaseConfig = {
+    apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
+    authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
+    databaseURL: "https://koperasi-taruna-karya-cirebon-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "koperasi-taruna-karya-cirebon",
+    storageBucket: "koperasi-taruna-karya-cirebon.firebasestorage.app",
+    messagingSenderId: "573396276351",
+    appId: "1:573396276351:web:3fcf1d78bfa5ad9a189b4a",
+    measurementId: "G-RH91DN1KT8"
+  };
 
-firebase.initializeApp(firebaseConfig);
+  // INIT
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-const auth = firebase.auth();
-const db = firebase.firestore();
+  // PROTEKSI LOGIN
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "login.html";
+    }
+  });
 
-/* Cek login */
-auth.onAuthStateChanged(user => {
-  if (!user) {
-    window.location = "login.html";
+  // LOGOUT
+  window.logout = function(){
+    signOut(auth).then(() => {
+      window.location.href = "login.html";
+    });
   }
-});
 
-/* Logout */
-function logout(){
-  auth.signOut().then(() => {
-    window.location = "login.html";
-  });
-}
+  // TAMBAH BARANG
+  window.tambahBarang = async function(){
+    await addDoc(collection(db, "barang"), {
+      nama: namaBarang.value,
+      harga: hargaBarang.value,
+      createdAt: new Date()
+    });
+    alert("Barang berhasil ditambahkan");
+  }
 
-/* Tambah Barang */
-function tambahBarang(){
-  db.collection("barang").add({
-    nama: namaBarang.value,
-    harga: hargaBarang.value
-  });
-  alert("Barang ditambahkan");
-}
+  // TAMBAH JASA
+  window.tambahJasa = async function(){
+    await addDoc(collection(db, "jasa"), {
+      nama: namaJasa.value,
+      harga: hargaJasa.value,
+      createdAt: new Date()
+    });
+    alert("Jasa berhasil ditambahkan");
+  }
 
-/* Tambah Jasa */
-function tambahJasa(){
-  db.collection("jasa").add({
-    nama: namaJasa.value,
-    harga: hargaJasa.value
-  });
-  alert("Jasa ditambahkan");
-}
+  // TAMBAH PENGURUS
+  window.tambahPengurus = async function(){
+    await addDoc(collection(db, "pengurus"), {
+      nama: namaPengurus.value,
+      jabatan: jabatan.value,
+      createdAt: new Date()
+    });
+    alert("Pengurus berhasil ditambahkan");
+  }
+
+  // TAMBAH ANGGOTA
+  window.tambahAnggota = async function(){
+    await addDoc(collection(db, "anggota"), {
+      nama: namaAnggota.value,
+      email: emailAnggota.value,
+      createdAt: new Date()
+    });
+    alert("Anggota berhasil ditambahkan");
+  }
+
 </script>
 
 </body>
