@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Pengurus Koperasi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+    }
+
+    .container {
+      padding: 20px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+
+    .name {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .role {
+      color: #2563eb;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<div id="navbar"></div>
+
+<div class="container">
+  <h2>Struktur Pengurus</h2>
+
+  <div class="grid">
+
+    <!-- Ketua -->
+    <div class="card">
+      <img src="https://via.placeholder.com/150">
+      <div class="name">Shidiq Hasanudin, S.IP</div>
+      <div class="role">Ketua</div>
+    </div>
+
+    <!-- Sekretaris -->
+    <div class="card">
+      <img src="https://via.placeholder.com/150">
+      <div class="name">Casaman, S.IP</div>
+      <div class="role">Sekretaris</div>
+    </div>
+
+    <!-- Bendahara -->
+    <div class="card">
+      <img src="https://via.placeholder.com/150">
+      <div class="name">Tati Fatmawati</div>
+      <div class="role">Bendahara</div>
+    </div>
+
+    <!-- Anggota -->
+    <div class="card">
+      <img src="https://via.placeholder.com/150">
+      <div class="name">Anggota 1</div>
+      <div class="role">Anggota</div>
+    </div>
+
+    <div class="card">
+      <img src="https://via.placeholder.com/150">
+      <div class="name">Anggota 2</div>
+      <div class="role">Anggota</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* Load Navbar */
+fetch('navbar.html')
+.then(res => res.text())
+.then(data => document.getElementById('navbar').innerHTML = data);
+</script>
+
+</body>
+</html>
