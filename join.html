@@ -6,82 +6,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {margin:0;font-family:Arial;background:#f1f5f9}
-
-/* NAVBAR fallback */
-.navbar {
-  background:#1e293b;
-  padding:15px;
-  text-align:center;
-}
-.navbar a {
-  color:white;
-  margin:0 10px;
-  text-decoration:none;
-}
-
-/* FORM */
-.container {max-width:600px;margin:40px auto;padding:20px}
-.card {
-  background:white;
-  padding:25px;
-  border-radius:12px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.1)
-}
-h2{text-align:center}
-label{margin-top:10px;display:block;font-weight:bold}
-input,select,textarea{
-  width:100%;padding:10px;margin-top:5px;border-radius:8px;border:1px solid #ccc
-}
-button{
-  margin-top:20px;width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:8px;cursor:pointer
-}
+body{margin:0;font-family:Arial;background:#f1f5f9}
+.container{max-width:600px;margin:40px auto;padding:20px}
+.card{background:white;padding:25px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+label{margin-top:10px;display:block}
+input,select,textarea{width:100%;padding:10px;margin-top:5px;border-radius:8px;border:1px solid #ccc}
+button{margin-top:20px;width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:8px}
+img{width:100%;margin-top:10px;display:none;border-radius:8px}
 </style>
 </head>
 
 <body>
-
-<!-- NAVBAR -->
-<div id="navbar"></div>
 
 <div class="container">
   <div class="card">
     <h2>Form Pendaftaran</h2>
 
     <form id="form">
-
-      <label>Nama Lengkap</label>
-      <input type="text" id="nama" required>
+      <label>Nama</label>
+      <input id="nama" required>
 
       <label>Email</label>
       <input type="email" id="email" required>
 
-      <label>No WhatsApp</label>
-      <input type="text" id="wa" required>
+      <label>WhatsApp</label>
+      <input id="wa" required>
 
       <label>Alamat</label>
-      <textarea id="alamat" required></textarea>
+      <textarea id="alamat"></textarea>
 
       <label>Foto</label>
-      <input type="file" id="foto" accept="image/*" required>
+      <input type="file" id="foto" required>
+      <img id="preview">
 
-      <label>Daftar Sebagai</label>
+      <label>Role</label>
       <select id="role">
         <option value="anggota">Anggota</option>
         <option value="pengurus">Pengurus</option>
       </select>
 
-      <label>Jabatan (jika pengurus)</label>
+      <label>Jabatan</label>
       <select id="jabatan">
-        <option value="">-- Pilih Jabatan --</option>
+        <option value="">-</option>
         <option>Ketua</option>
         <option>Sekretaris</option>
         <option>Bendahara</option>
-        <option>Anggota Pengurus</option>
       </select>
 
       <button type="submit">Daftar</button>
-
     </form>
   </div>
 </div>
@@ -89,50 +61,79 @@ button{
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-storage.js";
 
-/* LOAD NAVBAR */
-fetch("navbar.html")
-  .then(res => res.text())
-  .then(data => {
-    document.getElementById("navbar").innerHTML = data;
-  })
-  .catch(() => {
-    document.getElementById("navbar").innerHTML = `
-      <div class="navbar">
-        <a href="index.html">Beranda</a>
-        <a href="barang.html">Barang</a>
-        <a href="jasa.html">Jasa</a>
-        <a href="pengurus.html">Pengurus</a>
-        <a href="kontak.html">Kontak</a>
-        <a href="join.html">Gabung</a>
-        <a href="login.html">Login</a>
-      </div>
-    `;
-  });
+/* 🔥 CONFIG */
+const GITHUB_TOKEN = "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";
+const REPO = "shasanudin/koperasi-taruna-karya";
+const BRANCH = "main";
 
 /* FIREBASE */
 const config = {
   apiKey:"AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
   authDomain:"koperasi-taruna-karya-cirebon.firebaseapp.com",
   projectId:"koperasi-taruna-karya-cirebon",
-  storageBucket:"koperasi-taruna-karya-cirebon.firebasestorage.app",
 };
 
 const app = initializeApp(config);
 const db = getFirestore(app);
-const storage = getStorage(app);
+
+/* PREVIEW */
+foto.addEventListener("change", ()=>{
+  preview.src = URL.createObjectURL(foto.files[0]);
+  preview.style.display="block";
+});
+
+/* UPLOAD KE GITHUB */
+async function uploadToGitHub(file){
+  const reader = new FileReader();
+
+  return new Promise((resolve,reject)=>{
+    reader.onload = async ()=>{
+      try{
+        const base64 = reader.result.split(",")[1];
+        const fileName = Date.now()+"_"+file.name;
+
+        const res = await fetch(
+          `https://api.github.com/repos/${REPO}/contents/images/${fileName}`,
+          {
+            method:"PUT",
+            headers:{
+              "Authorization":`Bearer ${GITHUB_TOKEN}`,
+              "Content-Type":"application/json"
+            },
+            body: JSON.stringify({
+              message:"upload image",
+              content: base64,
+              branch: BRANCH
+            })
+          }
+        );
+
+        const data = await res.json();
+
+        if(data.error) throw new Error(data.error);
+
+        const url = `https://raw.githubusercontent.com/${REPO}/${BRANCH}/images/${fileName}`;
+
+        resolve(url);
+
+      }catch(err){
+        reject(err);
+      }
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
 
 /* SUBMIT */
-document.getElementById("form").addEventListener("submit", async (e)=>{
+form.addEventListener("submit", async (e)=>{
   e.preventDefault();
 
   try{
     const file = foto.files[0];
-    const refStorage = ref(storage,"foto/"+Date.now()+"_"+file.name);
 
-    await uploadBytes(refStorage,file);
-    const fotoURL = await getDownloadURL(refStorage);
+    const fotoURL = await uploadToGitHub(file);
 
     const data = {
       nama:nama.value,
@@ -148,12 +149,13 @@ document.getElementById("form").addEventListener("submit", async (e)=>{
 
     if(role.value==="anggota"){
       await addDoc(collection(db,"anggota"),data);
-    } else {
+    }else{
       await addDoc(collection(db,"pengurus"),data);
     }
 
-    alert("Berhasil daftar, tunggu approval!");
+    alert("Berhasil daftar!");
     form.reset();
+    preview.style.display="none";
 
   }catch(err){
     alert("Error: "+err.message);
