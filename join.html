@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Gabung Anggota</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<div id="navbar"></div>
+
+<div class="container">
+  <div class="card">
+    <h2>Form Pendaftaran Anggota</h2>
+
+    <form id="form">
+
+      <label>Nama Lengkap</label>
+      <input type="text" id="nama" required>
+
+      <label>Email</label>
+      <input type="email" id="email" required>
+
+      <label>No WhatsApp</label>
+      <input type="text" id="wa" required>
+
+      <label>Alamat</label>
+      <textarea id="alamat" required></textarea>
+
+      <label>Pekerjaan</label>
+      <input type="text" id="pekerjaan">
+
+      <label>Jenis Kelamin</label>
+      <select id="jk">
+        <option value="Laki-laki">Laki-laki</option>
+        <option value="Perempuan">Perempuan</option>
+      </select>
+
+      <button type="submit">Daftar Sekarang</button>
+
+    </form>
+  </div>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
+
+<script>
+/* Load Navbar */
+fetch('navbar.html')
+.then(res => res.text())
+.then(data => document.getElementById('navbar').innerHTML = data);
+
+/* Firebase config */
+const firebaseConfig = {
+  apiKey: "API_KEY",
+  authDomain: "PROJECT.firebaseapp.com",
+  projectId: "PROJECT_ID",
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+/* Submit form */
+document.getElementById("form").addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  const data = {
+    nama: nama.value,
+    email: email.value,
+    wa: wa.value,
+    alamat: alamat.value,
+    pekerjaan: pekerjaan.value,
+    jk: jk.value,
+    tanggal: new Date()
+  };
+
+  await db.collection("anggota").add(data);
+
+  alert("Pendaftaran berhasil!");
+  document.getElementById("form").reset();
+});
+</script>
+
+</body>
+</html>
