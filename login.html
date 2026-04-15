@@ -2,69 +2,422 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Login Koperasi</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <title>Login - Koperasi Taruna Karya Cirebon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: Arial;
-      background: linear-gradient(to right, #2563eb, #1e3a8a);
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      position: relative;
     }
 
+    /* Background pattern */
+    body::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(circle at 10% 20%, rgba(255,255,255,0.08) 2%, transparent 2.5%);
+      background-size: 30px 30px;
+      pointer-events: none;
+    }
+
+    /* Tombol Kembali ke Beranda */
+    .back-home {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 10px 20px;
+      border-radius: 50px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .back-home:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateX(-5px);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .back-home i {
+      font-size: 1.1rem;
+      transition: transform 0.3s;
+    }
+
+    .back-home:hover i {
+      transform: translateX(-3px);
+    }
+
+    /* Card Login */
     .card {
       background: white;
-      padding: 30px;
-      border-radius: 12px;
-      width: 300px;
+      padding: 40px 35px;
+      border-radius: 32px;
+      width: 420px;
+      max-width: 90%;
       text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      position: relative;
+      z-index: 1;
+      animation: fadeInUp 0.6s ease-out;
     }
 
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    button {
-      margin-top: 15px;
+    /* Logo di dalam card */
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-img {
+      height: 70px;
+      width: auto;
+      border-radius: 16px;
+      background: white;
+      padding: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h2 {
+      color: #1e293b;
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      color: #64748b;
+      font-size: 0.85rem;
+      margin-bottom: 30px;
+    }
+
+    /* Input Group */
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #334155;
+      font-size: 0.85rem;
+    }
+
+    .input-group label i {
+      margin-right: 8px;
+      color: #2563eb;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      left: 15px;
+      color: #94a3b8;
+      font-size: 1rem;
+    }
+
+    .input-wrapper input {
       width: 100%;
-      padding: 10px;
-      border: none;
-      background: #2563eb;
-      color: white;
-      border-radius: 6px;
+      padding: 14px 15px 14px 45px;
+      border: 2px solid #e2e8f0;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+      background: #f8fafc;
+    }
+
+    .input-wrapper input:focus {
+      outline: none;
+      border-color: #2563eb;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    /* Toggle Password */
+    .toggle-password {
+      position: absolute;
+      right: 15px;
       cursor: pointer;
+      color: #94a3b8;
+      transition: color 0.3s;
+      z-index: 2;
     }
 
-    button:hover {
-      background: #1d4ed8;
+    .toggle-password:hover {
+      color: #2563eb;
+    }
+
+    /* Tombol Login */
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    .btn-login:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Link Lupa Password & Daftar */
+    .forgot-password {
+      text-align: right;
+      margin: 15px 0 20px;
+    }
+
+    .forgot-password a {
+      color: #2563eb;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .forgot-password a:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .register-link p {
+      color: #64748b;
+      font-size: 0.85rem;
+    }
+
+    .register-link a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 700;
+      transition: color 0.3s;
+    }
+
+    .register-link a:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+
+    /* Alert custom */
+    .alert {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 12px;
+      background: white;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 1000;
+      animation: slideInRight 0.3s ease;
+      max-width: 350px;
+    }
+
+    .alert.error {
+      border-left: 4px solid #ef4444;
+    }
+
+    .alert.success {
+      border-left: 4px solid #10b981;
+    }
+
+    .alert i {
+      font-size: 1.2rem;
+    }
+
+    .alert.error i {
+      color: #ef4444;
+    }
+
+    .alert.success i {
+      color: #10b981;
+    }
+
+    .alert .message {
+      flex: 1;
+      font-size: 0.85rem;
+      color: #1e293b;
+    }
+
+    .alert .close-alert {
+      cursor: pointer;
+      color: #94a3b8;
+      transition: color 0.3s;
+    }
+
+    .alert .close-alert:hover {
+      color: #1e293b;
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .card {
+        padding: 30px 25px;
+        width: 90%;
+      }
+      
+      .card h2 {
+        font-size: 1.5rem;
+      }
+      
+      .back-home {
+        top: 20px;
+        left: 20px;
+        padding: 8px 16px;
+        font-size: 0.85rem;
+      }
+      
+      .logo-img {
+        height: 55px;
+      }
     }
   </style>
 </head>
-
 <body>
 
+<!-- Tombol Kembali ke Beranda -->
+<a href="index.html" class="back-home">
+  <i class="fas fa-arrow-left"></i>
+  <span>Kembali ke Beranda</span>
+</a>
+
 <div class="card">
-  <h2>Login Koperasi</h2>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
-  <button id="loginBtn">Login</button>
+  <div class="logo-container">
+    <img class="logo-img" 
+         src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" 
+         alt="Logo Koperasi Taruna Karya"
+         onerror="this.src='https://placehold.co/200x200?text=Koperasi'">
+  </div>
+  
+  <h2>Selamat Datang Kembali</h2>
+  <p class="subtitle">Masuk ke akun koperasi Anda</p>
+  
+  <form id="loginForm">
+    <div class="input-group">
+      <label><i class="fas fa-envelope"></i> Alamat Email</label>
+      <div class="input-wrapper">
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="email" placeholder="contoh@email.com" required autocomplete="email">
+      </div>
+    </div>
+    
+    <div class="input-group">
+      <label><i class="fas fa-lock"></i> Kata Sandi</label>
+      <div class="input-wrapper">
+        <i class="fas fa-key"></i>
+        <input type="password" id="password" placeholder="Masukkan password" required autocomplete="current-password">
+        <i class="fas fa-eye toggle-password" id="togglePassword" style="right: 15px; left: auto;"></i>
+      </div>
+    </div>
+    
+    <div class="forgot-password">
+      <a href="#" id="forgotPassword"><i class="fas fa-question-circle"></i> Lupa password?</a>
+    </div>
+    
+    <button type="submit" class="btn-login" id="loginBtn">
+      <i class="fas fa-sign-in-alt"></i> Masuk
+    </button>
+  </form>
+  
+  <div class="register-link">
+    <p>Belum punya akun? <a href="join.html"><i class="fas fa-user-plus"></i> Daftar Sekarang</a></p>
+  </div>
 </div>
 
 <script type="module">
-  // Import Firebase (VERSI MODERN)
+  // Import Firebase
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 
-  // CONFIG KAMU
+  // Firebase Configuration
   const firebaseConfig = {
     apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
     authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
@@ -76,23 +429,148 @@
     measurementId: "G-RH91DN1KT8"
   };
 
-  // INIT
+  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  // LOGIN FUNCTION
-  document.getElementById("loginBtn").addEventListener("click", async () => {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+  // DOM Elements
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const loginForm = document.getElementById('loginForm');
+  const loginBtn = document.getElementById('loginBtn');
+  const togglePassword = document.getElementById('togglePassword');
 
+  // Fungsi show alert
+  function showAlert(message, type = 'error') {
+    // Hapus alert yang sudah ada
+    const existingAlert = document.querySelector('.alert');
+    if (existingAlert) {
+      existingAlert.remove();
+    }
+    
+    const alert = document.createElement('div');
+    alert.className = `alert ${type}`;
+    alert.innerHTML = `
+      <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
+      <div class="message">${message}</div>
+      <i class="fas fa-times close-alert"></i>
+    `;
+    
+    document.body.appendChild(alert);
+    
+    // Event close alert
+    alert.querySelector('.close-alert').addEventListener('click', () => {
+      alert.remove();
+    });
+    
+    // Auto close after 5 seconds
+    setTimeout(() => {
+      if (alert.parentNode) alert.remove();
+    }, 5000);
+  }
+
+  // Toggle Password Visibility
+  togglePassword.addEventListener('click', () => {
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    togglePassword.classList.toggle('fa-eye');
+    togglePassword.classList.toggle('fa-eye-slash');
+  });
+
+  // Login Function
+  async function handleLogin(e) {
+    e.preventDefault();
+    
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    
+    // Validasi sederhana
+    if (!email || !password) {
+      showAlert('Harap isi email dan password dengan benar!', 'error');
+      return;
+    }
+    
+    // Disable button & show loading
+    loginBtn.disabled = true;
+    const originalHtml = loginBtn.innerHTML;
+    loginBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Memproses...';
+    
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      alert("Login berhasil!");
-      window.location.href = "dashboard.html";
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log('Login berhasil:', userCredential.user.email);
+      showAlert('Login berhasil! Mengalihkan ke dashboard...', 'success');
+      
+      // Redirect ke dashboard setelah delay
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 1500);
+      
     } catch (error) {
-      alert("Error: " + error.message);
+      console.error('Login error:', error);
+      
+      // Pesan error yang lebih user-friendly
+      let errorMessage = 'Login gagal. ';
+      switch (error.code) {
+        case 'auth/invalid-email':
+          errorMessage += 'Format email tidak valid.';
+          break;
+        case 'auth/user-disabled':
+          errorMessage += 'Akun Anda telah dinonaktifkan. Hubungi admin.';
+          break;
+        case 'auth/user-not-found':
+          errorMessage += 'Email tidak terdaftar. Silakan daftar terlebih dahulu.';
+          break;
+        case 'auth/wrong-password':
+          errorMessage += 'Password salah. Silakan coba lagi.';
+          break;
+        case 'auth/too-many-requests':
+          errorMessage += 'Terlalu banyak percobaan. Coba lagi nanti.';
+          break;
+        default:
+          errorMessage += error.message;
+      }
+      showAlert(errorMessage, 'error');
+      
+      // Reset form password
+      passwordInput.value = '';
+      passwordInput.focus();
+      
+    } finally {
+      // Restore button
+      loginBtn.disabled = false;
+      loginBtn.innerHTML = originalHtml;
+    }
+  }
+
+  // Event listener untuk submit form
+  loginForm.addEventListener('submit', handleLogin);
+  
+  // Lupa password handler
+  const forgotPasswordLink = document.getElementById('forgotPassword');
+  forgotPasswordLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    const email = emailInput.value.trim();
+    if (email && email.includes('@')) {
+      showAlert(`Link reset password akan dikirim ke ${email}. Fitur ini segera hadir.`, 'success');
+    } else {
+      showAlert('Masukkan email Anda terlebih dahulu untuk reset password.', 'error');
     }
   });
+  
+  // Enter key support
+  passwordInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      loginForm.dispatchEvent(new Event('submit'));
+    }
+  });
+  
+  // Logo fallback
+  const logoImg = document.querySelector('.logo-img');
+  if (logoImg) {
+    logoImg.addEventListener('error', function() {
+      this.src = 'https://placehold.co/200x200?text=Koperasi+Taruna';
+    });
+  }
 </script>
 
 </body>
