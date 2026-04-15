@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kontak Koperasi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .info p {
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<div id="navbar"></div>
+
+<div class="container">
+  <h2>Hubungi Kami</h2>
+
+  <div class="grid">
+    
+    <!-- Form -->
+    <div class="card">
+      <h3>Kirim Pesan</h3>
+      <input type="text" id="nama" placeholder="Nama">
+      <input type="email" id="email" placeholder="Email">
+      <textarea id="pesan" rows="5" placeholder="Pesan"></textarea>
+      <button onclick="kirim()">Kirim</button>
+    </div>
+
+    <!-- Info -->
+    <div class="card info">
+      <h3>Kontak Koperasi</h3>
+      <p><strong>Email:</strong> koperasi@email.com</p>
+      <p><strong>WhatsApp:</strong> 08123456789</p>
+      <p><strong>Alamat:</strong> Cirebon, Jawa Barat</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* Load Navbar */
+fetch('navbar.html')
+.then(res => res.text())
+.then(data => document.getElementById('navbar').innerHTML = data);
+
+/* Kirim pesan (sementara) */
+function kirim(){
+  const nama = document.getElementById("nama").value;
+  const email = document.getElementById("email").value;
+  const pesan = document.getElementById("pesan").value;
+
+  if(!nama || !email || !pesan){
+    alert("Harap isi semua field!");
+    return;
+  }
+
+  alert("Pesan berhasil dikirim!");
+}
+</script>
+
+</body>
+</html>
