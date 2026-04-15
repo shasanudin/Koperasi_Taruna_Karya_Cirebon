@@ -6,32 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-  margin:0;
-  font-family:Arial;
-  background:#f1f5f9;
-}
+body {margin:0;font-family:Arial;background:#f1f5f9}
 
-/* NAVBAR STYLE (fallback kalau gagal load) */
-.navbar {
-  background:#1e293b;
-  padding:15px;
-  text-align:center;
-}
-.navbar a {
-  color:white;
-  margin:0 10px;
-  text-decoration:none;
-}
+/* NAVBAR */
+.navbar {background:#1e293b;padding:15px;text-align:center}
+.navbar a {color:white;margin:0 10px;text-decoration:none}
 
 /* CONTENT */
-.container {
-  max-width:1000px;
-  margin:30px auto;
-  padding:20px;
-}
-
-h2 { text-align:center; }
+.container {max-width:1000px;margin:30px auto;padding:20px}
+h2{text-align:center}
 
 .grid {
   display:grid;
@@ -44,27 +27,61 @@ h2 { text-align:center; }
   padding:15px;
   border-radius:10px;
   box-shadow:0 2px 10px rgba(0,0,0,0.1);
+  cursor:pointer;
   transition:0.2s;
 }
 
-.card:hover {
-  transform:translateY(-5px);
+.card:hover {transform:translateY(-5px)}
+
+.card img {
+  width:100%;
+  height:150px;
+  object-fit:cover;
+  border-radius:10px;
 }
 
-.jabatan {
-  font-weight:bold;
-  color:#2563eb;
+.jabatan {color:#2563eb;font-weight:bold}
+
+/* POPUP */
+.modal {
+  display:none;
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,0.6);
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-content {
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  width:300px;
+  text-align:center;
+}
+
+.modal-content img {
+  width:100%;
+  border-radius:10px;
+}
+
+.close {
+  margin-top:10px;
+  background:red;
+  color:white;
+  padding:8px;
+  cursor:pointer;
 }
 </style>
 </head>
 
 <body>
 
-<!-- NAVBAR DINAMIS -->
 <div id="navbar"></div>
 
 <div class="container">
-  <h2>Struktur Pengurus Koperasi</h2>
+  <h2>Struktur Pengurus</h2>
 
   <h3>Ketua</h3>
   <div id="ketua" class="grid"></div>
@@ -79,72 +96,75 @@ h2 { text-align:center; }
   <div id="anggota" class="grid"></div>
 </div>
 
+<!-- POPUP -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <img id="mFoto">
+    <h3 id="mNama"></h3>
+    <p id="mJabatan"></p>
+    <p id="mEmail"></p>
+    <p id="mWa"></p>
+    <button class="close" onclick="closeModal()">Tutup</button>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-/* LOAD NAVBAR */
+/* NAVBAR LOAD */
 fetch("navbar.html")
-  .then(res => res.text())
-  .then(data => {
-    document.getElementById("navbar").innerHTML = data;
-  })
-  .catch(() => {
-    document.getElementById("navbar").innerHTML = `
-      <div class="navbar">
-        <a href="index.html">Beranda</a>
-        <a href="barang.html">Barang</a>
-        <a href="jasa.html">Jasa</a>
-        <a href="pengurus.html">Pengurus</a>
-        <a href="kontak.html">Kontak</a>
-        <a href="join.html">Gabung</a>
-        <a href="login.html">Login</a>
-      </div>
-    `;
-  });
+.then(res=>res.text())
+.then(data=>navbar.innerHTML=data);
 
 /* FIREBASE */
-const firebaseConfig = {
-  apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
-  authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
-  projectId: "koperasi-taruna-karya-cirebon",
+const config = {
+  apiKey:"AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
+  authDomain:"koperasi-taruna-karya-cirebon.firebaseapp.com",
+  projectId:"koperasi-taruna-karya-cirebon",
 };
 
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(config);
 const db = getFirestore(app);
 
-/* REALTIME DATA */
-onSnapshot(collection(db,"pengurus"), (snapshot) => {
+/* POPUP */
+window.openModal = (data)=>{
+  modal.style.display="flex";
+  mFoto.src = data.foto || "https://via.placeholder.com/300";
+  mNama.innerText = data.nama;
+  mJabatan.innerText = data.jabatan;
+  mEmail.innerText = data.email;
+  mWa.innerText = data.wa;
+}
 
-  ketua.innerHTML = "";
-  sekretaris.innerHTML = "";
-  bendahara.innerHTML = "";
-  anggota.innerHTML = "";
+window.closeModal = ()=>{
+  modal.style.display="none";
+}
 
-  snapshot.forEach(doc => {
-    const data = doc.data();
+/* REALTIME */
+onSnapshot(collection(db,"pengurus"), (snap)=>{
 
-    if(data.status !== "approved") return;
+  ketua.innerHTML="";
+  sekretaris.innerHTML="";
+  bendahara.innerHTML="";
+  anggota.innerHTML="";
+
+  snap.forEach(d=>{
+    const p = d.data();
+    if(p.status !== "approved") return;
 
     const html = `
-      <div class="card">
-        <div class="jabatan">${data.jabatan}</div>
-        <h4>${data.nama}</h4>
-        <p>${data.email}</p>
-        <p>${data.wa}</p>
+      <div class="card" onclick='openModal(${JSON.stringify(p)})'>
+        <img src="${p.foto || 'https://via.placeholder.com/300'}">
+        <div class="jabatan">${p.jabatan}</div>
+        <h4>${p.nama}</h4>
       </div>
     `;
 
-    if(data.jabatan === "Ketua"){
-      ketua.innerHTML += html;
-    } else if(data.jabatan === "Sekretaris"){
-      sekretaris.innerHTML += html;
-    } else if(data.jabatan === "Bendahara"){
-      bendahara.innerHTML += html;
-    } else {
-      anggota.innerHTML += html;
-    }
-
+    if(p.jabatan==="Ketua") ketua.innerHTML+=html;
+    else if(p.jabatan==="Sekretaris") sekretaris.innerHTML+=html;
+    else if(p.jabatan==="Bendahara") bendahara.innerHTML+=html;
+    else anggota.innerHTML+=html;
   });
 
 });
