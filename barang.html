@@ -36,7 +36,7 @@ h2{margin-bottom:10px}
 
 button{
   margin-top:10px;width:100%;padding:10px;
-  border:none;border-radius:6px;background:#2563eb;color:white;cursor:pointer
+  border:none;border-radius:6px;background:#25D366;color:white;cursor:pointer
 }
 </style>
 </head>
@@ -59,12 +59,15 @@ button{
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-/* LOAD NAVBAR */
+/* ================= NAVBAR ================= */
 fetch('navbar.html')
 .then(res=>res.text())
 .then(data=>navbar.innerHTML=data);
 
-/* FIREBASE */
+/* ================= NOMOR WA ================= */
+const noWA = "6281234567890"; // GANTI NOMOR KAMU
+
+/* ================= FIREBASE ================= */
 const config = {
   apiKey:"AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
   authDomain:"koperasi-taruna-karya-cirebon.firebaseapp.com",
@@ -74,7 +77,7 @@ const config = {
 const app = initializeApp(config);
 const db = getFirestore(app);
 
-/* FIX URL GITHUB */
+/* ================= FIX URL GAMBAR ================= */
 function fixImage(url){
   if(!url) return "https://via.placeholder.com/300";
 
@@ -84,12 +87,11 @@ function fixImage(url){
     .replace("koperasi-taruna-karya","Koperasi_Taruna_Karya_Cirebon");
 }
 
-/* DATA */
+/* ================= DATA ================= */
 let semuaBarang = [];
-
 const list = document.getElementById("product-list");
 
-/* REALTIME FIREBASE */
+/* ================= REALTIME ================= */
 onSnapshot(collection(db,"barang"), (snap)=>{
   semuaBarang = [];
 
@@ -106,23 +108,36 @@ onSnapshot(collection(db,"barang"), (snap)=>{
   tampilkanProduk(semuaBarang);
 });
 
-/* RENDER */
+/* ================= RENDER ================= */
 function tampilkanProduk(data){
   list.innerHTML = "";
 
   data.forEach(p=>{
+
+    const pesan = encodeURIComponent(
+`Halo, saya ingin tanya tentang produk:
+
+Nama: ${p.nama}
+Harga: ${p.harga}
+Gambar: ${p.gambar}`
+    );
+
     list.innerHTML += `
       <div class="card">
         <img src="${p.gambar}" onerror="this.src='https://via.placeholder.com/300'">
         <h3>${p.nama}</h3>
         <p class="price">${p.harga}</p>
-        <button>Beli</button>
+
+        <a href="https://wa.me/${noWA}?text=${pesan}" target="_blank">
+          <button>Tanyakan via WhatsApp</button>
+        </a>
+
       </div>
     `;
   });
 }
 
-/* SEARCH */
+/* ================= SEARCH ================= */
 search.addEventListener("input", function(){
   const keyword = this.value.toLowerCase();
 
