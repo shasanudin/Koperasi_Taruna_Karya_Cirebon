@@ -1,161 +1,151 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Marketplace Jasa</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Marketplace Jasa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f1f5f9;
-    }
+<style>
+body{margin:0;font-family:Arial;background:#f1f5f9}
+.container{padding:20px}
+h2{margin-bottom:10px}
 
-    .container {
-      padding: 20px;
-    }
+.search-box{margin-bottom:20px}
+.search-box input{
+  width:100%;padding:10px;border-radius:8px;border:1px solid #ccc
+}
 
-    h2 {
-      margin-bottom: 10px;
-    }
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:20px
+}
 
-    .search-box {
-      margin-bottom: 20px;
-    }
+.card{
+  background:white;border-radius:10px;padding:15px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+  transition:0.3s
+}
+.card:hover{transform:translateY(-5px)}
 
-    .search-box input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
+.card img{
+  width:100%;height:150px;object-fit:cover;border-radius:8px
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-    }
+.price{color:#16a34a;font-weight:bold}
+.desc{font-size:14px;color:#555}
 
-    .card {
-      background: white;
-      border-radius: 10px;
-      padding: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: 0.3s;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-    }
-
-    .card img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-
-    .card h3 {
-      margin: 10px 0 5px;
-    }
-
-    .price {
-      color: #16a34a;
-      font-weight: bold;
-    }
-
-    .desc {
-      font-size: 14px;
-      color: #555;
-    }
-
-    button {
-      margin-top: 10px;
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      background: #16a34a;
-      color: white;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #15803d;
-    }
-  </style>
+button{
+  margin-top:10px;width:100%;padding:10px;
+  border:none;border-radius:6px;background:#25D366;color:white;cursor:pointer
+}
+</style>
 </head>
 
 <body>
 
-<!-- Navbar -->
 <div id="navbar"></div>
 
 <div class="container">
   <h2>Marketplace Jasa</h2>
 
-  <!-- Search -->
   <div class="search-box">
     <input type="text" id="search" placeholder="Cari jasa...">
   </div>
 
-  <!-- List -->
   <div class="grid" id="service-list"></div>
 </div>
 
-<script>
-/* Load Navbar */
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+/* ================= NAVBAR ================= */
 fetch('navbar.html')
-.then(res => res.text())
-.then(data => document.getElementById('navbar').innerHTML = data);
+.then(res=>res.text())
+.then(data=>navbar.innerHTML=data);
 
-/* Data contoh */
-const jasa = [
-  {
-    nama: "Servis Motor",
-    harga: 50000,
-    deskripsi: "Servis ringan & ganti oli",
-    gambar: "https://via.placeholder.com/300"
-  },
-  {
-    nama: "Desain Grafis",
-    harga: 100000,
-    deskripsi: "Logo, banner, dll",
-    gambar: "https://via.placeholder.com/300"
-  },
-  {
-    nama: "Jasa Cuci Motor",
-    harga: 20000,
-    deskripsi: "Cuci bersih & cepat",
-    gambar: "https://via.placeholder.com/300"
-  }
-];
+/* ================= NOMOR WA ================= */
+const noWA = "6288214940995"; // GANTI
 
+/* ================= FIREBASE ================= */
+const config = {
+  apiKey:"AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
+  authDomain:"koperasi-taruna-karya-cirebon.firebaseapp.com",
+  projectId:"koperasi-taruna-karya-cirebon",
+};
+
+const app = initializeApp(config);
+const db = getFirestore(app);
+
+/* ================= FIX GAMBAR ================= */
+function fixImage(url){
+  if(!url) return "https://via.placeholder.com/300";
+
+  return url
+    .replace("github.com","raw.githubusercontent.com")
+    .replace("/blob/","/");
+}
+
+/* ================= DATA ================= */
+let semuaJasa = [];
 const list = document.getElementById("service-list");
 
-/* Render */
+/* ================= REALTIME ================= */
+onSnapshot(collection(db,"jasa"), (snap)=>{
+  semuaJasa = [];
+
+  snap.forEach(doc=>{
+    const data = doc.data();
+
+    semuaJasa.push({
+      nama: data.nama,
+      harga: data.harga, // STRING (sesuai DB kamu)
+      deskripsi: data.deskripsi || "",
+      gambar: fixImage(data.gambar)
+    });
+  });
+
+  tampilkanJasa(semuaJasa);
+});
+
+/* ================= RENDER ================= */
 function tampilkanJasa(data){
   list.innerHTML = "";
-  data.forEach(j => {
+
+  data.forEach(j=>{
+
+    const pesan = encodeURIComponent(
+`Halo, saya tertarik dengan jasa berikut:
+
+Nama: ${j.nama}
+Harga: ${j.harga}
+Deskripsi: ${j.deskripsi}`
+    );
+
     list.innerHTML += `
       <div class="card">
-        <img src="${j.gambar}">
+        <img src="${j.gambar}" onerror="this.src='https://via.placeholder.com/300'">
         <h3>${j.nama}</h3>
         <p class="desc">${j.deskripsi}</p>
-        <p class="price">Rp ${j.harga}</p>
-        <button>Pesan</button>
+        <p class="price">${j.harga}</p>
+
+        <a href="https://wa.me/${noWA}?text=${pesan}" target="_blank">
+          <button>Pesan via WhatsApp</button>
+        </a>
       </div>
     `;
   });
 }
 
-tampilkanJasa(jasa);
-
-/* Search */
-document.getElementById("search").addEventListener("input", function(){
+/* ================= SEARCH ================= */
+search.addEventListener("input", function(){
   const keyword = this.value.toLowerCase();
-  const hasil = jasa.filter(j => j.nama.toLowerCase().includes(keyword));
+
+  const hasil = semuaJasa.filter(j =>
+    j.nama.toLowerCase().includes(keyword)
+  );
+
   tampilkanJasa(hasil);
 });
 </script>
