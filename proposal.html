@@ -8,8 +8,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
-<!-- html2canvas untuk tanda tangan digital -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <!-- qrcodejs2 untuk QR Code -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
@@ -159,7 +157,7 @@ body {
   color: #1e3a8a;
 }
 
-/* Tanda Tangan & QR */
+/* Tanda Tangan Digital QR Code */
 .signature-section {
   display: flex;
   flex-wrap: wrap;
@@ -173,7 +171,7 @@ body {
 
 .signature-box {
   flex: 1;
-  min-width: 200px;
+  min-width: 220px;
   text-align: center;
 }
 
@@ -187,27 +185,24 @@ body {
   padding-bottom: 5px;
 }
 
-.signature-preview {
-  margin: 15px 0;
-  padding: 10px;
-  border: 1px dashed #cbd5e1;
-  border-radius: 12px;
-  background: #fafafa;
-  min-height: 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.qr-signature {
+  margin: 15px auto;
+  padding: 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  background: white;
+  display: inline-block;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.signature-preview canvas {
-  max-width: 200px;
-  border-radius: 8px;
+.qr-signature div {
+  margin: 0 auto;
 }
 
 .signature-name {
-  font-weight: 600;
+  font-weight: 700;
   margin-top: 10px;
+  color: #1e293b;
 }
 
 .signature-jabatan {
@@ -215,18 +210,10 @@ body {
   color: #64748b;
 }
 
-.qr-box {
-  flex: 0.5;
-  min-width: 180px;
-  text-align: center;
-}
-
-.qr-placeholder {
-  background: white;
-  padding: 15px;
-  border-radius: 16px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  display: inline-block;
+.signature-verified {
+  font-size: 0.7rem;
+  color: #059669;
+  margin-top: 5px;
 }
 
 /* Tombol Aksi */
@@ -274,16 +261,16 @@ body {
   transform: translateY(-2px);
 }
 
-.btn-success {
-  background: linear-gradient(135deg, #059669, #047857);
+.btn-warning {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
   color: white;
 }
 
-.btn-success:hover {
+.btn-warning:hover {
   transform: translateY(-2px);
 }
 
-/* Loading */
+/* Loading & Empty State */
 .loading {
   text-align: center;
   padding: 40px;
@@ -303,7 +290,12 @@ body {
   border-radius: 16px;
 }
 
-/* Footer Proposal */
+.empty-state i {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+/* Footer */
 .proposal-footer {
   background: #f8fafc;
   padding: 20px 40px;
@@ -328,10 +320,6 @@ body {
   .proposal-container {
     box-shadow: none;
     border-radius: 0;
-  }
-  
-  .signature-preview canvas {
-    border: none;
   }
   
   .btn, .no-print {
@@ -363,7 +351,7 @@ body {
     align-items: center;
   }
   
-  .signature-box, .qr-box {
+  .signature-box {
     width: 100%;
   }
   
@@ -434,30 +422,29 @@ body {
       <p class="grand-total"><strong>Grand Total:</strong> <span id="grandTotal">Rp 0</span></p>
     </div>
 
-    <!-- Tanda Tangan Digital & QR Code -->
+    <!-- Tanda Tangan Digital QR CODE -->
     <div class="signature-section">
       <div class="signature-box">
-        <h4><i class="fas fa-signature"></i> Tanda Tangan Digital</h4>
-        <div class="signature-preview" id="ketuaSignature">
-          <canvas id="ketuaCanvas" width="200" height="80" style="border:1px solid #ccc; border-radius:8px; background:white;"></canvas>
-        </div>
+        <h4><i class="fas fa-qrcode"></i> Tanda Tangan Digital</h4>
+        <div class="qr-signature" id="ketuaQR"></div>
         <div class="signature-name" id="ketuaNama">Memuat...</div>
         <div class="signature-jabatan" id="ketuaJabatan">Ketua Koperasi</div>
+        <div class="signature-verified"><i class="fas fa-check-circle"></i> Tervalidasi Digital</div>
       </div>
 
       <div class="signature-box">
-        <h4><i class="fas fa-signature"></i> Tanda Tangan Digital</h4>
-        <div class="signature-preview" id="sekretarisSignature">
-          <canvas id="sekretarisCanvas" width="200" height="80" style="border:1px solid #ccc; border-radius:8px; background:white;"></canvas>
-        </div>
+        <h4><i class="fas fa-qrcode"></i> Tanda Tangan Digital</h4>
+        <div class="qr-signature" id="sekretarisQR"></div>
         <div class="signature-name" id="sekretarisNama">Memuat...</div>
         <div class="signature-jabatan" id="sekretarisJabatan">Sekretaris Koperasi</div>
+        <div class="signature-verified"><i class="fas fa-check-circle"></i> Tervalidasi Digital</div>
       </div>
 
-      <div class="qr-box">
-        <h4><i class="fas fa-qrcode"></i> Verifikasi Dokumen</h4>
-        <div class="qr-placeholder" id="qrcode"></div>
-        <p style="font-size: 0.7rem; margin-top: 8px; color: #64748b;">Scan untuk verifikasi keaslian</p>
+      <div class="signature-box">
+        <h4><i class="fas fa-file-signature"></i> Verifikasi Dokumen</h4>
+        <div class="qr-signature" id="docQR"></div>
+        <div class="signature-name">Scan untuk Verifikasi</div>
+        <div class="signature-jabatan">Keaslian Dokumen</div>
       </div>
     </div>
 
@@ -476,8 +463,7 @@ body {
 
 <div class="action-buttons no-print">
   <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Cetak / Simpan PDF</button>
-  <button class="btn btn-secondary" onclick="captureSignature()"><i class="fas fa-camera"></i> Generate Tanda Tangan</button>
-  <button class="btn btn-success" onclick="refreshData()"><i class="fas fa-sync-alt"></i> Refresh Data</button>
+  <button class="btn btn-warning" onclick="refreshData()"><i class="fas fa-sync-alt"></i> Refresh Data</button>
 </div>
 
 <script type="module">
@@ -505,104 +491,141 @@ document.getElementById('tanggalProposal').innerText = new Date().toLocaleDateSt
   year: 'numeric', month: 'long', day: 'numeric'
 });
 
-// Fungsi untuk menggambar tanda tangan digital dari nama
-function drawSignature(canvasId, name, jabatan) {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  canvas.width = 200;
-  canvas.height = 80;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+// Fungsi generate QR Code di dalam div
+function generateQRCode(divId, text, size = 120) {
+  const div = document.getElementById(divId);
+  if (!div) return;
+  div.innerHTML = '';
   
-  // Background putih
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  // Gambar garis tanda tangan (simulasi signature)
-  ctx.beginPath();
-  ctx.strokeStyle = '#1e3a8a';
-  ctx.lineWidth = 1.5;
-  
-  // Membuat tanda tangan dinamis berdasarkan nama (font cursive style)
-  ctx.font = 'italic 24px "Brush Script MT", "Segoe Script", cursive';
-  ctx.fillStyle = '#1e3a8a';
-  ctx.fillText(name || 'Tanda Tangan', 20, 50);
-  
-  // Tambahkan garis bawah
-  ctx.beginPath();
-  ctx.moveTo(20, 60);
-  ctx.lineTo(180, 60);
-  ctx.stroke();
-  
-  // Tambahkan tanggal
-  ctx.font = '10px Inter';
-  ctx.fillStyle = '#64748b';
-  ctx.fillText(new Date().toLocaleDateString('id-ID'), 140, 75);
+  try {
+    new QRCode(div, {
+      text: text,
+      width: size,
+      height: size,
+      colorDark: "#1e3a8a",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  } catch(e) {
+    console.error("QR Error:", e);
+    div.innerHTML = `<div style="width:${size}px;height:${size}px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;border-radius:12px;"><i class="fas fa-qrcode" style="font-size:40px;color:#94a3b8;"></i></div>`;
+  }
 }
 
-// Load data barang dari Firestore
+// Load data barang dari Firestore (collection: barang)
 async function loadBarang() {
   try {
     const barangRef = collection(db, "barang");
-    const queryBarang = query(barangRef, where("status", "==", "approved"));
-    const snapshot = await getDocs(queryBarang);
+    // Coba ambil semua data, filter status jika ada
+    let snapshot;
+    try {
+      const q = query(barangRef, where("status", "==", "approved"));
+      snapshot = await getDocs(q);
+    } catch {
+      // Jika field status tidak ada, ambil semua
+      snapshot = await getDocs(barangRef);
+    }
+    
     barangList = [];
     snapshot.forEach(doc => {
-      barangList.push({ id: doc.id, ...doc.data() });
+      const data = doc.data();
+      barangList.push({ 
+        id: doc.id, 
+        nama: data.nama || data.name || data.nama_barang || 'Tidak ada nama',
+        deskripsi: data.deskripsi || data.description || '-',
+        harga: data.harga || data.price || 0,
+        stok: data.stok || data.stock || '-'
+      });
     });
+    
+    console.log("Barang loaded:", barangList.length);
     renderBarang();
   } catch (error) {
     console.error("Error loading barang:", error);
-    document.getElementById('barangBody').innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data barang</td></tr>`;
+    document.getElementById('barangBody').innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data barang<br><small>${error.message}</small></td></tr>`;
   }
 }
 
-// Load data jasa dari Firestore
+// Load data jasa dari Firestore (collection: jasa)
 async function loadJasa() {
   try {
     const jasaRef = collection(db, "jasa");
-    const queryJasa = query(jasaRef, where("status", "==", "approved"));
-    const snapshot = await getDocs(queryJasa);
+    let snapshot;
+    try {
+      const q = query(jasaRef, where("status", "==", "approved"));
+      snapshot = await getDocs(q);
+    } catch {
+      snapshot = await getDocs(jasaRef);
+    }
+    
     jasaList = [];
     snapshot.forEach(doc => {
-      jasaList.push({ id: doc.id, ...doc.data() });
+      const data = doc.data();
+      jasaList.push({ 
+        id: doc.id, 
+        nama: data.nama || data.name || data.nama_jasa || 'Tidak ada nama',
+        deskripsi: data.deskripsi || data.description || '-',
+        harga: data.harga || data.price || 0,
+        penyedia: data.penyedia || data.provider || 'Koperasi'
+      });
     });
+    
+    console.log("Jasa loaded:", jasaList.length);
     renderJasa();
   } catch (error) {
     console.error("Error loading jasa:", error);
-    document.getElementById('jasaBody').innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data jasa</td></tr>`;
+    document.getElementById('jasaBody').innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data jasa<br><small>${error.message}</small></td></tr>`;
   }
 }
 
-// Load pengurus (Ketua & Sekretaris)
+// Load pengurus (Ketua & Sekretaris) dari collection pengurus
 async function loadPengurus() {
   try {
     const pengurusRef = collection(db, "pengurus");
     const snapshot = await getDocs(pengurusRef);
+    
     snapshot.forEach(doc => {
       const data = doc.data();
-      if (data.jabatan === "Ketua" && data.status === "approved") {
+      if (data.jabatan === "Ketua" || data.jabatan === "KETUA" || data.jabatan?.toLowerCase() === "ketua") {
         ketuaData = data;
         document.getElementById('ketuaNama').innerHTML = `<i class="fas fa-user-check"></i> ${data.nama || 'Tidak tersedia'}`;
         document.getElementById('ketuaJabatan').innerText = data.jabatan || 'Ketua';
-        drawSignature('ketuaCanvas', data.nama || 'Ketua', data.jabatan);
+        
+        // Generate QR Code tanda tangan untuk Ketua
+        const qrText = JSON.stringify({
+          type: "ttd_ketua",
+          nama: data.nama,
+          jabatan: data.jabatan,
+          email: data.email,
+          timestamp: new Date().toISOString(),
+          verify: "https://koperasi-taruna-karya.web.app/verify"
+        });
+        generateQRCode('ketuaQR', qrText, 120);
       }
-      if (data.jabatan === "Sekretaris" && data.status === "approved") {
+      if (data.jabatan === "Sekretaris" || data.jabatan === "SEKRETARIS" || data.jabatan?.toLowerCase() === "sekretaris") {
         sekretarisData = data;
         document.getElementById('sekretarisNama').innerHTML = `<i class="fas fa-user-check"></i> ${data.nama || 'Tidak tersedia'}`;
         document.getElementById('sekretarisJabatan').innerText = data.jabatan || 'Sekretaris';
-        drawSignature('sekretarisCanvas', data.nama || 'Sekretaris', data.jabatan);
+        
+        const qrText = JSON.stringify({
+          type: "ttd_sekretaris",
+          nama: data.nama,
+          jabatan: data.jabatan,
+          email: data.email,
+          timestamp: new Date().toISOString(),
+          verify: "https://koperasi-taruna-karya.web.app/verify"
+        });
+        generateQRCode('sekretarisQR', qrText, 120);
       }
     });
     
-    // Fallback jika tidak ada data
     if (!ketuaData) {
       document.getElementById('ketuaNama').innerHTML = `<i class="fas fa-user-clock"></i> Menunggu data`;
-      drawSignature('ketuaCanvas', 'Ketua Koperasi', 'Ketua');
+      generateQRCode('ketuaQR', JSON.stringify({type:"ttd_ketua", status:"pending", message:"Data Ketua belum tersedia"}), 120);
     }
     if (!sekretarisData) {
       document.getElementById('sekretarisNama').innerHTML = `<i class="fas fa-user-clock"></i> Menunggu data`;
-      drawSignature('sekretarisCanvas', 'Sekretaris', 'Sekretaris');
+      generateQRCode('sekretarisQR', JSON.stringify({type:"ttd_sekretaris", status:"pending", message:"Data Sekretaris belum tersedia"}), 120);
     }
   } catch (error) {
     console.error("Error loading pengurus:", error);
@@ -613,23 +636,23 @@ async function loadPengurus() {
 function renderBarang() {
   const tbody = document.getElementById('barangBody');
   if (!barangList.length) {
-    tbody.innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-box-open"></i> Belum ada data barang</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-box-open"></i> Belum ada data barang<br><small>Silakan tambahkan data di collection "barang" Firestore</small></td></tr>`;
     document.getElementById('totalBarang').innerText = 'Rp 0';
-    return;
+    return 0;
   }
   
   let total = 0;
   let html = '';
   barangList.forEach((item, index) => {
-    const harga = item.harga || 0;
+    const harga = Number(item.harga) || 0;
     total += harga;
     html += `
       <tr>
         <td>${index + 1}</td>
-        <td><strong>${escapeHtml(item.nama || '-')}</strong></td>
-        <td>${escapeHtml(item.deskripsi || '-')}</td>
+        <td><strong>${escapeHtml(item.nama)}</strong></td>
+        <td>${escapeHtml(item.deskripsi)}</td>
         <td class="price">Rp ${formatRupiah(harga)}</td>
-        <td>${item.stok || '-'}</td>
+        <td>${escapeHtml(item.stok)}</td>
       </tr>
     `;
   });
@@ -642,23 +665,23 @@ function renderBarang() {
 function renderJasa() {
   const tbody = document.getElementById('jasaBody');
   if (!jasaList.length) {
-    tbody.innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-briefcase"></i> Belum ada data jasa</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-briefcase"></i> Belum ada data jasa<br><small>Silakan tambahkan data di collection "jasa" Firestore</small></td></tr>`;
     document.getElementById('totalJasa').innerText = 'Rp 0';
-    return;
+    return 0;
   }
   
   let total = 0;
   let html = '';
   jasaList.forEach((item, index) => {
-    const harga = item.harga || 0;
+    const harga = Number(item.harga) || 0;
     total += harga;
     html += `
       <tr>
         <td>${index + 1}</td>
-        <td><strong>${escapeHtml(item.nama || '-')}</strong></td>
-        <td>${escapeHtml(item.deskripsi || '-')}</td>
+        <td><strong>${escapeHtml(item.nama)}</strong></td>
+        <td>${escapeHtml(item.deskripsi)}</td>
         <td class="price">Rp ${formatRupiah(harga)}</td>
-        <td>${escapeHtml(item.penyedia || 'Koperasi')}</td>
+        <td>${escapeHtml(item.penyedia)}</td>
       </tr>
     `;
   });
@@ -667,63 +690,35 @@ function renderJasa() {
   return total;
 }
 
-// Hitung grand total
+// Hitung dan update grand total
 function updateGrandTotal() {
-  const totalBarangEl = document.getElementById('totalBarang');
-  const totalJasaEl = document.getElementById('totalJasa');
-  const grandTotalEl = document.getElementById('grandTotal');
-  
   let totalBarang = 0;
   let totalJasa = 0;
   
-  barangList.forEach(item => totalBarang += (item.harga || 0));
-  jasaList.forEach(item => totalJasa += (item.harga || 0));
+  barangList.forEach(item => totalBarang += (Number(item.harga) || 0));
+  jasaList.forEach(item => totalJasa += (Number(item.harga) || 0));
   
   const grand = totalBarang + totalJasa;
-  grandTotalEl.innerHTML = `Rp ${formatRupiah(grand)}`;
+  document.getElementById('grandTotal').innerHTML = `Rp ${formatRupiah(grand)}`;
 }
 
-// Generate QR Code dengan data verifikasi
-function generateQRCode() {
-  const qrDiv = document.getElementById('qrcode');
-  qrDiv.innerHTML = '';
-  
-  // Buat data verifikasi
-  const verificationData = {
-    document: "Proposal Penawaran Koperasi Taruna Karya",
+// Generate QR Code Verifikasi Dokumen
+function generateDocQR() {
+  const docData = {
+    document: "Proposal Penawaran Koperasi Taruna Karya Cirebon",
     date: new Date().toISOString(),
+    tanggal_proposal: document.getElementById('tanggalProposal').innerText,
+    total_barang: barangList.reduce((a,b) => a + (Number(b.harga) || 0), 0),
+    total_jasa: jasaList.reduce((a,b) => a + (Number(b.harga) || 0), 0),
+    jumlah_barang: barangList.length,
+    jumlah_jasa: jasaList.length,
     ketua: ketuaData?.nama || "Tidak tersedia",
     sekretaris: sekretarisData?.nama || "Tidak tersedia",
-    totalBarang: barangList.reduce((a,b) => a + (b.harga || 0), 0),
-    totalJasa: jasaList.reduce((a,b) => a + (b.harga || 0), 0),
-    verifyUrl: "https://koperasi-taruna-karya.web.app/verify"
+    verify_url: "https://koperasi-taruna-karya.web.app/verify"
   };
   
-  const jsonString = JSON.stringify(verificationData);
-  
-  // Gunakan QRCode library
-  new QRCode(qrDiv, {
-    text: jsonString,
-    width: 120,
-    height: 120,
-    colorDark: "#1e3a8a",
-    colorLight: "#ffffff",
-    correctLevel: QRCode.CorrectLevel.H
-  });
+  generateQRCode('docQR', JSON.stringify(docData), 120);
 }
-
-// Fungsi capture tanda tangan (simpan sebagai gambar digital)
-window.captureSignature = function() {
-  // Simulasikan capture tanda tangan dengan menggambar ulang
-  if (ketuaData) drawSignature('ketuaCanvas', ketuaData.nama, ketuaData.jabatan);
-  else drawSignature('ketuaCanvas', 'Ketua Koperasi', 'Ketua');
-  
-  if (sekretarisData) drawSignature('sekretarisCanvas', sekretarisData.nama, sekretarisData.jabatan);
-  else drawSignature('sekretarisCanvas', 'Sekretaris', 'Sekretaris');
-  
-  // Tampilkan notifikasi
-  alert('✓ Tanda tangan digital telah digenerate ulang');
-};
 
 // Refresh semua data
 window.refreshData = async function() {
@@ -732,21 +727,33 @@ window.refreshData = async function() {
   
   await Promise.all([loadBarang(), loadJasa(), loadPengurus()]);
   updateGrandTotal();
-  generateQRCode();
+  generateDocQR();
   
-  // Tampilkan toast sederhana
-  alert('✓ Data berhasil di-refresh dari Firebase');
+  // Tampilkan notifikasi
+  const toast = document.createElement('div');
+  toast.style.position = 'fixed';
+  toast.style.bottom = '20px';
+  toast.style.right = '20px';
+  toast.style.background = '#059669';
+  toast.style.color = 'white';
+  toast.style.padding = '12px 24px';
+  toast.style.borderRadius = '40px';
+  toast.style.fontWeight = '600';
+  toast.style.zIndex = '9999';
+  toast.innerHTML = '<i class="fas fa-check-circle"></i> Data berhasil di-refresh!';
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
 };
 
 // Helper functions
 function formatRupiah(angka) {
-  if (!angka) return '0';
+  if (!angka && angka !== 0) return '0';
   return new Intl.NumberFormat('id-ID').format(angka);
 }
 
 function escapeHtml(str) {
   if (!str) return '-';
-  return str.replace(/[&<>]/g, function(m) {
+  return String(str).replace(/[&<>]/g, function(m) {
     if (m === '&') return '&amp;';
     if (m === '<') return '&lt;';
     if (m === '>') return '&gt;';
@@ -762,9 +769,11 @@ if (logoImg) {
 
 // Inisialisasi
 async function init() {
-  await Promise.all([loadBarang(), loadJasa(), loadPengurus()]);
+  await loadBarang();
+  await loadJasa();
+  await loadPengurus();
   updateGrandTotal();
-  generateQRCode();
+  generateDocQR();
 }
 
 init();
