@@ -717,41 +717,54 @@ window.show = (id) => {
   if (id === 'kartu') loadKartuPengurus();
 }
 
-// Load Kartu Pengurus - Data diambil berdasarkan EMAIL dari SESSION
+// Load Kartu Pengurus - PERBAIKAN: Menggunakan case-insensitive untuk email
 async function loadKartuPengurus() {
   // Ambil email dari session (hasil login)
-  const email = sessionData?.email;
+  const emailSession = sessionData?.email;
   
-  console.log("Loading kartu for email:", email);
+  console.log("Loading kartu for email (session):", emailSession);
   
-  if (!email) {
+  if (!emailSession) {
     console.error("No email found in session");
     document.getElementById('kartuNama').innerText = 'Email tidak ditemukan';
     document.getElementById('kartuJabatan').innerText = 'Silakan login ulang';
     return;
   }
   
+  // Ubah email session menjadi lowercase untuk pencarian case-insensitive
+  const emailLower = emailSession.toLowerCase();
+  console.log("Searching with lowercase email:", emailLower);
+  
   try {
-    // Query ke Firestore berdasarkan EMAIL (bukan hardcode)
+    // Ambil SEMUA data users dari Firestore
     const usersRef = collection(db, "users");
-    const q = query(usersRef, where("email", "==", email));
-    const snapshot = await getDocs(q);
+    const snapshot = await getDocs(usersRef);
     
-    console.log("Query result size:", snapshot.size);
+    console.log("Total users in Firestore:", snapshot.size);
     
-    if (!snapshot.empty) {
-      const user = snapshot.docs[0].data();
-      console.log("User data found:", user);
-      
+    let userFound = null;
+    
+    // Cari user dengan email yang cocok (case-insensitive)
+    snapshot.forEach(doc => {
+      const user = doc.data();
+      const userEmail = user.email ? user.email.toLowerCase() : '';
+      console.log("Comparing:", userEmail, "with", emailLower);
+      if (userEmail === emailLower) {
+        userFound = { id: doc.id, ...user };
+        console.log("User found:", userFound);
+      }
+    });
+    
+    if (userFound) {
       // Isi data ke kartu
-      document.getElementById('kartuNama').innerText = user.nama || 'Tidak tersedia';
-      document.getElementById('kartuJabatan').innerText = user.jabatan || 'Pengurus Koperasi';
-      document.getElementById('kartuEmail').innerText = user.email || '-';
-      document.getElementById('kartuNoHp').innerText = user.no_hp || '-';
+      document.getElementById('kartuNama').innerText = userFound.nama || 'Tidak tersedia';
+      document.getElementById('kartuJabatan').innerText = userFound.jabatan || 'Pengurus Koperasi';
+      document.getElementById('kartuEmail').innerText = userFound.email || '-';
+      document.getElementById('kartuNoHp').innerText = userFound.no_hp || '-';
       
       // Format tanggal bergabung
-      if (user.createdAt) {
-        const tanggal = new Date(user.createdAt);
+      if (userFound.createdAt) {
+        const tanggal = new Date(userFound.createdAt);
         document.getElementById('kartuBergabung').innerText = tanggal.toLocaleDateString('id-ID', {
           year: 'numeric',
           month: 'long',
@@ -762,26 +775,34 @@ async function loadKartuPengurus() {
       }
       
       // Ambil 8 karakter pertama dari UID untuk ID Anggota
-      if (user.uid) {
-        document.getElementById('kartuId').innerText = user.uid.substring(0, 8).toUpperCase();
+      if (userFound.uid) {
+        document.getElementById('kartuId').innerText = userFound.uid.substring(0, 8).toUpperCase();
       } else {
         document.getElementById('kartuId').innerText = '-';
       }
       
       // Set avatar dengan inisial nama
       const avatarPlaceholder = document.getElementById('avatarPlaceholder');
-      if (avatarPlaceholder && user.nama) {
-        const initial = user.nama.charAt(0).toUpperCase();
+      if (avatarPlaceholder && userFound.nama) {
+        const initial = userFound.nama.charAt(0).toUpperCase();
         avatarPlaceholder.innerHTML = `<span style="font-size: 3rem; font-weight: bold;">${initial}</span>`;
       } else if (avatarPlaceholder) {
         avatarPlaceholder.innerHTML = `<i class="fas fa-user-tie" style="font-size: 3rem;"></i>`;
       }
       
     } else {
-      console.error("User not found in Firestore for email:", email);
+      console.error("User not found in Firestore for email:", emailSession);
       document.getElementById('kartuNama').innerText = 'Data tidak ditemukan';
       document.getElementById('kartuJabatan').innerText = 'Hubungi administrator';
-      document.getElementById('kartuEmail').innerText = email;
+      document.getElementById('kartuEmail').innerText = emailSession;
+      
+      // Tampilkan daftar email yang ada di Firestore untuk debugging
+      let emailList = [];
+      snapshot.forEach(doc => {
+        const user = doc.data();
+        if (user.email) emailList.push(user.email);
+      });
+      console.log("Available emails in Firestore:", emailList);
     }
   } catch(e) {
     console.error("Error loading kartu:", e);
