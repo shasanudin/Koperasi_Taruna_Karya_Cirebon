@@ -28,7 +28,6 @@ body {
   padding: 20px;
 }
 
-/* Background pattern */
 body::before {
   content: '';
   position: absolute;
@@ -39,7 +38,6 @@ body::before {
   pointer-events: none;
 }
 
-/* Tombol Kembali ke Beranda */
 .back-home {
   position: fixed;
   top: 30px;
@@ -63,19 +61,8 @@ body::before {
 .back-home:hover {
   background: rgba(255, 255, 255, 0.3);
   transform: translateX(-5px);
-  border-color: rgba(255, 255, 255, 0.5);
 }
 
-.back-home i {
-  font-size: 1.1rem;
-  transition: transform 0.3s;
-}
-
-.back-home:hover i {
-  transform: translateX(-3px);
-}
-
-/* Card Login */
 .login-container {
   background: white;
   border-radius: 32px;
@@ -84,24 +71,13 @@ body::before {
   max-width: 100%;
   text-align: center;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  position: relative;
   z-index: 1;
   animation: fadeInUp 0.6s ease-out;
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.logo {
-  margin-bottom: 20px;
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .logo img {
@@ -114,10 +90,9 @@ body::before {
 }
 
 .login-container h2 {
-  color: #1e293b;
   font-size: 1.8rem;
   font-weight: 800;
-  margin-bottom: 8px;
+  margin: 20px 0 8px;
   background: linear-gradient(135deg, #1e3a8a, #2563eb);
   background-clip: text;
   -webkit-background-clip: text;
@@ -130,7 +105,6 @@ body::before {
   margin-bottom: 30px;
 }
 
-/* Input Group */
 .input-group {
   margin-bottom: 20px;
   text-align: left;
@@ -144,11 +118,6 @@ body::before {
   font-size: 0.85rem;
 }
 
-.input-group label i {
-  margin-right: 8px;
-  color: #2563eb;
-}
-
 .input-wrapper {
   position: relative;
   display: flex;
@@ -159,7 +128,6 @@ body::before {
   position: absolute;
   left: 15px;
   color: #94a3b8;
-  font-size: 1rem;
 }
 
 .input-wrapper input {
@@ -168,8 +136,7 @@ body::before {
   border: 2px solid #e2e8f0;
   border-radius: 14px;
   font-size: 0.95rem;
-  font-family: 'Inter', sans-serif;
-  transition: all 0.3s ease;
+  transition: all 0.3s;
   background: #f8fafc;
 }
 
@@ -180,21 +147,13 @@ body::before {
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
-/* Toggle Password */
 .toggle-password {
   position: absolute;
   right: 15px;
   cursor: pointer;
   color: #94a3b8;
-  transition: color 0.3s;
-  z-index: 2;
 }
 
-.toggle-password:hover {
-  color: #2563eb;
-}
-
-/* Tombol Login */
 .btn-login {
   width: 100%;
   padding: 14px;
@@ -205,8 +164,7 @@ body::before {
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 10px;
+  transition: all 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -218,17 +176,11 @@ body::before {
   box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
 }
 
-.btn-login:active {
-  transform: translateY(0);
-}
-
 .btn-login:disabled {
   opacity: 0.7;
   cursor: not-allowed;
-  transform: none;
 }
 
-/* Link Lupa Password & Daftar */
 .forgot-password {
   text-align: right;
   margin: 15px 0 20px;
@@ -238,13 +190,6 @@ body::before {
   color: #2563eb;
   text-decoration: none;
   font-size: 0.8rem;
-  font-weight: 500;
-  transition: color 0.3s;
-}
-
-.forgot-password a:hover {
-  color: #1d4ed8;
-  text-decoration: underline;
 }
 
 .register-link {
@@ -263,15 +208,8 @@ body::before {
   color: #2563eb;
   text-decoration: none;
   font-weight: 700;
-  transition: color 0.3s;
 }
 
-.register-link a:hover {
-  color: #1d4ed8;
-  text-decoration: underline;
-}
-
-/* Alert custom */
 .alert {
   position: fixed;
   top: 20px;
@@ -288,54 +226,16 @@ body::before {
   max-width: 350px;
 }
 
-.alert.error {
-  border-left: 4px solid #ef4444;
-}
-
-.alert.success {
-  border-left: 4px solid #10b981;
-}
-
-.alert i {
-  font-size: 1.2rem;
-}
-
-.alert.error i {
-  color: #ef4444;
-}
-
-.alert.success i {
-  color: #10b981;
-}
-
-.alert .message {
-  flex: 1;
-  font-size: 0.85rem;
-  color: #1e293b;
-}
-
-.alert .close-alert {
-  cursor: pointer;
-  color: #94a3b8;
-  transition: color 0.3s;
-}
-
-.alert .close-alert:hover {
-  color: #1e293b;
-}
+.alert.error { border-left: 4px solid #ef4444; }
+.alert.success { border-left: 4px solid #10b981; }
+.alert.error i { color: #ef4444; }
+.alert.success i { color: #10b981; }
 
 @keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(100px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(100px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
-/* Loading Spinner */
 .loading-spinner {
   display: inline-block;
   width: 18px;
@@ -350,46 +250,25 @@ body::before {
   to { transform: rotate(360deg); }
 }
 
-/* Responsive */
 @media (max-width: 480px) {
-  .login-container {
-    padding: 30px 25px;
-    width: 90%;
-  }
-  
-  .login-container h2 {
-    font-size: 1.5rem;
-  }
-  
-  .back-home {
-    top: 20px;
-    left: 20px;
-    padding: 8px 16px;
-    font-size: 0.85rem;
-  }
-  
-  .logo img {
-    height: 55px;
-  }
+  .login-container { padding: 30px 25px; width: 90%; }
+  .login-container h2 { font-size: 1.5rem; }
+  .back-home { top: 20px; left: 20px; padding: 8px 16px; font-size: 0.85rem; }
+  .logo img { height: 55px; }
 }
 </style>
 </head>
 <body>
 
-<!-- Tombol Kembali ke Beranda -->
-<div class="back-home" onclick="goToHome()">
+<div class="back-home" onclick="window.location.href='index.html'">
   <i class="fas fa-arrow-left"></i>
   <span>Kembali ke Beranda</span>
 </div>
 
 <div class="login-container">
   <div class="logo">
-    <img id="logoImg" 
-         src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" 
-         alt="Logo Koperasi Taruna Karya"
-         onerror="this.src='https://placehold.co/200x200?text=Koperasi'">
+    <img id="logoImg" src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="Logo" onerror="this.src='https://placehold.co/200x200'">
   </div>
-  
   <h2>Selamat Datang Kembali</h2>
   <p class="subtitle">Masuk ke akun koperasi Anda</p>
   
@@ -398,7 +277,7 @@ body::before {
       <label><i class="fas fa-envelope"></i> Alamat Email</label>
       <div class="input-wrapper">
         <i class="fas fa-envelope"></i>
-        <input type="email" id="email" placeholder="contoh@email.com" required autocomplete="email">
+        <input type="email" id="email" placeholder="contoh@email.com" required>
       </div>
     </div>
     
@@ -406,7 +285,7 @@ body::before {
       <label><i class="fas fa-lock"></i> Kata Sandi</label>
       <div class="input-wrapper">
         <i class="fas fa-key"></i>
-        <input type="password" id="password" placeholder="Masukkan password" required autocomplete="current-password">
+        <input type="password" id="password" placeholder="Masukkan password" required>
         <i class="fas fa-eye toggle-password" id="togglePassword"></i>
       </div>
     </div>
@@ -426,24 +305,20 @@ body::before {
 </div>
 
 <script type="module">
-// ==================== IMPOR FIREBASE ====================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-// ==================== FIREBASE CONFIGURATION ====================
 const firebaseConfig = {
   apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
   authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
   projectId: "koperasi-taruna-karya-cirebon",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ==================== ROLE TO DASHBOARD MAPPING ====================
 const roleDashboard = {
   'KETUA': 'dashboard_ketua.html',
   'SEKRETARIS': 'dashboard_sekretaris.html',
@@ -452,78 +327,14 @@ const roleDashboard = {
   'ANGGOTA': 'dashboard_anggota.html'
 };
 
-// ==================== DOM ELEMENTS ====================
-const emailInput = document.getElementById('email');
-const passwordInput = document.getElementById('password');
-const loginForm = document.getElementById('loginForm');
-const loginBtn = document.getElementById('loginBtn');
-const togglePassword = document.getElementById('togglePassword');
+// Bersihkan session lama saat halaman login dimuat
+localStorage.clear();
+sessionStorage.clear();
 
-// ==================== FUNGSI UTILITY ====================
-
-// Fungsi go to home
-window.goToHome = function() {
-  window.location.href = 'index.html';
-};
-
-// Fungsi show alert
-function showAlert(message, type = 'error') {
-  const existingAlert = document.querySelector('.alert');
-  if (existingAlert) existingAlert.remove();
-  
-  const alert = document.createElement('div');
-  alert.className = `alert ${type}`;
-  alert.innerHTML = `
-    <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
-    <div class="message">${message}</div>
-    <i class="fas fa-times close-alert"></i>
-  `;
-  
-  document.body.appendChild(alert);
-  
-  alert.querySelector('.close-alert').addEventListener('click', () => alert.remove());
-  setTimeout(() => { if (alert.parentNode) alert.remove(); }, 5000);
-}
-
-// Toggle Password Visibility
-togglePassword.addEventListener('click', () => {
-  const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-  passwordInput.setAttribute('type', type);
-  togglePassword.classList.toggle('fa-eye');
-  togglePassword.classList.toggle('fa-eye-slash');
-});
-
-// ==================== CEK SESSION ACTIVE ====================
-async function checkExistingSession() {
-  const userSession = localStorage.getItem('userSession');
-  const userRole = localStorage.getItem('userRole');
-  
-  if (userSession && userRole) {
-    try {
-      const session = JSON.parse(userSession);
-      const loginTime = new Date(session.loginTime);
-      const now = new Date();
-      const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
-      
-      // Session expired setelah 8 jam
-      if (hoursDiff <= 8 && roleDashboard[session.role]) {
-        console.log("Session valid, redirecting to:", roleDashboard[session.role]);
-        window.location.replace(roleDashboard[session.role]);
-        return true;
-      } else {
-        localStorage.removeItem('userSession');
-        localStorage.removeItem('userRole');
-        localStorage.removeItem('userName');
-      }
-    } catch(e) {
-      console.error("Session check error:", e);
-      localStorage.clear();
-    }
-  }
-  
-  // Cek Firebase Auth
-  const user = auth.currentUser;
+// Cek apakah user sudah login
+onAuthStateChanged(auth, async (user) => {
   if (user) {
+    console.log("User already logged in:", user.email);
     try {
       const userQuery = query(collection(db, "users"), where("email", "==", user.email));
       const userSnap = await getDocs(userQuery);
@@ -541,78 +352,81 @@ async function checkExistingSession() {
           localStorage.setItem('userRole', userData.role);
           localStorage.setItem('userName', userData.nama);
           window.location.replace(roleDashboard[userData.role]);
-          return true;
         }
       }
-      await signOut(auth);
-    } catch(e) {
-      console.error("Firebase session check error:", e);
-    }
+    } catch(e) { console.error(e); }
   }
-  
-  return false;
+});
+
+function showAlert(message, type = 'error') {
+  const existing = document.querySelector('.alert');
+  if (existing) existing.remove();
+  const alert = document.createElement('div');
+  alert.className = `alert ${type}`;
+  alert.innerHTML = `<i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i><div>${message}</div><i class="fas fa-times close-alert"></i>`;
+  document.body.appendChild(alert);
+  alert.querySelector('.close-alert').addEventListener('click', () => alert.remove());
+  setTimeout(() => alert.remove(), 5000);
 }
 
-// ==================== LOGIN HANDLER ====================
-async function handleLogin(e) {
+// Toggle Password
+const togglePassword = document.getElementById('togglePassword');
+togglePassword.addEventListener('click', () => {
+  const password = document.getElementById('password');
+  const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+  password.setAttribute('type', type);
+  togglePassword.classList.toggle('fa-eye');
+  togglePassword.classList.toggle('fa-eye-slash');
+});
+
+// Login Handler
+const loginForm = document.getElementById('loginForm');
+const loginBtn = document.getElementById('loginBtn');
+
+loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
   
-  // Validasi input
   if (!email || !password) {
-    showAlert('Harap isi email dan password dengan benar!', 'error');
+    showAlert('Harap isi email dan password!');
     return;
   }
   
-  // Disable button & show loading
   loginBtn.disabled = true;
-  const originalHtml = loginBtn.innerHTML;
   loginBtn.innerHTML = '<span class="loading-spinner"></span> Memproses...';
   
   try {
-    console.log("Attempting login for:", email);
-    
-    // STEP 1: Autentikasi dengan Firebase Auth
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const authUser = userCredential.user;
-    console.log("Auth success:", authUser.uid);
+    const user = userCredential.user;
     
-    // STEP 2: Ambil data user dari Firestore
     const userQuery = query(collection(db, "users"), where("email", "==", email));
     const userSnap = await getDocs(userQuery);
     
     if (userSnap.empty) {
       await signOut(auth);
-      showAlert('Akun tidak terdaftar di sistem koperasi. Hubungi admin.', 'error');
+      showAlert('Akun tidak terdaftar di sistem koperasi');
       return;
     }
     
     const userData = userSnap.docs[0].data();
-    console.log("User data:", userData);
     
-    // STEP 3: Cek status akun
     if (userData.status !== 'active') {
       await signOut(auth);
-      let statusMsg = userData.status === 'pending' 
-        ? 'Akun Anda masih menunggu verifikasi admin.' 
-        : 'Akun Anda telah dinonaktifkan. Hubungi pengurus.';
-      showAlert(statusMsg, 'error');
+      showAlert(userData.status === 'pending' ? 'Akun menunggu verifikasi' : 'Akun Anda dinonaktifkan');
       return;
     }
     
-    // STEP 4: Validasi role
     if (!roleDashboard[userData.role]) {
       await signOut(auth);
-      showAlert(`Role "${userData.role}" tidak dikenali. Hubungi admin.`, 'error');
+      showAlert('Role tidak dikenali');
       return;
     }
     
-    // STEP 5: Simpan session ke localStorage
     const session = {
-      uid: authUser.uid,
-      email: authUser.email,
+      uid: user.uid,
+      email: user.email,
       nama: userData.nama,
       role: userData.role,
       loginTime: new Date().toISOString()
@@ -621,90 +435,29 @@ async function handleLogin(e) {
     localStorage.setItem('userRole', userData.role);
     localStorage.setItem('userName', userData.nama);
     
-    console.log("Session saved, redirecting to:", roleDashboard[userData.role]);
+    showAlert(`Selamat datang, ${userData.nama}!`, 'success');
     
-    // STEP 6: Tampilkan pesan sukses
-    showAlert(`Selamat datang, ${userData.nama || userData.role}!`, 'success');
-    
-    // STEP 7: Redirect ke dashboard sesuai role
     setTimeout(() => {
       window.location.replace(roleDashboard[userData.role]);
-    }, 1000);
+    }, 500);
     
   } catch (error) {
-    console.error("Login error:", error);
-    
-    // Pesan error yang lebih user-friendly
-    let errorMessage = 'Login gagal. ';
-    switch (error.code) {
-      case 'auth/invalid-email':
-        errorMessage += 'Format email tidak valid.';
-        break;
-      case 'auth/user-disabled':
-        errorMessage += 'Akun Anda telah dinonaktifkan. Hubungi admin.';
-        break;
-      case 'auth/user-not-found':
-        errorMessage += 'Email tidak terdaftar. Silakan daftar terlebih dahulu.';
-        break;
-      case 'auth/wrong-password':
-        errorMessage += 'Password salah. Silakan coba lagi.';
-        break;
-      case 'auth/too-many-requests':
-        errorMessage += 'Terlalu banyak percobaan. Coba lagi nanti.';
-        break;
-      default:
-        errorMessage += error.message;
-    }
-    showAlert(errorMessage, 'error');
-    
-    // Reset form password
-    passwordInput.value = '';
-    passwordInput.focus();
-    
+    let message = 'Login gagal. ';
+    if (error.code === 'auth/user-not-found') message += 'Email tidak terdaftar';
+    else if (error.code === 'auth/wrong-password') message += 'Password salah';
+    else if (error.code === 'auth/invalid-email') message += 'Email tidak valid';
+    else message += error.message;
+    showAlert(message);
+    document.getElementById('password').value = '';
   } finally {
-    // Restore button
     loginBtn.disabled = false;
-    loginBtn.innerHTML = originalHtml;
-  }
-}
-
-// ==================== EVENT LISTENER ====================
-loginForm.addEventListener('submit', handleLogin);
-
-// Lupa password handler
-const forgotPasswordLink = document.getElementById('forgotPassword');
-forgotPasswordLink.addEventListener('click', (e) => {
-  e.preventDefault();
-  const email = emailInput.value.trim();
-  if (email && email.includes('@')) {
-    showAlert(`Link reset password akan dikirim ke ${email}. Fitur reset password akan segera hadir.`, 'success');
-  } else {
-    showAlert('Masukkan email Anda terlebih dahulu untuk reset password.', 'error');
+    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Masuk';
   }
 });
 
-// Enter key support
-passwordInput.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') {
-    loginForm.dispatchEvent(new Event('submit'));
-  }
+document.getElementById('password').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') loginForm.dispatchEvent(new Event('submit'));
 });
-
-// Logo fallback
-const logoImg = document.getElementById('logoImg');
-if (logoImg) {
-  logoImg.addEventListener('error', function() {
-    this.src = 'https://placehold.co/200x200?text=Koperasi+Taruna';
-  });
-}
-
-// ==================== INITIAL CHECK ====================
-// Bersihkan session lama saat halaman login dimuat (optional)
-// Tapi jangan bersihkan jika ingin auto redirect
-
-// Cek session yang sudah ada
-checkExistingSession();
 </script>
-
 </body>
 </html>
