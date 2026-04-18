@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Pengurus - Koperasi Taruna Karya Cirebon</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- html2canvas untuk screenshot kartu pengurus -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- Font Awesome 6 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f0f4f8;
+  overflow-x: hidden;
+}
+
+/* ========== TOPBAR ========== */
+.topbar {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: white;
+  padding: 16px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 260px;
+  z-index: 99;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.topbar h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbar h3 i {
+  color: #8b5cf6;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-name {
+  background: rgba(255,255,255,0.1);
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 0.85rem;
+}
+
+.logout-btn {
+  background: rgba(239, 68, 68, 0.9);
+  border: none;
+  padding: 10px 24px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+/* ========== SIDEBAR ========== */
+.sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  color: white;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 30px 20px;
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-logo img {
+  height: 60px;
+  width: auto;
+  border-radius: 12px;
+  background: white;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.sidebar-logo h4 {
+  font-size: 1rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.sidebar button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px 16px;
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+  cursor: pointer;
+  border-radius: 12px;
+  text-align: left;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar button i {
+  width: 24px;
+  font-size: 1.1rem;
+}
+
+.sidebar button:hover {
+  background: #8b5cf6;
+  color: white;
+  transform: translateX(5px);
+}
+
+.sidebar button.active {
+  background: #8b5cf6;
+  color: white;
+}
+
+/* ========== MAIN CONTENT ========== */
+.main {
+  margin-left: 260px;
+  padding: 90px 30px 40px 30px;
+  min-height: 100vh;
+}
+
+/* Card Style */
+.card {
+  background: white;
+  padding: 24px;
+  border-radius: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-left: 4px solid #8b5cf6;
+  padding-left: 15px;
+}
+
+.card h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 20px 0 15px 0;
+  color: #334155;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+  color: white;
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+/* Kartu Pengurus */
+.kartu-pengurus {
+  background: linear-gradient(135deg, #1e1b4b, #2e1065);
+  border-radius: 24px;
+  padding: 0;
+  overflow: hidden;
+  color: white;
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.kartu-pengurus::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.kartu-header {
+  background: rgba(255,255,255,0.1);
+  padding: 20px 25px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.kartu-header h3 {
+  border-left: none;
+  padding-left: 0;
+  color: white;
+  margin-bottom: 0;
+}
+
+.kartu-badge {
+  background: #8b5cf6;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.kartu-body {
+  padding: 25px;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.kartu-avatar {
+  text-align: center;
+}
+
+.kartu-avatar img {
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  object-fit: cover;
+  border: 4px solid #8b5cf6;
+  background: white;
+}
+
+.kartu-avatar .avatar-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  background: linear-gradient(135deg, #8b5cf6, #c084fc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  border: 4px solid white;
+}
+
+.kartu-info {
+  flex: 1;
+}
+
+.kartu-info h2 {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+}
+
+.kartu-jabatan {
+  color: #c084fc;
+  font-weight: 600;
+  margin-bottom: 15px;
+  display: inline-block;
+  background: rgba(139, 92, 246, 0.3);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+
+.kartu-detail {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 15px 0;
+}
+
+.kartu-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #e2e8f0;
+}
+
+.kartu-detail-item i {
+  width: 25px;
+  color: #c084fc;
+}
+
+.kartu-footer {
+  background: rgba(0,0,0,0.3);
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.btn-download-kartu {
+  background: #8b5cf6;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 30px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-download-kartu:hover {
+  background: #7c3aed;
+  transform: translateY(-2px);
+}
+
+/* Grid untuk list */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.notification-item {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-left: 4px solid #8b5cf6;
+  transition: all 0.2s;
+}
+
+.notification-title {
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.notification-date {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+/* SHU Info */
+.shu-card {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+}
+
+.shu-amount {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #b45309;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 70px;
+    padding: 20px 10px;
+  }
+  .sidebar button span {
+    display: none;
+  }
+  .sidebar button i {
+    margin: 0;
+  }
+  .sidebar-logo h4, .sidebar-logo span {
+    display: none;
+  }
+  .sidebar-logo img {
+    height: 40px;
+  }
+  .topbar {
+    left: 70px;
+  }
+  .main {
+    margin-left: 70px;
+    padding: 80px 20px 30px 20px;
+  }
+  .kartu-body {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .kartu-detail {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .topbar h3 {
+    font-size: 1rem;
+  }
+  .user-name {
+    display: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== SCRIPT VALIDASI SESSION ========== -->
+<script>
+(function() {
+  console.log("Dashboard Pengurus - Checking session...");
+  
+  const userSession = localStorage.getItem('userSession');
+  const userRole = localStorage.getItem('userRole');
+  
+  console.log("userSession:", userSession);
+  console.log("userRole:", userRole);
+  
+  if (!userSession || !userRole) {
+    console.log("No session found, redirecting to login");
+    window.location.replace('login.html');
+    return;
+  }
+  
+  try {
+    const session = JSON.parse(userSession);
+    console.log("Session data:", session);
+    
+    const loginTime = new Date(session.loginTime);
+    const now = new Date();
+    const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
+    
+    if (hoursDiff > 8) {
+      console.log("Session expired");
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.replace('login.html');
+      return;
+    }
+    
+    if (session.role !== 'PENGURUS') {
+      console.log("Role mismatch! Expected PENGURUS, got", session.role);
+      const roleRedirect = {
+        'KETUA': 'dashboard_ketua.html',
+        'SEKRETARIS': 'dashboard_sekretaris.html',
+        'BENDAHARA': 'dashboard_bendahara.html',
+        'ANGGOTA': 'dashboard_anggota.html'
+      }[session.role];
+      window.location.replace(roleRedirect || 'login.html');
+      return;
+    }
+    
+    const userNameSpan = document.getElementById('userNameDisplay');
+    if (userNameSpan) {
+      userNameSpan.innerHTML = `<i class="fas fa-users"></i> ${session.nama || session.email}`;
+    }
+    
+    console.log("Session valid for Pengurus, dashboard ready");
+    
+  } catch(e) {
+    console.error("Session validation error:", e);
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.replace('login.html');
+  }
+})();
+
+window.logout = function() {
+  console.log("Logging out from Pengurus dashboard...");
+  localStorage.clear();
+  sessionStorage.clear();
+  window.location.replace('login.html');
+};
+</script>
+
+<div class="topbar">
+  <h3><i class="fas fa-users"></i> Dashboard Pengurus Koperasi</h3>
+  <div class="user-info">
+    <span class="user-name" id="userNameDisplay"><i class="fas fa-user"></i> Loading...</span>
+    <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
+  </div>
+</div>
+
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <img src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="Logo" onerror="this.src='https://placehold.co/200x200?text=Koperasi'">
+    <h4>Koperasi Taruna</h4>
+  </div>
+  <button onclick="show('dashboard')" id="btnDashboard">
+    <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
+  </button>
+  <button onclick="show('kartu')" id="btnKartu">
+    <i class="fas fa-id-card"></i> <span>Kartu Pengurus</span>
+  </button>
+  <button onclick="show('statistik')" id="btnStatistik">
+    <i class="fas fa-chart-line"></i> <span>Statistik</span>
+  </button>
+  <button onclick="show('notifikasi')" id="btnNotifikasi">
+    <i class="fas fa-bell"></i> <span>Notifikasi</span>
+  </button>
+  <button onclick="show('shu')" id="btnShu">
+    <i class="fas fa-chart-pie"></i> <span>Info SHU</span>
+  </button>
+  <button onclick="show('anggota')" id="btnAnggota">
+    <i class="fas fa-users"></i> <span>Data Anggota</span>
+  </button>
+</div>
+
+<div class="main">
+
+<!-- DASHBOARD UTAMA -->
+<div id="dashboard" class="card">
+  <h3><i class="fas fa-chart-line"></i> Ringkasan Koperasi</h3>
+  <div class="stats-grid">
+    <div class="stat-card"><i class="fas fa-users"></i><div class="stat-number" id="totalAnggota">0</div><div class="stat-label">Total Anggota</div></div>
+    <div class="stat-card"><i class="fas fa-user-tie"></i><div class="stat-number" id="totalPengurus">0</div><div class="stat-label">Total Pengurus</div></div>
+    <div class="stat-card"><i class="fas fa-box"></i><div class="stat-number" id="totalBarang">0</div><div class="stat-label">Total Barang</div></div>
+    <div class="stat-card"><i class="fas fa-briefcase"></i><div class="stat-number" id="totalJasa">0</div><div class="stat-label">Total Jasa</div></div>
+  </div>
+  <div class="chart-container">
+    <canvas id="mainChart" style="max-height: 300px;"></canvas>
+  </div>
+</div>
+
+<!-- KARTU PENGURUS -->
+<div id="kartu" class="kartu-pengurus" style="display:none">
+  <div class="kartu-header">
+    <h3><i class="fas fa-id-card"></i> Kartu Identitas Pengurus</h3>
+    <div class="kartu-badge"><i class="fas fa-check-circle"></i> Terverifikasi</div>
+  </div>
+  <div class="kartu-body" id="kartuContent">
+    <div class="kartu-avatar">
+      <div class="avatar-placeholder" id="avatarPlaceholder">
+        <i class="fas fa-user-tie"></i>
+      </div>
+    </div>
+    <div class="kartu-info">
+      <h2 id="kartuNama">Memuat...</h2>
+      <div class="kartu-jabatan" id="kartuJabatan">Pengurus Koperasi</div>
+      <div class="kartu-detail">
+        <div class="kartu-detail-item"><i class="fas fa-envelope"></i> <span id="kartuEmail">-</span></div>
+        <div class="kartu-detail-item"><i class="fas fa-phone"></i> <span id="kartuNoHp">-</span></div>
+        <div class="kartu-detail-item"><i class="fas fa-calendar-alt"></i> <span id="kartuBergabung">-</span></div>
+        <div class="kartu-detail-item"><i class="fas fa-id-badge"></i> <span id="kartuId">-</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="kartu-footer">
+    <div><i class="fas fa-qrcode"></i> Scan untuk verifikasi keanggotaan</div>
+    <button class="btn-download-kartu" onclick="downloadKartu()"><i class="fas fa-download"></i> Download Kartu</button>
+  </div>
+</div>
+
+<!-- STATISTIK DETAIL -->
+<div id="statistik" class="card" style="display:none">
+  <h3><i class="fas fa-chart-simple"></i> Statistik Detail</h3>
+  <div class="stats-grid">
+    <div class="stat-card"><i class="fas fa-user-plus"></i><div class="stat-number" id="pendaftarBaru">0</div><div class="stat-label">Pendaftar Baru</div></div>
+    <div class="stat-card"><i class="fas fa-hand-holding-usd"></i><div class="stat-number" id="totalSimpanan">Rp 0</div><div class="stat-label">Total Simpanan</div></div>
+    <div class="stat-card"><i class="fas fa-chart-line"></i><div class="stat-number" id="shuTahunIni">Rp 0</div><div class="stat-label">SHU Tahun Ini</div></div>
+  </div>
+  <div class="chart-container">
+    <canvas id="detailChart" style="max-height: 300px;"></canvas>
+  </div>
+</div>
+
+<!-- NOTIFIKASI -->
+<div id="notifikasi" class="card" style="display:none">
+  <h3><i class="fas fa-bell"></i> Notifikasi & Pengumuman</h3>
+  <div id="listNotifikasi"></div>
+</div>
+
+<!-- INFO SHU -->
+<div id="shu" class="card" style="display:none">
+  <h3><i class="fas fa-chart-pie"></i> Informasi SHU (Sisa Hasil Usaha)</h3>
+  <div class="shu-card">
+    <p>SHU Tahun 2024</p>
+    <div class="shu-amount" id="shuAmount">Rp 0</div>
+    <p style="margin-top: 10px;">Pembagian akan dilaksanakan pada RAT bulan Maret 2025</p>
+  </div>
+  <div style="margin-top: 20px;">
+    <h4>Alokasi SHU</h4>
+    <div id="alokasiSHU"></div>
+  </div>
+</div>
+
+<!-- DATA ANGGOTA -->
+<div id="anggota" class="card" style="display:none">
+  <h3><i class="fas fa-users"></i> Data Anggota Koperasi</h3>
+  <input type="text" id="searchAnggota" class="form-group" placeholder="🔍 Cari anggota..." style="margin-bottom:20px; width:100%; padding:10px; border-radius:12px; border:1px solid #e2e8f0;" onkeyup="filterAnggotaList()">
+  <div class="grid" id="listAnggota"></div>
+</div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs, query, orderBy, limit, where } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+const config = {
+  apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
+  authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
+  projectId: "koperasi-taruna-karya-cirebon",
+};
+
+const app = initializeApp(config);
+const db = getFirestore(app);
+
+let semuaAnggota = [];
+let sessionData = null;
+
+// Ambil session dari localStorage
+try {
+  sessionData = JSON.parse(localStorage.getItem('userSession'));
+  console.log("Session data loaded:", sessionData);
+} catch(e) {
+  console.error("Error parsing session:", e);
+}
+
+// Navigasi
+window.show = (id) => {
+  ["dashboard", "kartu", "statistik", "notifikasi", "shu", "anggota"].forEach(s => {
+    const el = document.getElementById(s);
+    if (el) el.style.display = "none";
+  });
+  document.getElementById(id).style.display = "block";
+  
+  document.querySelectorAll('.sidebar button').forEach(btn => btn.classList.remove('active'));
+  if (id === 'dashboard') document.getElementById('btnDashboard')?.classList.add('active');
+  if (id === 'kartu') document.getElementById('btnKartu')?.classList.add('active');
+  if (id === 'statistik') document.getElementById('btnStatistik')?.classList.add('active');
+  if (id === 'notifikasi') document.getElementById('btnNotifikasi')?.classList.add('active');
+  if (id === 'shu') document.getElementById('btnShu')?.classList.add('active');
+  if (id === 'anggota') document.getElementById('btnAnggota')?.classList.add('active');
+  
+  if (id === 'anggota') loadAnggotaList();
+  if (id === 'kartu') loadKartuPengurus();
+}
+
+// Load Kartu Pengurus
+async function loadKartuPengurus() {
+  const email = sessionData?.email;
+  if (!email) return;
+  
+  try {
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("email", "==", email));
+    const snapshot = await getDocs(q);
+    
+    if (!snapshot.empty) {
+      const user = snapshot.docs[0].data();
+      document.getElementById('kartuNama').innerText = user.nama || 'Tidak tersedia';
+      document.getElementById('kartuJabatan').innerText = user.jabatan || 'Pengurus Koperasi';
+      document.getElementById('kartuEmail').innerText = user.email || '-';
+      document.getElementById('kartuNoHp').innerText = user.no_hp || '-';
+      document.getElementById('kartuBergabung').innerText = user.createdAt ? new Date(user.createdAt).toLocaleDateString('id-ID') : '-';
+      document.getElementById('kartuId').innerText = user.uid ? user.uid.substring(0, 8).toUpperCase() : '-';
+      
+      const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+      if (avatarPlaceholder) {
+        const initial = (user.nama || 'P').charAt(0).toUpperCase();
+        avatarPlaceholder.innerHTML = `<span style="font-size: 3rem;">${initial}</span>`;
+      }
+    }
+  } catch(e) {
+    console.error("Error loading kartu:", e);
+  }
+}
+
+// Download Kartu sebagai gambar
+window.downloadKartu = async () => {
+  const kartuElement = document.getElementById('kartuContent');
+  const originalStyle = kartuElement.style.cssText;
+  
+  try {
+    const canvas = await html2canvas(kartuElement, {
+      scale: 2,
+      backgroundColor: null,
+      logging: false
+    });
+    
+    const link = document.createElement('a');
+    link.download = 'kartu_pengurus.png';
+    link.href = canvas.toDataURL();
+    link.click();
+    
+    alert('Kartu berhasil di download!');
+  } catch(e) {
+    console.error("Error downloading kartu:", e);
+    alert('Gagal download kartu');
+  }
+};
+
+// Load Anggota List
+async function loadAnggotaList() {
+  const snap = await getDocs(collection(db, "anggota"));
+  semuaAnggota = [];
+  snap.forEach(d => { semuaAnggota.push({ id: d.id, ...d.data() }); });
+  renderAnggotaList(semuaAnggota);
+}
+
+function renderAnggotaList(data) {
+  const list = document.getElementById("listAnggota");
+  list.innerHTML = "";
+  data.forEach(a => {
+    list.innerHTML += `
+      <div class="item-card" style="background:#f8fafc;border-radius:16px;padding:15px;text-align:center">
+        <i class="fas fa-user-circle" style="font-size:50px;color:#8b5cf6"></i>
+        <b>${escapeHtml(a.nama || '-')}</b>
+        <p>No Anggota: ${escapeHtml(a.no_anggota || '-')}</p>
+        <p>WA: ${escapeHtml(a.wa || '-')}</p>
+        <p>Status: ${a.status === 'approved' ? '✅ Aktif' : (a.status === 'pending' ? '⏳ Pending' : '❌ Ditolak')}</p>
+      </div>
+    `;
+  });
+  document.getElementById('totalAnggota').innerText = data.length;
+}
+
+window.filterAnggotaList = () => {
+  const keyword = document.getElementById('searchAnggota').value.toLowerCase();
+  const filtered = semuaAnggota.filter(a => (a.nama || '').toLowerCase().includes(keyword));
+  renderAnggotaList(filtered);
+}
+
+// Load Notifikasi
+async function loadNotifikasi() {
+  const snap = await getDocs(query(collection(db, "notifikasi"), orderBy("createdAt", "desc"), limit(10)));
+  const list = document.getElementById("listNotifikasi");
+  list.innerHTML = "";
+  snap.forEach(d => {
+    const n = d.data();
+    list.innerHTML += `
+      <div class="notification-item">
+        <div class="notification-title">📢 ${escapeHtml(n.judul)}</div>
+        <div class="notification-date">${n.tanggal || '-'}</div>
+        <div style="margin-top:8px">${escapeHtml(n.isi)}</div>
+      </div>
+    `;
+  });
+  document.getElementById('totalNotifikasi').innerText = snap.size;
+}
+
+// Load SHU Info
+async function loadSHUInfo() {
+  const snap = await getDocs(query(collection(db, "shu"), orderBy("tahun", "desc"), limit(1)));
+  if (!snap.empty) {
+    const shu = snap.docs[0].data();
+    document.getElementById('shuAmount').innerHTML = `Rp ${formatRupiah(shu.total_shu)}`;
+    
+    const alokasiDiv = document.getElementById('alokasiSHU');
+    alokasiDiv.innerHTML = `
+      <div class="stats-grid" style="margin-top:15px">
+        <div class="stat-card" style="background:#fef3c7;color:#92400e"><div class="stat-number">${shu.alokasi?.cadangan * 100 || 20}%</div><div class="stat-label">Cadangan</div></div>
+        <div class="stat-card" style="background:#d1fae5;color:#065f46"><div class="stat-number">${shu.alokasi?.jasa_usaha * 100 || 30}%</div><div class="stat-label">Jasa Usaha</div></div>
+        <div class="stat-card" style="background:#e0e7ff;color:#3730a3"><div class="stat-number">${shu.alokasi?.jasa_modal * 100 || 25}%</div><div class="stat-label">Jasa Modal</div></div>
+        <div class="stat-card" style="background:#fce7f3;color:#9d174d"><div class="stat-number">${shu.alokasi?.pengurus * 100 || 10}%</div><div class="stat-label">Pengurus</div></div>
+      </div>
+    `;
+  }
+}
+
+// Load Dashboard Stats
+async function loadDashboardStats() {
+  const barangCount = (await getDocs(collection(db, "barang"))).size;
+  const jasaCount = (await getDocs(collection(db, "jasa"))).size;
+  const anggotaCount = (await getDocs(collection(db, "anggota"))).size;
+  const pengurusCount = (await getDocs(collection(db, "pengurus"))).size;
+  
+  document.getElementById('totalBarang').innerText = barangCount;
+  document.getElementById('totalJasa').innerText = jasaCount;
+  document.getElementById('totalAnggota').innerText = anggotaCount;
+  document.getElementById('totalPengurus').innerText = pengurusCount;
+  document.getElementById('pendaftarBaru').innerText = '12';
+  document.getElementById('totalSimpanan').innerHTML = 'Rp 125.500.000';
+  document.getElementById('shuTahunIni').innerHTML = 'Rp 48.250.000';
+  
+  // Main Chart
+  const ctx = document.getElementById("mainChart").getContext("2d");
+  if (window.mainChart) window.mainChart.destroy();
+  window.mainChart = new Chart(ctx, {
+    type: "bar",
+    data: { labels: ["Barang", "Jasa", "Anggota", "Pengurus"], 
+            datasets: [{ label: "Total Data", data: [barangCount, jasaCount, anggotaCount, pengurusCount], 
+                         backgroundColor: ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6"], borderRadius: 10 }] },
+    options: { responsive: true, maintainAspectRatio: true }
+  });
+  
+  // Detail Chart
+  const ctx2 = document.getElementById("detailChart").getContext("2d");
+  if (window.detailChart) window.detailChart.destroy();
+  window.detailChart = new Chart(ctx2, {
+    type: "doughnut",
+    data: { labels: ["Simpanan Pokok", "Simpanan Wajib", "Simpanan Sukarela"], 
+            datasets: [{ data: [65, 25, 10], backgroundColor: ["#3b82f6", "#10b981", "#f59e0b"] }] },
+    options: { responsive: true, maintainAspectRatio: true }
+  });
+}
+
+// Helper functions
+function formatRupiah(angka) {
+  if (!angka) return '0';
+  return new Intl.NumberFormat('id-ID').format(angka);
+}
+
+function escapeHtml(text) { 
+  if (!text) return ''; 
+  const div = document.createElement('div'); 
+  div.textContent = text; 
+  return div.innerHTML; 
+}
+
+// Load all data
+async function loadAll() {
+  await loadDashboardStats();
+  await loadAnggotaList();
+  await loadNotifikasi();
+  await loadSHUInfo();
+  await loadKartuPengurus();
+}
+
+loadAll();
+</script>
+
+</body>
+</html>
