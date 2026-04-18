@@ -328,25 +328,6 @@ body {
   background: #dc2626;
 }
 
-.btn-approve {
-  background: #10b981;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-right: 8px;
-}
-
-.btn-reject {
-  background: #ef4444;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
 /* Tabel */
 .table-wrapper {
   overflow-x: auto;
@@ -483,7 +464,7 @@ body {
 </head>
 <body>
 
-<!-- ========== SCRIPT VALIDASI SESSION (DILETAKAN PALING ATAS) ========== -->
+<!-- ========== SCRIPT VALIDASI SESSION (TANPA FIREBASE AUTH) ========== -->
 <script>
 (function() {
   console.log("Dashboard Bendahara - Checking session...");
@@ -510,8 +491,6 @@ body {
     const now = new Date();
     const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
     
-    console.log("Hours since login:", hoursDiff);
-    
     // Session expired setelah 8 jam
     if (hoursDiff > 8) {
       console.log("Session expired");
@@ -521,34 +500,26 @@ body {
       return;
     }
     
-    // Validasi role harus BENDAHARA untuk halaman ini
+    // Validasi role harus BENDAHARA
     if (session.role !== 'BENDAHARA') {
       console.log("Role mismatch! Expected BENDAHARA, got", session.role);
-      // Redirect ke dashboard sesuai role
       const roleRedirect = {
         'KETUA': 'dashboard_ketua.html',
         'SEKRETARIS': 'dashboard_sekretaris.html',
         'PENGURUS': 'dashboard_pengurus.html',
         'ANGGOTA': 'dashboard_anggota.html'
       }[session.role];
-      
-      if (roleRedirect) {
-        window.location.replace(roleRedirect);
-      } else {
-        window.location.replace('login.html');
-      }
+      window.location.replace(roleRedirect || 'login.html');
       return;
     }
     
-    // Tampilkan nama user di navbar setelah DOM siap
-    document.addEventListener('DOMContentLoaded', () => {
-      const userNameSpan = document.getElementById('userNameDisplay');
-      if (userNameSpan) {
-        userNameSpan.innerHTML = `<i class="fas fa-calculator"></i> ${session.nama || session.email}`;
-      }
-    });
+    // Tampilkan nama user di navbar
+    const userNameSpan = document.getElementById('userNameDisplay');
+    if (userNameSpan) {
+      userNameSpan.innerHTML = `<i class="fas fa-calculator"></i> ${session.nama || session.email}`;
+    }
     
-    console.log("Session valid for Bendahara, dashboard loaded");
+    console.log("Session valid for Bendahara, dashboard ready");
     
   } catch(e) {
     console.error("Session validation error:", e);
@@ -558,30 +529,12 @@ body {
   }
 })();
 
-// ========== FUNGSI LOGOUT YANG BENAR ==========
+// Fungsi Logout (HANYA hapus localStorage, TIDAK panggil Firebase Auth)
 window.logout = function() {
   console.log("Logging out from Bendahara dashboard...");
-  try {
-    // Hapus semua data dari localStorage
-    localStorage.removeItem('userSession');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('userName');
-    localStorage.clear();
-    
-    // Hapus sessionStorage
-    sessionStorage.clear();
-    
-    // Hapus cookies
-    document.cookie.split(";").forEach(function(c) {
-      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-    });
-    
-    // Redirect ke login
-    window.location.replace('login.html');
-  } catch(e) {
-    console.error("Logout error:", e);
-    window.location.replace('login.html');
-  }
+  localStorage.clear();
+  sessionStorage.clear();
+  window.location.replace('login.html');
 };
 </script>
 
@@ -816,86 +769,20 @@ window.logout = function() {
 </div>
 
 <script type="module">
+// ========== IMPORT FIREBASE (TANPA AUTH) ==========
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const config = {
   apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
   authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
   projectId: "koperasi-taruna-karya-cirebon",
-  storageBucket: "koperasi-taruna-karya-cirebon.firebasestorage.app"
 };
 
 const app = initializeApp(config);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
-let currentUser = null;
 let semuaAnggota = [];
-
-// ========== CEK SESSION DARI FIRESTORE (VALIDASI TAMBAHAN) ==========
-onAuthStateChanged(auth, async (u) => {
-  console.log("onAuthStateChanged triggered, user:", u?.email);
-  
-  // Jika tidak ada user auth, redirect ke login
-  if (!u) {
-    console.log("No Firebase user, redirecting to login");
-    window.location.replace("login.html");
-    return;
-  }
-  
-  try {
-    // Ambil data user dari Firestore
-    const userQuery = query(collection(db, "users"), where("email", "==", u.email));
-    const userSnap = await getDocs(userQuery);
-    
-    if (userSnap.empty) {
-      console.log("User not found in Firestore");
-      await signOut(auth);
-      localStorage.clear();
-      window.location.replace("login.html");
-      return;
-    }
-    
-    const userData = userSnap.docs[0].data();
-    currentUser = userData;
-    console.log("User data from Firestore:", userData);
-    
-    // Validasi status user
-    if (userData.status !== 'active') {
-      console.log("User status not active:", userData.status);
-      await signOut(auth);
-      localStorage.clear();
-      alert('Akun Anda tidak aktif. Hubungi admin.');
-      window.location.replace("login.html");
-      return;
-    }
-    
-    // Validasi role harus BENDAHARA
-    if (userData.role !== 'BENDAHARA') {
-      console.log("Role mismatch! Expected BENDAHARA, got", userData.role);
-      await signOut(auth);
-      localStorage.clear();
-      alert('Akses ditolak! Anda bukan Bendahara Koperasi.');
-      window.location.replace("login.html");
-      return;
-    }
-    
-    // Update nama di navbar jika belum terisi
-    const userNameSpan = document.getElementById('userNameDisplay');
-    if (userNameSpan && userNameSpan.innerHTML.includes('Loading')) {
-      userNameSpan.innerHTML = `<i class="fas fa-calculator"></i> ${userData.nama || userData.email}`;
-    }
-    
-    console.log("User validated, loading data...");
-    await loadAll();
-    
-  } catch (error) {
-    console.error("Auth state error:", error);
-    window.location.replace("login.html");
-  }
-});
 
 // Navigasi
 window.show = (id) => {
@@ -951,7 +838,7 @@ window.tambahSimpanan = async () => {
   
   await addDoc(collection(db, "simpanan"), {
     anggotaId, anggotaNama: anggota?.nama || '-', jenis, nominal, tanggal,
-    dibuat_oleh: currentUser?.email, createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString()
   });
   
   alert("Transaksi simpanan berhasil!");
@@ -1006,7 +893,7 @@ window.tambahHutang = async () => {
   
   await addDoc(collection(db, "hutang_koperasi"), {
     investor, nominal, bunga: bunga || 0, jatuh_tempo: jatuhTempo, keterangan,
-    sisa_hutang: nominal, status: 'active', dibuat_oleh: currentUser?.email, createdAt: new Date().toISOString()
+    sisa_hutang: nominal, status: 'active', createdAt: new Date().toISOString()
   });
   
   alert("Data hutang ditambahkan!");
@@ -1079,7 +966,7 @@ window.hitungDanSimpanSHU = async () => {
   
   await addDoc(collection(db, "shu"), {
     tahun, total_shu: totalSHU, alokasi, perhitungan, status: "approved",
-    dibuat_oleh: currentUser?.email, createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString()
   });
   
   alert(`SHU Tahun ${tahun} berhasil disimpan!\n\nRincian:\nCadangan: Rp ${formatRupiah(perhitungan.cadangan)}\nJasa Usaha: Rp ${formatRupiah(perhitungan.jasa_usaha)}\nJasa Modal: Rp ${formatRupiah(perhitungan.jasa_modal)}`);
@@ -1162,7 +1049,7 @@ window.generateLaporanKeuangan = async () => {
       <tr><td>Simpanan Wajib</td><td>Rp ${formatRupiah(totalWajib)}</td></tr>
       <tr><td>Simpanan Sukarela</td><td>Rp ${formatRupiah(totalSukarela)}</td></tr>
       <tr style="background:#e2e8f0"><td><strong>Total</strong></td><td><strong>Rp ${formatRupiah(totalPokok+totalWajib+totalSukarela)}</strong></td></tr>
-     </table>`;
+    </table>`;
   } else if (jenis === 'shu') {
     const snap = await getDocs(query(collection(db, "shu"), orderBy("tahun", "desc")));
     laporanHtml += `<table class="data-table"><tr><th>Tahun</th><th>Total SHU</th><th>Status</th></tr>`;
@@ -1181,7 +1068,7 @@ window.generateLaporanKeuangan = async () => {
       <tr><th>Aset (Total Simpanan)</th><td>Rp ${formatRupiah(totalAset)}</td></tr>
       <tr><th>Kewajiban (Total Hutang)</th><td>Rp ${formatRupiah(totalKewajiban)}</td></tr>
       <tr style="background:#e2e8f0"><th>Ekuitas (Aset - Kewajiban)</th><td>Rp ${formatRupiah(totalAset - totalKewajiban)}</td></tr>
-     </table>`;
+    </table>`;
   }
   
   preview.innerHTML = laporanHtml;
@@ -1299,6 +1186,8 @@ async function loadAll() {
 document.getElementById('tglSimpanan').value = new Date().toISOString().split('T')[0];
 document.getElementById('periodeMulai').value = new Date().toISOString().slice(0,7);
 document.getElementById('periodeSampai').value = new Date().toISOString().slice(0,7);
+
+loadAll();
 </script>
 
 </body>
