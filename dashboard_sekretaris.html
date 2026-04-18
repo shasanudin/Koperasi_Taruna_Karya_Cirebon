@@ -501,7 +501,7 @@ body {
 </head>
 <body>
 
-<!-- ========== SCRIPT VALIDASI SESSION (DILETAKAN PALING ATAS) ========== -->
+<!-- ========== SCRIPT VALIDASI SESSION (TANPA FIREBASE AUTH) ========== -->
 <script>
 (function() {
   console.log("Dashboard Sekretaris - Checking session...");
@@ -528,8 +528,6 @@ body {
     const now = new Date();
     const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
     
-    console.log("Hours since login:", hoursDiff);
-    
     // Session expired setelah 8 jam
     if (hoursDiff > 8) {
       console.log("Session expired");
@@ -548,24 +546,17 @@ body {
         'PENGURUS': 'dashboard_pengurus.html',
         'ANGGOTA': 'dashboard_anggota.html'
       }[session.role];
-      
-      if (roleRedirect) {
-        window.location.replace(roleRedirect);
-      } else {
-        window.location.replace('login.html');
-      }
+      window.location.replace(roleRedirect || 'login.html');
       return;
     }
     
     // Tampilkan nama user di navbar
-    document.addEventListener('DOMContentLoaded', () => {
-      const userNameSpan = document.getElementById('userNameDisplay');
-      if (userNameSpan) {
-        userNameSpan.innerHTML = `<i class="fas fa-file-alt"></i> ${session.nama || session.email}`;
-      }
-    });
+    const userNameSpan = document.getElementById('userNameDisplay');
+    if (userNameSpan) {
+      userNameSpan.innerHTML = `<i class="fas fa-file-alt"></i> ${session.nama || session.email}`;
+    }
     
-    console.log("Session valid for Sekretaris, dashboard loaded");
+    console.log("Session valid for Sekretaris, dashboard ready");
     
   } catch(e) {
     console.error("Session validation error:", e);
@@ -575,16 +566,12 @@ body {
   }
 })();
 
-// ========== FUNGSI LOGOUT ==========
-window.logout = async function() {
+// Fungsi Logout (HANYA hapus localStorage, TIDAK panggil Firebase Auth)
+window.logout = function() {
   console.log("Logging out from Sekretaris dashboard...");
-  try {
-    localStorage.clear();
-    sessionStorage.clear();
-    window.location.replace('login.html');
-  } catch(e) {
-    window.location.replace('login.html');
-  }
+  localStorage.clear();
+  sessionStorage.clear();
+  window.location.replace('login.html');
 };
 </script>
 
@@ -749,72 +736,20 @@ window.logout = async function() {
 </div>
 
 <script type="module">
+// ========== IMPORT FIREBASE (TANPA AUTH) ==========
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const config = {
   apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
   authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
   projectId: "koperasi-taruna-karya-cirebon",
-  storageBucket: "koperasi-taruna-karya-cirebon.firebasestorage.app"
 };
 
 const app = initializeApp(config);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
-let currentUser = null;
 let semuaAnggota = [];
-
-// ========== CEK SESSION DARI FIRESTORE (VALIDASI TAMBAHAN) ==========
-onAuthStateChanged(auth, async (u) => {
-  // Jika tidak ada user auth, redirect ke login
-  if (!u) {
-    window.location.href = "login.html";
-    return;
-  }
-  
-  // Ambil data user dari Firestore
-  const userQuery = query(collection(db, "users"), where("email", "==", u.email));
-  const userSnap = await getDocs(userQuery);
-  
-  if (userSnap.empty) {
-    await signOut(auth);
-    localStorage.clear();
-    window.location.href = "login.html";
-    return;
-  }
-  
-  const userData = userSnap.docs[0].data();
-  currentUser = userData;
-  
-  // Validasi status user
-  if (userData.status !== 'active') {
-    await signOut(auth);
-    localStorage.clear();
-    alert('Akun Anda tidak aktif. Hubungi admin.');
-    window.location.href = "login.html";
-    return;
-  }
-  
-  // Validasi role harus SEKRETARIS
-  if (userData.role !== 'SEKRETARIS') {
-    await signOut(auth);
-    localStorage.clear();
-    alert('Akses ditolak! Anda bukan Sekretaris Koperasi.');
-    window.location.href = "login.html";
-    return;
-  }
-  
-  // Update nama di navbar jika belum terisi
-  const userNameSpan = document.getElementById('userNameDisplay');
-  if (userNameSpan && userNameSpan.innerHTML.includes('Loading')) {
-    userNameSpan.innerHTML = `<i class="fas fa-file-alt"></i> ${userData.nama || userData.email}`;
-  }
-  
-  loadAll();
-});
 
 // Navigasi
 window.show = (id) => {
@@ -846,7 +781,7 @@ window.simpanProposal = async () => {
   
   await addDoc(collection(db, "proposals"), {
     judul, isi, tujuan, tanggal: tgl, status: "draft",
-    dibuat_oleh: currentUser?.email, createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString()
   });
   alert("Proposal disimpan!");
   document.getElementById('judulProposal').value = "";
@@ -869,7 +804,6 @@ async function loadProposals() {
         <div class="proposal-title">${escapeHtml(p.judul)}</div>
         <div class="proposal-meta">
           <span><i class="fas fa-calendar"></i> ${p.tanggal || '-'}</span>
-          <span><i class="fas fa-user"></i> ${escapeHtml(p.dibuat_oleh)}</span>
           <span><i class="fas fa-envelope"></i> ${escapeHtml(p.tujuan || '-')}</span>
         </div>
         <div class="proposal-meta">${escapeHtml(p.isi?.substring(0, 150))}${p.isi?.length > 150 ? '...' : ''}</div>
@@ -903,7 +837,7 @@ window.simpanSurat = async () => {
   
   await addDoc(collection(db, "surat_keluar"), {
     no_surat: noSurat, perihal, tujuan, isi, tanggal: tgl,
-    dibuat_oleh: currentUser?.email, createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString()
   });
   alert("Surat disimpan!");
   document.getElementById('noSurat').value = "";
@@ -970,7 +904,7 @@ window.simpanRapat = async () => {
   if (!judul || !waktu) return alert("Judul dan waktu rapat harus diisi!");
   
   await addDoc(collection(db, "rapat"), {
-    judul, waktu, tempat, peserta, dibuat_oleh: currentUser?.email, createdAt: new Date().toISOString()
+    judul, waktu, tempat, peserta, createdAt: new Date().toISOString()
   });
   alert("Rapat dijadwalkan!");
   document.getElementById('judulRapat').value = "";
@@ -1017,7 +951,7 @@ window.kirimNotifikasi = async () => {
   if (!judul || !isi) return alert("Judul dan isi pengumuman harus diisi!");
   
   await addDoc(collection(db, "notifikasi"), {
-    judul, isi, tanggal: tgl, dibuat_oleh: currentUser?.email, createdAt: new Date().toISOString()
+    judul, isi, tanggal: tgl, createdAt: new Date().toISOString()
   });
   alert("Pengumuman dikirim!");
   document.getElementById('judulNotif').value = "";
@@ -1111,6 +1045,8 @@ async function loadAll() {
 document.getElementById('tglProposal').value = new Date().toISOString().split('T')[0];
 document.getElementById('tglSurat').value = new Date().toISOString().split('T')[0];
 document.getElementById('tglNotif').value = new Date().toISOString().split('T')[0];
+
+loadAll();
 </script>
 
 </body>
