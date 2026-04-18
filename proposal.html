@@ -132,24 +132,44 @@ body {
   color: #059669;
 }
 
-/* Tanda Tangan Digital - Layout Sejajar */
-.signature-section {
-  margin: 40px 0 20px 0;
-  padding: 30px 0 20px 0;
-  border-top: 2px dashed #cbd5e1;
+/* Halaman Tanda Tangan - Page Break */
+.signature-page {
+  margin-top: 40px;
+  page-break-before: always;
+  break-before: page;
 }
 
+.signature-page-title {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #1e3a8a;
+}
+
+.signature-page-title h2 {
+  font-size: 1.5rem;
+  color: #1e3a8a;
+  font-weight: 700;
+}
+
+.signature-page-title p {
+  color: #64748b;
+  margin-top: 8px;
+}
+
+/* Tanda Tangan Digital - Layout Sejajar */
 .signature-row {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 60px;
-  margin-bottom: 30px;
+  gap: 50px;
+  margin-bottom: 40px;
 }
 
 .signature-box {
-  flex: 0 0 auto;
-  min-width: 220px;
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
   text-align: center;
 }
 
@@ -158,9 +178,9 @@ body {
   font-weight: 600;
   color: #1e3a8a;
   margin-bottom: 15px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 2px solid #e2e8f0;
   display: inline-block;
-  padding-bottom: 5px;
+  padding-bottom: 8px;
 }
 
 .qr-signature {
@@ -173,10 +193,17 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
+.qr-signature canvas,
+.qr-signature img {
+  display: block;
+  margin: 0 auto;
+}
+
 .signature-name {
   font-weight: 700;
   margin-top: 10px;
   color: #1e293b;
+  font-size: 1rem;
 }
 
 .signature-jabatan {
@@ -190,30 +217,29 @@ body {
   margin-top: 5px;
 }
 
-/* Verifikasi Dokumen - di bawah tanda tangan */
-.verification-row {
-  text-align: center;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #e2e8f0;
+/* Verifikasi Dokumen */
+.verification-page {
+  page-break-before: avoid;
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 2px dashed #cbd5e1;
 }
 
 .verification-box {
-  display: inline-block;
   text-align: center;
 }
 
 .verification-box h4 {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #1e3a8a;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .verification-box p {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: #64748b;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 /* Loading & Empty State */
@@ -245,7 +271,7 @@ body {
   display: flex;
   justify-content: center;
   gap: 15px;
-  margin-bottom: 30px;
+  margin: 30px auto;
   flex-wrap: wrap;
 }
 
@@ -326,7 +352,15 @@ body {
     print-color-adjust: exact;
   }
   
-  /* Pastikan tanda tangan sejajar di print */
+  /* Halaman tanda tangan baru */
+  .signature-page {
+    page-break-before: always;
+    break-before: page;
+    margin-top: 0;
+    padding-top: 40px;
+  }
+  
+  /* Tanda tangan sejajar di print */
   .signature-row {
     display: flex !important;
     flex-direction: row !important;
@@ -344,10 +378,10 @@ body {
     break-inside: avoid;
   }
   
-  .verification-row {
+  .verification-page {
     page-break-inside: avoid;
     break-inside: avoid;
-    margin-top: 20px;
+    margin-top: 30px;
   }
   
   /* Hindari potongan di tengah tabel */
@@ -358,11 +392,6 @@ body {
   
   .section {
     break-inside: avoid;
-  }
-  
-  /* Hilangkan total section saat print */
-  .total-section {
-    display: none !important;
   }
 }
 
@@ -441,41 +470,68 @@ body {
         </table>
       </div>
     </div>
+  </div>
 
-    <!-- Tanda Tangan Digital - LAYOUT SEJAJAR (Ketua & Sekretaris) -->
-    <div class="signature-section">
-      <div class="signature-row">
-        <div class="signature-box">
-          <h4><i class="fas fa-qrcode"></i> Tanda Tangan Digital</h4>
-          <div class="qr-signature" id="ketuaQR"></div>
-          <div class="signature-name" id="ketuaNama">Memuat...</div>
-          <div class="signature-jabatan" id="ketuaJabatan">Ketua Koperasi</div>
-          <div class="signature-verified"><i class="fas fa-check-circle"></i> Tervalidasi Digital</div>
-        </div>
+  <!-- HALAMAN TANDA TANGAN & VERIFIKASI (HALAMAN SENDIRI) -->
+  <div class="signature-page">
+    <div class="signature-page-title">
+      <h2><i class="fas fa-file-signature"></i> Lembar Pengesahan</h2>
+      <p>Halaman ini merupakan bukti keabsahan dokumen proposal</p>
+    </div>
 
-        <div class="signature-box">
-          <h4><i class="fas fa-qrcode"></i> Tanda Tangan Digital</h4>
-          <div class="qr-signature" id="sekretarisQR"></div>
-          <div class="signature-name" id="sekretarisNama">Memuat...</div>
-          <div class="signature-jabatan" id="sekretarisJabatan">Sekretaris Koperasi</div>
-          <div class="signature-verified"><i class="fas fa-check-circle"></i> Tervalidasi Digital</div>
+    <div class="signature-row">
+      <div class="signature-box">
+        <h4><i class="fas fa-qrcode"></i> Tanda Tangan Digital</h4>
+        <div class="qr-signature" id="ketuaQR">
+          <div style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;background:#f1f5f9;border-radius:12px;">
+            <i class="fas fa-spinner fa-pulse"></i>
+          </div>
         </div>
+        <div class="signature-name" id="ketuaNama">Memuat data...</div>
+        <div class="signature-jabatan" id="ketuaJabatan">Ketua Koperasi</div>
+        <div class="signature-verified"><i class="fas fa-check-circle"></i> Tervalidasi Digital</div>
       </div>
 
-      <!-- Verifikasi Dokumen - DI BAWAH tanda tangan ketua & sekretaris -->
-      <div class="verification-row">
-        <div class="verification-box">
-          <h4><i class="fas fa-file-signature"></i> Verifikasi Keaslian Dokumen</h4>
-          <div class="qr-signature" id="docQR"></div>
-          <p>Scan QR Code untuk verifikasi keaslian proposal ini</p>
+      <div class="signature-box">
+        <h4><i class="fas fa-qrcode"></i> Tanda Tangan Digital</h4>
+        <div class="qr-signature" id="sekretarisQR">
+          <div style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;background:#f1f5f9;border-radius:12px;">
+            <i class="fas fa-spinner fa-pulse"></i>
+          </div>
         </div>
+        <div class="signature-name" id="sekretarisNama">Memuat data...</div>
+        <div class="signature-jabatan" id="sekretarisJabatan">Sekretaris Koperasi</div>
+        <div class="signature-verified"><i class="fas fa-check-circle"></i> Tervalidasi Digital</div>
       </div>
     </div>
 
-    <!-- Penutup -->
-    <div class="section">
-      <div class="section-title">Penutup</div>
-      <p style="line-height: 1.6; color: #334155;">Demikian proposal penawaran ini kami sampaikan. Besar harapan kami untuk dapat menjalin kerjasama yang saling menguntungkan. Terima kasih atas kepercayaan Anda kepada Koperasi Taruna Karya Cirebon.</p>
+    <!-- Verifikasi Dokumen -->
+    <div class="verification-page">
+      <div class="verification-box">
+        <h4><i class="fas fa-shield-alt"></i> Verifikasi Keaslian Dokumen</h4>
+        <div class="qr-signature" id="docQR">
+          <div style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;background:#f1f5f9;border-radius:12px;">
+            <i class="fas fa-spinner fa-pulse"></i>
+          </div>
+        </div>
+        <p>Scan QR Code di atas untuk memverifikasi keaslian proposal ini<br>Setiap dokumen memiliki kode verifikasi unik</p>
+      </div>
+    </div>
+
+    <!-- Tempat Tanda Tangan Basah (opsional) -->
+    <div style="margin-top: 50px; display: flex; justify-content: space-between; gap: 30px; flex-wrap: wrap;">
+      <div style="flex:1; text-align: center;">
+        <div style="border-top: 1px solid #000; width: 200px; margin: 0 auto; padding-top: 8px;">
+          <strong>Ketua Koperasi</strong>
+        </div>
+        <div style="margin-top: 30px; font-size: 0.8rem; color: #64748b;">( Tanda tangan basah dan cap )</div>
+      </div>
+      <div style="flex:1; text-align: center;">
+        <div style="border-top: 1px solid #000; width: 200px; margin: 0 auto; padding-top: 8px;">
+          <strong>Sekretaris Koperasi</strong>
+        </div>
+        <div style="margin-top: 30px; font-size: 0.8rem; color: #64748b;">( Tanda tangan basah dan cap )</div>
+      </div>
     </div>
   </div>
 
@@ -509,19 +565,12 @@ let semuaBarang = [];
 let semuaJasa = [];
 let ketuaData = null;
 let sekretarisData = null;
+let qrGenerated = false;
 
 // Set tanggal
 document.getElementById('tanggalProposal').innerText = new Date().toLocaleDateString('id-ID', {
   year: 'numeric', month: 'long', day: 'numeric'
 });
-
-// Fungsi fix gambar
-function fixImage(url) {
-  if (!url) return "https://via.placeholder.com/300";
-  return url
-    .replace("github.com", "raw.githubusercontent.com")
-    .replace("/blob/", "/");
-}
 
 // Format Rupiah
 function formatRupiah(angka) {
@@ -529,7 +578,7 @@ function formatRupiah(angka) {
   return new Intl.NumberFormat('id-ID').format(angka);
 }
 
-// Parse harga dari berbagai format
+// Parse harga
 function parseHarga(harga) {
   if (typeof harga === 'number') return harga;
   if (typeof harga === 'string') {
@@ -539,6 +588,36 @@ function parseHarga(harga) {
   return 0;
 }
 
+// Generate QR Code dengan delay dan retry
+function generateQRCode(divId, text, size = 120) {
+  const div = document.getElementById(divId);
+  if (!div) {
+    console.error("Element not found:", divId);
+    return false;
+  }
+  
+  try {
+    div.innerHTML = '';
+    new QRCode(div, {
+      text: text,
+      width: size,
+      height: size,
+      colorDark: "#1e3a8a",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+    console.log("QR generated for:", divId);
+    return true;
+  } catch(e) {
+    console.error("QR Error for", divId, ":", e);
+    div.innerHTML = `<div style="width:${size}px;height:${size}px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;border-radius:12px;flex-direction:column;">
+      <i class="fas fa-qrcode" style="font-size:30px;color:#94a3b8;"></i>
+      <span style="font-size:10px;">QR Code</span>
+    </div>`;
+    return false;
+  }
+}
+
 // ================= LOAD BARANG =================
 onSnapshot(collection(db, "barang"), (snap) => {
   semuaBarang = [];
@@ -546,11 +625,9 @@ onSnapshot(collection(db, "barang"), (snap) => {
     const data = doc.data();
     semuaBarang.push({
       nama: data.nama || data.name || 'Tidak ada nama',
-      harga: data.harga || data.price || 0,
-      gambar: fixImage(data.gambar)
+      harga: data.harga || data.price || 0
     });
   });
-  console.log("Barang loaded:", semuaBarang.length);
   renderBarang();
 });
 
@@ -562,57 +639,64 @@ onSnapshot(collection(db, "jasa"), (snap) => {
     semuaJasa.push({
       nama: data.nama || data.name || 'Tidak ada nama',
       harga: data.harga || data.price || 0,
-      deskripsi: data.deskripsi || data.description || "",
-      gambar: fixImage(data.gambar)
+      deskripsi: data.deskripsi || data.description || ""
     });
   });
-  console.log("Jasa loaded:", semuaJasa.length);
   renderJasa();
 });
 
-// ================= LOAD PENGURUS =================
+// ================= LOAD PENGURUS & GENERATE QR =================
 onSnapshot(collection(db, "pengurus"), (snap) => {
   snap.forEach(doc => {
     const data = doc.data();
     const jabatan = (data.jabatan || "").toLowerCase();
+    
     if (jabatan === "ketua") {
       ketuaData = data;
       document.getElementById('ketuaNama').innerHTML = `<i class="fas fa-user-check"></i> ${data.nama || 'Tidak tersedia'}`;
       document.getElementById('ketuaJabatan').innerText = data.jabatan || 'Ketua Koperasi';
       
       const qrText = JSON.stringify({
-        type: "ttd_ketua",
-        nama: data.nama,
-        jabatan: data.jabatan,
-        email: data.email || '-',
-        timestamp: new Date().toISOString(),
-        verify: "https://koperasi-taruna-karya.web.app/verify"
-      });
-      generateQRCode('ketuaQR', qrText, 120);
+                type: "ttd_ketua",
+                nama: data.nama,
+                jabatan: data.jabatan,
+                email: data.email || '-',
+                timestamp: new Date().toISOString()
+              });
+      setTimeout(() => {
+        generateQRCode('ketuaQR', qrText, 120);
+      }, 500);
     }
+    
     if (jabatan === "sekretaris") {
       sekretarisData = data;
       document.getElementById('sekretarisNama').innerHTML = `<i class="fas fa-user-check"></i> ${data.nama || 'Tidak tersedia'}`;
       document.getElementById('sekretarisJabatan').innerText = data.jabatan || 'Sekretaris Koperasi';
       
       const qrText = JSON.stringify({
-        type: "ttd_sekretaris",
-        nama: data.nama,
-        jabatan: data.jabatan,
-        email: data.email || '-',
-        timestamp: new Date().toISOString(),
-        verify: "https://koperasi-taruna-karya.web.app/verify"
-      });
-      generateQRCode('sekretarisQR', qrText, 120);
+                type: "ttd_sekretaris",
+                nama: data.nama,
+                jabatan: data.jabatan,
+                email: data.email || '-',
+                timestamp: new Date().toISOString()
+              });
+      setTimeout(() => {
+        generateQRCode('sekretarisQR', qrText, 120);
+      }, 500);
     }
   });
+  
+  // Generate QR Dokumen setelah data pengurus tersedia
+  setTimeout(() => {
+    generateDocQR();
+  }, 1000);
 });
 
 // Render Tabel Barang
 function renderBarang() {
   const tbody = document.getElementById('barangBody');
   if (!semuaBarang.length) {
-    tbody.innerHTML = `<tr><td colspan="3" class="empty-state"><i class="fas fa-box-open"></i> Belum ada data barang<br><small>Silakan tambahkan data di collection "barang" Firestore</small></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="3" class="empty-state"><i class="fas fa-box-open"></i> Belum ada data barang</td></tr>`;
     return;
   }
   
@@ -634,7 +718,7 @@ function renderBarang() {
 function renderJasa() {
   const tbody = document.getElementById('jasaBody');
   if (!semuaJasa.length) {
-    tbody.innerHTML = `<tr><td colspan="4" class="empty-state"><i class="fas fa-briefcase"></i> Belum ada data jasa<br><small>Silakan tambahkan data di collection "jasa" Firestore</small></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="4" class="empty-state"><i class="fas fa-briefcase"></i> Belum ada data jasa</td></tr>`;
     return;
   }
   
@@ -651,25 +735,6 @@ function renderJasa() {
     `;
   });
   tbody.innerHTML = html;
-}
-
-// Generate QR Code
-function generateQRCode(divId, text, size = 120) {
-  const div = document.getElementById(divId);
-  if (!div) return;
-  div.innerHTML = '';
-  try {
-    new QRCode(div, {
-      text: text,
-      width: size,
-      height: size,
-      colorDark: "#1e3a8a",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.H
-    });
-  } catch(e) {
-    div.innerHTML = `<div style="width:${size}px;height:${size}px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;border-radius:12px;"><i class="fas fa-qrcode" style="font-size:40px;color:#94a3b8;"></i></div>`;
-  }
 }
 
 // Generate QR Verifikasi Dokumen
@@ -689,7 +754,10 @@ function generateDocQR() {
     sekretaris: sekretarisData?.nama || "Tidak tersedia",
     verify_url: "https://koperasi-taruna-karya.web.app/verify"
   };
-  generateQRCode('docQR', JSON.stringify(docData), 120);
+  
+  setTimeout(() => {
+    generateQRCode('docQR', JSON.stringify(docData), 120);
+  }, 300);
 }
 
 // Refresh Data
@@ -697,8 +765,12 @@ window.refreshData = function() {
   document.getElementById('barangBody').innerHTML = '<tr><td colspan="3" class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat ulang...</td></tr>';
   document.getElementById('jasaBody').innerHTML = '<tr><td colspan="4" class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat ulang...</td></tr>';
   
+  // Reset QR
+  document.getElementById('ketuaQR').innerHTML = '<div style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;background:#f1f5f9;border-radius:12px;"><i class="fas fa-spinner fa-pulse"></i></div>';
+  document.getElementById('sekretarisQR').innerHTML = '<div style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;background:#f1f5f9;border-radius:12px;"><i class="fas fa-spinner fa-pulse"></i></div>';
+  document.getElementById('docQR').innerHTML = '<div style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;background:#f1f5f9;border-radius:12px;"><i class="fas fa-spinner fa-pulse"></i></div>';
+  
   setTimeout(() => {
-    generateDocQR();
     const toast = document.createElement('div');
     toast.style.position = 'fixed';
     toast.style.bottom = '20px';
@@ -712,7 +784,7 @@ window.refreshData = function() {
     toast.innerHTML = '<i class="fas fa-check-circle"></i> Data berhasil di-refresh!';
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 3000);
-  }, 500);
+  }, 1000);
 };
 
 function escapeHtml(str) {
@@ -724,11 +796,6 @@ function escapeHtml(str) {
     return m;
   });
 }
-
-// Generate QR Dokumen setelah data load
-setTimeout(() => {
-  generateDocQR();
-}, 2000);
 
 // Logo fallback
 const logoImg = document.getElementById('logoImg');
