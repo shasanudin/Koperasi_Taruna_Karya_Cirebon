@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Sekretaris - Koperasi Taruna Karya Cirebon</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Font Awesome 6 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f0f4f8;
+  overflow-x: hidden;
+}
+
+/* ========== TOPBAR ========== */
+.topbar {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: white;
+  padding: 16px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 260px;
+  z-index: 99;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.topbar h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbar h3 i {
+  color: #38bdf8;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-name {
+  background: rgba(255,255,255,0.1);
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 0.85rem;
+}
+
+.logout-btn {
+  background: rgba(239, 68, 68, 0.9);
+  border: none;
+  padding: 10px 24px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+/* ========== SIDEBAR ========== */
+.sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  color: white;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 30px 20px;
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-logo img {
+  height: 60px;
+  width: auto;
+  border-radius: 12px;
+  background: white;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.sidebar-logo h4 {
+  font-size: 1rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.sidebar button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px 16px;
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+  cursor: pointer;
+  border-radius: 12px;
+  text-align: left;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar button i {
+  width: 24px;
+  font-size: 1.1rem;
+}
+
+.sidebar button:hover {
+  background: #2563eb;
+  color: white;
+  transform: translateX(5px);
+}
+
+.sidebar button.active {
+  background: #2563eb;
+  color: white;
+}
+
+/* ========== MAIN CONTENT ========== */
+.main {
+  margin-left: 260px;
+  padding: 90px 30px 40px 30px;
+  min-height: 100vh;
+}
+
+/* Card Style */
+.card {
+  background: white;
+  padding: 24px;
+  border-radius: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-left: 4px solid #38bdf8;
+  padding-left: 15px;
+}
+
+.card h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 20px 0 15px 0;
+  color: #334155;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white;
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+/* Form styling */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #334155;
+  font-size: 0.85rem;
+}
+
+.form-group label i {
+  margin-right: 8px;
+  color: #38bdf8;
+}
+
+.form-group input, .form-group textarea, .form-group select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  font-family: 'Inter', sans-serif;
+}
+
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.btn-simpan {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-simpan:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+}
+
+.btn-secondary {
+  background: #e2e8f0;
+  color: #1e293b;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-secondary:hover {
+  background: #cbd5e1;
+  transform: translateY(-2px);
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+/* Proposal Card */
+.proposal-card {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 15px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s;
+}
+
+.proposal-card:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.proposal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.proposal-meta {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.proposal-status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.status-draft {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.status-pending {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status-approved {
+  background: #d1fae5;
+  color: #059669;
+}
+
+/* Notifikasi */
+.notification-item {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-left: 4px solid #38bdf8;
+  transition: all 0.2s;
+}
+
+.notification-item.unread {
+  background: #eff6ff;
+  border-left-color: #2563eb;
+}
+
+.notification-title {
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.notification-date {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+/* Agenda Rapat */
+.rapat-card {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 15px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.rapat-info h4 {
+  margin: 0 0 5px 0;
+  font-size: 1rem;
+}
+
+.rapat-info p {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 3px 0;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 70px;
+    padding: 20px 10px;
+  }
+  .sidebar button span {
+    display: none;
+  }
+  .sidebar button i {
+    margin: 0;
+  }
+  .sidebar-logo h4, .sidebar-logo span {
+    display: none;
+  }
+  .sidebar-logo img {
+    height: 40px;
+  }
+  .topbar {
+    left: 70px;
+  }
+  .main {
+    margin-left: 70px;
+    padding: 80px 20px 30px 20px;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .topbar h3 {
+    font-size: 1rem;
+  }
+  .user-name {
+    display: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h3><i class="fas fa-file-alt"></i> Dashboard Sekretaris</h3>
+  <div class="user-info">
+    <span class="user-name" id="userNameDisplay"><i class="fas fa-user"></i> Loading...</span>
+    <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
+  </div>
+</div>
+
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <img src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="Logo" onerror="this.src='https://placehold.co/200x200?text=Koperasi'">
+    <h4>Koperasi Taruna</h4>
+  </div>
+  <button onclick="show('dashboard')" id="btnDashboard">
+    <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
+  </button>
+  <button onclick="show('proposal')" id="btnProposal">
+    <i class="fas fa-file-signature"></i> <span>Proposal</span>
+  </button>
+  <button onclick="show('surat')" id="btnSurat">
+    <i class="fas fa-envelope"></i> <span>Surat Menyurat</span>
+  </button>
+  <button onclick="show('rapat')" id="btnRapat">
+    <i class="fas fa-calendar-alt"></i> <span>Manajemen Rapat</span>
+  </button>
+  <button onclick="show('notifikasi')" id="btnNotifikasi">
+    <i class="fas fa-bell"></i> <span>Notifikasi</span>
+  </button>
+  <button onclick="show('anggota')" id="btnAnggota">
+    <i class="fas fa-users"></i> <span>Data Anggota</span>
+  </button>
+</div>
+
+<div class="main">
+
+<!-- DASHBOARD UTAMA -->
+<div id="dashboard" class="card">
+  <h3><i class="fas fa-chart-line"></i> Ringkasan Aktivitas</h3>
+  <div class="stats-grid">
+    <div class="stat-card"><i class="fas fa-file-signature"></i><div class="stat-number" id="totalProposal">0</div><div class="stat-label">Total Proposal</div></div>
+    <div class="stat-card"><i class="fas fa-envelope"></i><div class="stat-number" id="totalSurat">0</div><div class="stat-label">Surat Keluar</div></div>
+    <div class="stat-card"><i class="fas fa-calendar"></i><div class="stat-number" id="totalRapat">0</div><div class="stat-label">Rapat Bulan Ini</div></div>
+    <div class="stat-card"><i class="fas fa-users"></i><div class="stat-number" id="totalAnggotaStat">0</div><div class="stat-label">Total Anggota</div></div>
+  </div>
+  <div class="chart-container">
+    <canvas id="activityChart" style="max-height: 300px;"></canvas>
+  </div>
+</div>
+
+<!-- PROPOSAL -->
+<div id="proposal" class="card" style="display:none">
+  <h3><i class="fas fa-plus-circle"></i> Buat Proposal Baru</h3>
+  <div class="form-row">
+    <div class="form-group">
+      <label><i class="fas fa-tag"></i> Judul Proposal</label>
+      <input id="judulProposal" placeholder="Contoh: Proposal Pengajuan Dana Usaha">
+    </div>
+    <div class="form-group">
+      <label><i class="fas fa-calendar"></i> Tanggal</label>
+      <input type="date" id="tglProposal">
+    </div>
+  </div>
+  <div class="form-group">
+    <label><i class="fas fa-align-left"></i> Isi Proposal</label>
+    <textarea id="isiProposal" rows="5" placeholder="Tuliskan isi proposal..."></textarea>
+  </div>
+  <div class="form-group">
+    <label><i class="fas fa-user-tie"></i> Tujuan / Penerima</label>
+    <input id="tujuanProposal" placeholder="Kepada Yth. ...">
+  </div>
+  <button class="btn-simpan" onclick="simpanProposal()"><i class="fas fa-save"></i> Simpan Proposal</button>
+  
+  <h4 style="margin-top: 30px;"><i class="fas fa-list"></i> Daftar Proposal</h4>
+  <div id="listProposal"></div>
+</div>
+
+<!-- SURAT MENYURAT -->
+<div id="surat" class="card" style="display:none">
+  <h3><i class="fas fa-paper-plane"></i> Buat Surat Keluar</h3>
+  <div class="form-row">
+    <div class="form-group">
+      <label><i class="fas fa-hashtag"></i> Nomor Surat</label>
+      <input id="noSurat" placeholder="Contoh: 001/KTK/2024">
+    </div>
+    <div class="form-group">
+      <label><i class="fas fa-calendar"></i> Tanggal</label>
+      <input type="date" id="tglSurat">
+    </div>
+  </div>
+  <div class="form-group">
+    <label><i class="fas fa-tag"></i> Perihal</label>
+    <input id="perihalSurat" placeholder="Perihal surat...">
+  </div>
+  <div class="form-group">
+    <label><i class="fas fa-address-card"></i> Tujuan</label>
+    <input id="tujuanSurat" placeholder="Kepada Yth. ...">
+  </div>
+  <div class="form-group">
+    <label><i class="fas fa-align-left"></i> Isi Surat</label>
+    <textarea id="isiSurat" rows="5" placeholder="Isi surat..."></textarea>
+  </div>
+  <button class="btn-simpan" onclick="simpanSurat()"><i class="fas fa-save"></i> Simpan Surat</button>
+  
+  <h4 style="margin-top: 30px;"><i class="fas fa-history"></i> Arsip Surat Keluar</h4>
+  <div id="listSurat"></div>
+</div>
+
+<!-- MANAJEMEN RAPAT -->
+<div id="rapat" class="card" style="display:none">
+  <h3><i class="fas fa-plus-circle"></i> Jadwalkan Rapat</h3>
+  <div class="form-row">
+    <div class="form-group">
+      <label><i class="fas fa-tag"></i> Judul Rapat</label>
+      <input id="judulRapat" placeholder="Contoh: Rapat Anggota Tahunan">
+    </div>
+    <div class="form-group">
+      <label><i class="fas fa-calendar"></i> Tanggal & Waktu</label>
+      <input type="datetime-local" id="waktuRapat">
+    </div>
+  </div>
+  <div class="form-group">
+    <label><i class="fas fa-map-marker-alt"></i> Tempat</label>
+    <input id="tempatRapat" placeholder="Lokasi rapat">
+  </div>
+  <div class="form-group">
+    <label><i class="fas fa-users"></i> Peserta (pisah dengan koma)</label>
+    <input id="pesertaRapat" placeholder="Contoh: Pengurus, Anggota, ...">
+  </div>
+  <button class="btn-simpan" onclick="simpanRapat()"><i class="fas fa-save"></i> Jadwalkan Rapat</button>
+  
+  <h4 style="margin-top: 30px;"><i class="fas fa-calendar-week"></i> Daftar Rapat</h4>
+  <div id="listRapat"></div>
+</div>
+
+<!-- NOTIFIKASI -->
+<div id="notifikasi" class="card" style="display:none">
+  <h3><i class="fas fa-bell"></i> Notifikasi & Pengumuman</h3>
+  <div class="form-group">
+    <label><i class="fas fa-edit"></i> Buat Pengumuman Baru</label>
+    <div class="form-row">
+      <input id="judulNotif" placeholder="Judul pengumuman" style="flex:2">
+      <input type="date" id="tglNotif" style="flex:1">
+    </div>
+    <textarea id="isiNotif" rows="3" placeholder="Isi pengumuman..." style="margin-top:10px"></textarea>
+    <button class="btn-simpan" onclick="kirimNotifikasi()" style="margin-top:10px"><i class="fas fa-paper-plane"></i> Kirim Pengumuman</button>
+  </div>
+  
+  <h4 style="margin-top: 30px;"><i class="fas fa-history"></i> Riwayat Pengumuman</h4>
+  <div id="listNotifikasi"></div>
+</div>
+
+<!-- DATA ANGGOTA -->
+<div id="anggota" class="card" style="display:none">
+  <h3><i class="fas fa-users"></i> Data Anggota Koperasi</h3>
+  <input type="text" id="searchAnggota" class="form-group" placeholder="🔍 Cari anggota..." style="margin-bottom:20px" onkeyup="filterAnggota()">
+  <div id="listAnggota" class="grid"></div>
+</div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+const config = {
+  apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
+  authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
+  projectId: "koperasi-taruna-karya-cirebon",
+  storageBucket: "koperasi-taruna-karya-cirebon.firebasestorage.app"
+};
+
+const app = initializeApp(config);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null;
+let semuaAnggota = [];
+
+// Cek session dan role
+onAuthStateChanged(auth, async (u) => {
+  if (!u) {
+    location.href = "login.html";
+    return;
+  }
+  
+  const userQuery = query(collection(db, "users"), where("email", "==", u.email));
+  const userSnap = await getDocs(userQuery);
+  if (!userSnap.empty) {
+    currentUser = userSnap.docs[0].data();
+    document.getElementById('userNameDisplay').innerHTML = `<i class="fas fa-file-alt"></i> ${currentUser.nama || currentUser.email}`;
+    
+    if (currentUser.role !== 'SEKRETARIS') {
+      alert('Akses ditolak! Anda bukan Sekretaris Koperasi.');
+      signOut(auth);
+      location.href = "login.html";
+    }
+  }
+  loadAll();
+});
+
+window.logout = () => signOut(auth);
+
+// Navigasi
+window.show = (id) => {
+  ["dashboard", "proposal", "surat", "rapat", "notifikasi", "anggota"].forEach(s => {
+    const el = document.getElementById(s);
+    if (el) el.style.display = "none";
+  });
+  document.getElementById(id).style.display = "block";
+  
+  document.querySelectorAll('.sidebar button').forEach(btn => btn.classList.remove('active'));
+  if (id === 'dashboard') document.getElementById('btnDashboard')?.classList.add('active');
+  if (id === 'proposal') document.getElementById('btnProposal')?.classList.add('active');
+  if (id === 'surat') document.getElementById('btnSurat')?.classList.add('active');
+  if (id === 'rapat') document.getElementById('btnRapat')?.classList.add('active');
+  if (id === 'notifikasi') document.getElementById('btnNotifikasi')?.classList.add('active');
+  if (id === 'anggota') document.getElementById('btnAnggota')?.classList.add('active');
+  
+  if (id === 'anggota') loadAnggota();
+}
+
+// ==================== PROPOSAL ====================
+window.simpanProposal = async () => {
+  const judul = document.getElementById('judulProposal').value;
+  const isi = document.getElementById('isiProposal').value;
+  const tujuan = document.getElementById('tujuanProposal').value;
+  const tgl = document.getElementById('tglProposal').value || new Date().toISOString().split('T')[0];
+  
+  if (!judul || !isi) return alert("Judul dan isi proposal harus diisi!");
+  
+  await addDoc(collection(db, "proposals"), {
+    judul, isi, tujuan, tanggal: tgl, status: "draft",
+    dibuat_oleh: currentUser?.email, createdAt: new Date().toISOString()
+  });
+  alert("Proposal disimpan!");
+  document.getElementById('judulProposal').value = "";
+  document.getElementById('isiProposal').value = "";
+  document.getElementById('tujuanProposal').value = "";
+  loadProposals();
+}
+
+async function loadProposals() {
+  const snap = await getDocs(query(collection(db, "proposals"), orderBy("createdAt", "desc")));
+  const list = document.getElementById("listProposal");
+  list.innerHTML = "";
+  snap.forEach(d => {
+    const p = d.data();
+    let statusClass = "status-draft";
+    if (p.status === 'pending') statusClass = "status-pending";
+    if (p.status === 'approved') statusClass = "status-approved";
+    list.innerHTML += `
+      <div class="proposal-card">
+        <div class="proposal-title">${escapeHtml(p.judul)}</div>
+        <div class="proposal-meta">
+          <span><i class="fas fa-calendar"></i> ${p.tanggal || '-'}</span>
+          <span><i class="fas fa-user"></i> ${escapeHtml(p.dibuat_oleh)}</span>
+          <span><i class="fas fa-envelope"></i> ${escapeHtml(p.tujuan || '-')}</span>
+        </div>
+        <div class="proposal-meta">${escapeHtml(p.isi?.substring(0, 150))}${p.isi?.length > 150 ? '...' : ''}</div>
+        <div><span class="proposal-status ${statusClass}">${p.status || 'draft'}</span></div>
+        <div style="margin-top:10px">
+          <button class="btn-secondary" onclick="window.open('proposal.html?id=${d.id}', '_blank')"><i class="fas fa-print"></i> Cetak Proposal</button>
+          <button class="btn-danger" onclick="hapusProposal('${d.id}')"><i class="fas fa-trash"></i> Hapus</button>
+        </div>
+      </div>
+    `;
+  });
+  document.getElementById('totalProposal').innerText = snap.size;
+}
+
+window.hapusProposal = async (id) => {
+  if (confirm("Hapus proposal ini?")) {
+    await deleteDoc(doc(db, "proposals", id));
+    loadProposals();
+  }
+}
+
+// ==================== SURAT ====================
+window.simpanSurat = async () => {
+  const noSurat = document.getElementById('noSurat').value;
+  const perihal = document.getElementById('perihalSurat').value;
+  const tujuan = document.getElementById('tujuanSurat').value;
+  const isi = document.getElementById('isiSurat').value;
+  const tgl = document.getElementById('tglSurat').value || new Date().toISOString().split('T')[0];
+  
+  if (!noSurat || !perihal) return alert("Nomor surat dan perihal harus diisi!");
+  
+  await addDoc(collection(db, "surat_keluar"), {
+    no_surat: noSurat, perihal, tujuan, isi, tanggal: tgl,
+    dibuat_oleh: currentUser?.email, createdAt: new Date().toISOString()
+  });
+  alert("Surat disimpan!");
+  document.getElementById('noSurat').value = "";
+  document.getElementById('perihalSurat').value = "";
+  document.getElementById('tujuanSurat').value = "";
+  document.getElementById('isiSurat').value = "";
+  loadSurat();
+}
+
+async function loadSurat() {
+  const snap = await getDocs(query(collection(db, "surat_keluar"), orderBy("createdAt", "desc")));
+  const list = document.getElementById("listSurat");
+  list.innerHTML = "";
+  snap.forEach(d => {
+    const s = d.data();
+    list.innerHTML += `
+      <div class="proposal-card">
+        <div class="proposal-title">📄 ${escapeHtml(s.no_surat)} - ${escapeHtml(s.perihal)}</div>
+        <div class="proposal-meta">
+          <span><i class="fas fa-calendar"></i> ${s.tanggal || '-'}</span>
+          <span><i class="fas fa-address-card"></i> Kepada: ${escapeHtml(s.tujuan || '-')}</span>
+        </div>
+        <div class="proposal-meta">${escapeHtml(s.isi?.substring(0, 100))}${s.isi?.length > 100 ? '...' : ''}</div>
+        <div style="margin-top:10px">
+          <button class="btn-secondary" onclick="printSurat('${d.id}', '${escapeHtml(s.no_surat)}', '${escapeHtml(s.perihal)}', '${escapeHtml(s.tujuan)}', '${escapeHtml(s.isi)}', '${s.tanggal}')"><i class="fas fa-print"></i> Cetak</button>
+          <button class="btn-danger" onclick="hapusSurat('${d.id}')"><i class="fas fa-trash"></i> Hapus</button>
+        </div>
+      </div>
+    `;
+  });
+  document.getElementById('totalSurat').innerText = snap.size;
+}
+
+window.printSurat = (id, noSurat, perihal, tujuan, isi, tanggal) => {
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(`
+    <html><head><title>Surat ${noSurat}</title>
+    <style>body{font-family:'Times New Roman',serif;padding:40px;margin:0} .header{text-align:center;margin-bottom:30px} .kop{font-size:24px;font-weight:bold} .alamat{font-size:12px} .nomor{margin:20px 0} .isi{line-height:1.6;margin:30px 0} .ttd{margin-top:50px;text-align:right}</style>
+    </head><body>
+    <div class="header"><div class="kop">KOPERASI TARUNA KARYA CIREBON</div><div class="alamat">Jl. Siliwangi No.88, Cirebon, Jawa Barat</div></div>
+    <div class="nomor">Nomor: ${noSurat}<br>Tanggal: ${tanggal}<br>Perihal: ${perihal}</div>
+    <div class="isi">Kepada Yth. ${tujuan}<br><br>${isi.replace(/\n/g,'<br>')}</div>
+    <div class="ttd">Cirebon, ${tanggal}<br><br><br><br>Ketua Koperasi<br><br><br><br>_________________</div>
+    </body></html>
+  `);
+  printWindow.document.close();
+  printWindow.print();
+}
+
+window.hapusSurat = async (id) => {
+  if (confirm("Hapus surat ini?")) {
+    await deleteDoc(doc(db, "surat_keluar", id));
+    loadSurat();
+  }
+}
+
+// ==================== RAPAT ====================
+window.simpanRapat = async () => {
+  const judul = document.getElementById('judulRapat').value;
+  const waktu = document.getElementById('waktuRapat').value;
+  const tempat = document.getElementById('tempatRapat').value;
+  const peserta = document.getElementById('pesertaRapat').value;
+  
+  if (!judul || !waktu) return alert("Judul dan waktu rapat harus diisi!");
+  
+  await addDoc(collection(db, "rapat"), {
+    judul, waktu, tempat, peserta, dibuat_oleh: currentUser?.email, createdAt: new Date().toISOString()
+  });
+  alert("Rapat dijadwalkan!");
+  document.getElementById('judulRapat').value = "";
+  document.getElementById('waktuRapat').value = "";
+  document.getElementById('tempatRapat').value = "";
+  document.getElementById('pesertaRapat').value = "";
+  loadRapat();
+}
+
+async function loadRapat() {
+  const snap = await getDocs(query(collection(db, "rapat"), orderBy("waktu", "asc")));
+  const list = document.getElementById("listRapat");
+  list.innerHTML = "";
+  snap.forEach(d => {
+    const r = d.data();
+    list.innerHTML += `
+      <div class="rapat-card">
+        <div class="rapat-info">
+          <h4>📋 ${escapeHtml(r.judul)}</h4>
+          <p><i class="fas fa-calendar"></i> ${new Date(r.waktu).toLocaleString('id-ID')}</p>
+          <p><i class="fas fa-map-marker-alt"></i> ${escapeHtml(r.tempat || '-')}</p>
+          <p><i class="fas fa-users"></i> Peserta: ${escapeHtml(r.peserta || '-')}</p>
+        </div>
+        <button class="btn-danger" onclick="hapusRapat('${d.id}')"><i class="fas fa-trash"></i> Hapus</button>
+      </div>
+    `;
+  });
+  document.getElementById('totalRapat').innerText = snap.size;
+}
+
+window.hapusRapat = async (id) => {
+  if (confirm("Hapus jadwal rapat ini?")) {
+    await deleteDoc(doc(db, "rapat", id));
+    loadRapat();
+  }
+}
+
+// ==================== NOTIFIKASI ====================
+window.kirimNotifikasi = async () => {
+  const judul = document.getElementById('judulNotif').value;
+  const isi = document.getElementById('isiNotif').value;
+  const tgl = document.getElementById('tglNotif').value || new Date().toISOString().split('T')[0];
+  
+  if (!judul || !isi) return alert("Judul dan isi pengumuman harus diisi!");
+  
+  await addDoc(collection(db, "notifikasi"), {
+    judul, isi, tanggal: tgl, dibuat_oleh: currentUser?.email, createdAt: new Date().toISOString()
+  });
+  alert("Pengumuman dikirim!");
+  document.getElementById('judulNotif').value = "";
+  document.getElementById('isiNotif').value = "";
+  loadNotifikasi();
+}
+
+async function loadNotifikasi() {
+  const snap = await getDocs(query(collection(db, "notifikasi"), orderBy("createdAt", "desc")));
+  const list = document.getElementById("listNotifikasi");
+  list.innerHTML = "";
+  snap.forEach(d => {
+    const n = d.data();
+    list.innerHTML += `
+      <div class="notification-item">
+        <div class="notification-title">📢 ${escapeHtml(n.judul)}</div>
+        <div class="notification-date">${n.tanggal || '-'}</div>
+        <div style="margin-top:8px">${escapeHtml(n.isi)}</div>
+        <button class="btn-danger" style="margin-top:10px" onclick="hapusNotifikasi('${d.id}')"><i class="fas fa-trash"></i> Hapus</button>
+      </div>
+    `;
+  });
+}
+
+window.hapusNotifikasi = async (id) => {
+  if (confirm("Hapus pengumuman ini?")) {
+    await deleteDoc(doc(db, "notifikasi", id));
+    loadNotifikasi();
+  }
+}
+
+// ==================== ANGGOTA ====================
+async function loadAnggota() {
+  const snap = await getDocs(collection(db, "anggota"));
+  semuaAnggota = [];
+  snap.forEach(d => { semuaAnggota.push({ id: d.id, ...d.data() }); });
+  renderAnggota(semuaAnggota);
+  document.getElementById('totalAnggotaStat').innerText = semuaAnggota.length;
+}
+
+function renderAnggota(data) {
+  const list = document.getElementById("listAnggota");
+  list.innerHTML = "";
+  data.forEach(a => {
+    list.innerHTML += `
+      <div class="item-card">
+        <i class="fas fa-user-circle" style="font-size:50px;color:#2563eb;text-align:center;display:block"></i>
+        <b>${escapeHtml(a.nama || '-')}</b>
+        <p>No Anggota: ${escapeHtml(a.no_anggota || '-')}</p>
+        <p>WA: ${escapeHtml(a.wa || '-')}</p>
+        <p>Status: ${a.status === 'approved' ? '✅ Aktif' : (a.status === 'pending' ? '⏳ Pending' : '❌ Ditolak')}</p>
+      </div>
+    `;
+  });
+}
+
+window.filterAnggota = () => {
+  const keyword = document.getElementById('searchAnggota').value.toLowerCase();
+  const filtered = semuaAnggota.filter(a => (a.nama || '').toLowerCase().includes(keyword));
+  renderAnggota(filtered);
+}
+
+// ==================== CHART ====================
+let activityChart;
+async function loadChart() {
+  const proposalCount = (await getDocs(collection(db, "proposals"))).size;
+  const suratCount = (await getDocs(collection(db, "surat_keluar"))).size;
+  const rapatCount = (await getDocs(collection(db, "rapat"))).size;
+  
+  const ctx = document.getElementById("activityChart").getContext("2d");
+  if (activityChart) activityChart.destroy();
+  activityChart = new Chart(ctx, {
+    type: "bar",
+    data: { labels: ["Proposal", "Surat Keluar", "Rapat"], datasets: [{ label: "Jumlah", data: [proposalCount, suratCount, rapatCount], backgroundColor: ["#3b82f6", "#10b981", "#f59e0b"], borderRadius: 10 }] },
+    options: { responsive: true, maintainAspectRatio: true }
+  });
+}
+
+function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+
+async function loadAll() {
+  await loadProposals();
+  await loadSurat();
+  await loadRapat();
+  await loadNotifikasi();
+  await loadAnggota();
+  await loadChart();
+}
+
+// Set tanggal default
+document.getElementById('tglProposal').value = new Date().toISOString().split('T')[0];
+document.getElementById('tglSurat').value = new Date().toISOString().split('T')[0];
+document.getElementById('tglNotif').value = new Date().toISOString().split('T')[0];
+</script>
+
+</body>
+</html>
