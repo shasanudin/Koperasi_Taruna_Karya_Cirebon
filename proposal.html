@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposal Penawaran - Koperasi Taruna Karya Cirebon</title>
+<!-- Font Awesome 6 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- html2canvas untuk tanda tangan digital -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- qrcodejs2 untuk QR Code -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #e2e8f0;
+  padding: 40px 20px;
+}
+
+/* Container Proposal */
+.proposal-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+/* Header Proposal */
+.proposal-header {
+  background: linear-gradient(135deg, #0f2b4d 0%, #1e4a76 100%);
+  color: white;
+  padding: 40px;
+  text-align: center;
+}
+
+.logo-proposal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.logo-proposal img {
+  height: 70px;
+  width: auto;
+  background: white;
+  border-radius: 16px;
+  padding: 8px;
+}
+
+.proposal-header h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.proposal-header .subtitle {
+  opacity: 0.9;
+  font-size: 0.9rem;
+}
+
+.proposal-meta {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.proposal-meta span {
+  background: rgba(255,255,255,0.2);
+  padding: 6px 15px;
+  border-radius: 30px;
+  font-size: 0.8rem;
+}
+
+/* Konten Proposal */
+.proposal-content {
+  padding: 40px;
+}
+
+/* Section */
+.section {
+  margin-bottom: 40px;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  border-left: 5px solid #2563eb;
+  padding-left: 15px;
+  margin-bottom: 20px;
+}
+
+/* Tabel Barang & Jasa */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.data-table th {
+  background: #1e3a8a;
+  color: white;
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.data-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #334155;
+}
+
+.data-table tr:hover {
+  background: #f8fafc;
+}
+
+.price {
+  font-weight: 700;
+  color: #059669;
+}
+
+/* Total Section */
+.total-section {
+  background: #f1f5f9;
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 20px;
+  text-align: right;
+}
+
+.total-section p {
+  font-size: 1.1rem;
+  margin: 5px 0;
+}
+
+.grand-total {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1e3a8a;
+}
+
+/* Tanda Tangan & QR */
+.signature-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+  margin: 40px 0;
+  padding: 30px 0;
+  border-top: 2px dashed #cbd5e1;
+  border-bottom: 2px dashed #cbd5e1;
+}
+
+.signature-box {
+  flex: 1;
+  min-width: 200px;
+  text-align: center;
+}
+
+.signature-box h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #e2e8f0;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.signature-preview {
+  margin: 15px 0;
+  padding: 10px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  background: #fafafa;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.signature-preview canvas {
+  max-width: 200px;
+  border-radius: 8px;
+}
+
+.signature-name {
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.signature-jabatan {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.qr-box {
+  flex: 0.5;
+  min-width: 180px;
+  text-align: center;
+}
+
+.qr-placeholder {
+  background: white;
+  padding: 15px;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  display: inline-block;
+}
+
+/* Tombol Aksi */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 40px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+}
+
+.btn-secondary {
+  background: #f1f5f9;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+}
+
+.btn-secondary:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #059669, #047857);
+  color: white;
+}
+
+.btn-success:hover {
+  transform: translateY(-2px);
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #64748b;
+}
+
+.loading i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #94a3b8;
+  background: #f8fafc;
+  border-radius: 16px;
+}
+
+/* Footer Proposal */
+.proposal-footer {
+  background: #f8fafc;
+  padding: 20px 40px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #64748b;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: white;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .action-buttons {
+    display: none;
+  }
+  
+  .proposal-container {
+    box-shadow: none;
+    border-radius: 0;
+  }
+  
+  .signature-preview canvas {
+    border: none;
+  }
+  
+  .btn, .no-print {
+    display: none !important;
+  }
+  
+  .proposal-header {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .data-table th {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+@media (max-width: 768px) {
+  .proposal-content {
+    padding: 20px;
+  }
+  
+  .proposal-header {
+    padding: 25px;
+  }
+  
+  .signature-section {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .signature-box, .qr-box {
+    width: 100%;
+  }
+  
+  .section-title {
+    font-size: 1.2rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="proposal-container" id="proposalContainer">
+  <div class="proposal-header">
+    <div class="logo-proposal">
+      <img id="logoImg" src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="Logo Koperasi" onerror="this.src='https://placehold.co/200x200?text=Koperasi'">
+      <div>
+        <h1>PROPOSAL PENAWARAN</h1>
+        <div class="subtitle">Barang & Jasa Koperasi Taruna Karya Cirebon</div>
+      </div>
+    </div>
+    <div class="proposal-meta">
+      <span><i class="fas fa-calendar-alt"></i> <span id="tanggalProposal"></span></span>
+      <span><i class="fas fa-hashtag"></i> No. Ref: KTK/PROP/2026/001</span>
+    </div>
+  </div>
+
+  <div class="proposal-content">
+    <!-- Pendahuluan -->
+    <div class="section">
+      <div class="section-title">Latar Belakang</div>
+      <p style="line-height: 1.6; color: #334155;">Koperasi Taruna Karya Cirebon hadir sebagai mitra terpercaya dalam memenuhi kebutuhan barang dan jasa berkualitas. Dengan sistem koperasi yang transparan dan menguntungkan, kami menawarkan berbagai produk unggulan serta layanan profesional dari anggota terverifikasi. Proposal ini disusun sebagai bentuk komitmen kami dalam memberikan solusi terbaik bagi mitra dan anggota koperasi.</p>
+    </div>
+
+    <!-- Daftar Barang -->
+    <div class="section">
+      <div class="section-title"><i class="fas fa-box"></i> Daftar Barang Unggulan</div>
+      <div class="table-wrapper">
+        <table class="data-table" id="barangTable">
+          <thead>
+            <tr><th>No</th><th>Nama Barang</th><th>Deskripsi</th><th>Harga (Rp)</th><th>Stok</th></tr>
+          </thead>
+          <tbody id="barangBody">
+            <tr><td colspan="5" class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat data barang...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Daftar Jasa -->
+    <div class="section">
+      <div class="section-title"><i class="fas fa-briefcase"></i> Daftar Jasa Profesional</div>
+      <div class="table-wrapper">
+        <table class="data-table" id="jasaTable">
+          <thead>
+            <tr><th>No</th><th>Nama Jasa</th><th>Deskripsi</th><th>Harga (Rp)</th><th>Penyedia</th></tr>
+          </thead>
+          <tbody id="jasaBody">
+            <tr><td colspan="5" class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat data jasa...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Ringkasan Total -->
+    <div class="total-section">
+      <p><strong>Total Nilai Barang:</strong> <span id="totalBarang" class="price">Rp 0</span></p>
+      <p><strong>Total Nilai Jasa:</strong> <span id="totalJasa" class="price">Rp 0</span></p>
+      <p class="grand-total"><strong>Grand Total:</strong> <span id="grandTotal">Rp 0</span></p>
+    </div>
+
+    <!-- Tanda Tangan Digital & QR Code -->
+    <div class="signature-section">
+      <div class="signature-box">
+        <h4><i class="fas fa-signature"></i> Tanda Tangan Digital</h4>
+        <div class="signature-preview" id="ketuaSignature">
+          <canvas id="ketuaCanvas" width="200" height="80" style="border:1px solid #ccc; border-radius:8px; background:white;"></canvas>
+        </div>
+        <div class="signature-name" id="ketuaNama">Memuat...</div>
+        <div class="signature-jabatan" id="ketuaJabatan">Ketua Koperasi</div>
+      </div>
+
+      <div class="signature-box">
+        <h4><i class="fas fa-signature"></i> Tanda Tangan Digital</h4>
+        <div class="signature-preview" id="sekretarisSignature">
+          <canvas id="sekretarisCanvas" width="200" height="80" style="border:1px solid #ccc; border-radius:8px; background:white;"></canvas>
+        </div>
+        <div class="signature-name" id="sekretarisNama">Memuat...</div>
+        <div class="signature-jabatan" id="sekretarisJabatan">Sekretaris Koperasi</div>
+      </div>
+
+      <div class="qr-box">
+        <h4><i class="fas fa-qrcode"></i> Verifikasi Dokumen</h4>
+        <div class="qr-placeholder" id="qrcode"></div>
+        <p style="font-size: 0.7rem; margin-top: 8px; color: #64748b;">Scan untuk verifikasi keaslian</p>
+      </div>
+    </div>
+
+    <!-- Penutup -->
+    <div class="section">
+      <div class="section-title">Penutup</div>
+      <p style="line-height: 1.6; color: #334155;">Demikian proposal penawaran ini kami sampaikan. Besar harapan kami untuk dapat menjalin kerjasama yang saling menguntungkan. Untuk informasi lebih lanjut, silakan hubungi kontak kami. Terima kasih atas kepercayaan Anda kepada Koperasi Taruna Karya Cirebon.</p>
+    </div>
+  </div>
+
+  <div class="proposal-footer">
+    <p>Koperasi Taruna Karya Cirebon - Jl. Siliwangi No.88, Cirebon, Jawa Barat</p>
+    <p>Email: info@tarunakarya.cirebon.id | Telp: (0231) 567890</p>
+  </div>
+</div>
+
+<div class="action-buttons no-print">
+  <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Cetak / Simpan PDF</button>
+  <button class="btn btn-secondary" onclick="captureSignature()"><i class="fas fa-camera"></i> Generate Tanda Tangan</button>
+  <button class="btn btn-success" onclick="refreshData()"><i class="fas fa-sync-alt"></i> Refresh Data</button>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
+  authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
+  projectId: "koperasi-taruna-karya-cirebon",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Global Variables
+let barangList = [];
+let jasaList = [];
+let ketuaData = null;
+let sekretarisData = null;
+
+// Set tanggal proposal
+document.getElementById('tanggalProposal').innerText = new Date().toLocaleDateString('id-ID', {
+  year: 'numeric', month: 'long', day: 'numeric'
+});
+
+// Fungsi untuk menggambar tanda tangan digital dari nama
+function drawSignature(canvasId, name, jabatan) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = 200;
+  canvas.height = 80;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Background putih
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Gambar garis tanda tangan (simulasi signature)
+  ctx.beginPath();
+  ctx.strokeStyle = '#1e3a8a';
+  ctx.lineWidth = 1.5;
+  
+  // Membuat tanda tangan dinamis berdasarkan nama (font cursive style)
+  ctx.font = 'italic 24px "Brush Script MT", "Segoe Script", cursive';
+  ctx.fillStyle = '#1e3a8a';
+  ctx.fillText(name || 'Tanda Tangan', 20, 50);
+  
+  // Tambahkan garis bawah
+  ctx.beginPath();
+  ctx.moveTo(20, 60);
+  ctx.lineTo(180, 60);
+  ctx.stroke();
+  
+  // Tambahkan tanggal
+  ctx.font = '10px Inter';
+  ctx.fillStyle = '#64748b';
+  ctx.fillText(new Date().toLocaleDateString('id-ID'), 140, 75);
+}
+
+// Load data barang dari Firestore
+async function loadBarang() {
+  try {
+    const barangRef = collection(db, "barang");
+    const queryBarang = query(barangRef, where("status", "==", "approved"));
+    const snapshot = await getDocs(queryBarang);
+    barangList = [];
+    snapshot.forEach(doc => {
+      barangList.push({ id: doc.id, ...doc.data() });
+    });
+    renderBarang();
+  } catch (error) {
+    console.error("Error loading barang:", error);
+    document.getElementById('barangBody').innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data barang</td></tr>`;
+  }
+}
+
+// Load data jasa dari Firestore
+async function loadJasa() {
+  try {
+    const jasaRef = collection(db, "jasa");
+    const queryJasa = query(jasaRef, where("status", "==", "approved"));
+    const snapshot = await getDocs(queryJasa);
+    jasaList = [];
+    snapshot.forEach(doc => {
+      jasaList.push({ id: doc.id, ...doc.data() });
+    });
+    renderJasa();
+  } catch (error) {
+    console.error("Error loading jasa:", error);
+    document.getElementById('jasaBody').innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data jasa</td></tr>`;
+  }
+}
+
+// Load pengurus (Ketua & Sekretaris)
+async function loadPengurus() {
+  try {
+    const pengurusRef = collection(db, "pengurus");
+    const snapshot = await getDocs(pengurusRef);
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.jabatan === "Ketua" && data.status === "approved") {
+        ketuaData = data;
+        document.getElementById('ketuaNama').innerHTML = `<i class="fas fa-user-check"></i> ${data.nama || 'Tidak tersedia'}`;
+        document.getElementById('ketuaJabatan').innerText = data.jabatan || 'Ketua';
+        drawSignature('ketuaCanvas', data.nama || 'Ketua', data.jabatan);
+      }
+      if (data.jabatan === "Sekretaris" && data.status === "approved") {
+        sekretarisData = data;
+        document.getElementById('sekretarisNama').innerHTML = `<i class="fas fa-user-check"></i> ${data.nama || 'Tidak tersedia'}`;
+        document.getElementById('sekretarisJabatan').innerText = data.jabatan || 'Sekretaris';
+        drawSignature('sekretarisCanvas', data.nama || 'Sekretaris', data.jabatan);
+      }
+    });
+    
+    // Fallback jika tidak ada data
+    if (!ketuaData) {
+      document.getElementById('ketuaNama').innerHTML = `<i class="fas fa-user-clock"></i> Menunggu data`;
+      drawSignature('ketuaCanvas', 'Ketua Koperasi', 'Ketua');
+    }
+    if (!sekretarisData) {
+      document.getElementById('sekretarisNama').innerHTML = `<i class="fas fa-user-clock"></i> Menunggu data`;
+      drawSignature('sekretarisCanvas', 'Sekretaris', 'Sekretaris');
+    }
+  } catch (error) {
+    console.error("Error loading pengurus:", error);
+  }
+}
+
+// Render tabel barang
+function renderBarang() {
+  const tbody = document.getElementById('barangBody');
+  if (!barangList.length) {
+    tbody.innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-box-open"></i> Belum ada data barang</td></tr>`;
+    document.getElementById('totalBarang').innerText = 'Rp 0';
+    return;
+  }
+  
+  let total = 0;
+  let html = '';
+  barangList.forEach((item, index) => {
+    const harga = item.harga || 0;
+    total += harga;
+    html += `
+      <tr>
+        <td>${index + 1}</td>
+        <td><strong>${escapeHtml(item.nama || '-')}</strong></td>
+        <td>${escapeHtml(item.deskripsi || '-')}</td>
+        <td class="price">Rp ${formatRupiah(harga)}</td>
+        <td>${item.stok || '-'}</td>
+      </tr>
+    `;
+  });
+  tbody.innerHTML = html;
+  document.getElementById('totalBarang').innerHTML = `Rp ${formatRupiah(total)}`;
+  return total;
+}
+
+// Render tabel jasa
+function renderJasa() {
+  const tbody = document.getElementById('jasaBody');
+  if (!jasaList.length) {
+    tbody.innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-briefcase"></i> Belum ada data jasa</td></tr>`;
+    document.getElementById('totalJasa').innerText = 'Rp 0';
+    return;
+  }
+  
+  let total = 0;
+  let html = '';
+  jasaList.forEach((item, index) => {
+    const harga = item.harga || 0;
+    total += harga;
+    html += `
+      <tr>
+        <td>${index + 1}</td>
+        <td><strong>${escapeHtml(item.nama || '-')}</strong></td>
+        <td>${escapeHtml(item.deskripsi || '-')}</td>
+        <td class="price">Rp ${formatRupiah(harga)}</td>
+        <td>${escapeHtml(item.penyedia || 'Koperasi')}</td>
+      </tr>
+    `;
+  });
+  tbody.innerHTML = html;
+  document.getElementById('totalJasa').innerHTML = `Rp ${formatRupiah(total)}`;
+  return total;
+}
+
+// Hitung grand total
+function updateGrandTotal() {
+  const totalBarangEl = document.getElementById('totalBarang');
+  const totalJasaEl = document.getElementById('totalJasa');
+  const grandTotalEl = document.getElementById('grandTotal');
+  
+  let totalBarang = 0;
+  let totalJasa = 0;
+  
+  barangList.forEach(item => totalBarang += (item.harga || 0));
+  jasaList.forEach(item => totalJasa += (item.harga || 0));
+  
+  const grand = totalBarang + totalJasa;
+  grandTotalEl.innerHTML = `Rp ${formatRupiah(grand)}`;
+}
+
+// Generate QR Code dengan data verifikasi
+function generateQRCode() {
+  const qrDiv = document.getElementById('qrcode');
+  qrDiv.innerHTML = '';
+  
+  // Buat data verifikasi
+  const verificationData = {
+    document: "Proposal Penawaran Koperasi Taruna Karya",
+    date: new Date().toISOString(),
+    ketua: ketuaData?.nama || "Tidak tersedia",
+    sekretaris: sekretarisData?.nama || "Tidak tersedia",
+    totalBarang: barangList.reduce((a,b) => a + (b.harga || 0), 0),
+    totalJasa: jasaList.reduce((a,b) => a + (b.harga || 0), 0),
+    verifyUrl: "https://koperasi-taruna-karya.web.app/verify"
+  };
+  
+  const jsonString = JSON.stringify(verificationData);
+  
+  // Gunakan QRCode library
+  new QRCode(qrDiv, {
+    text: jsonString,
+    width: 120,
+    height: 120,
+    colorDark: "#1e3a8a",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+}
+
+// Fungsi capture tanda tangan (simpan sebagai gambar digital)
+window.captureSignature = function() {
+  // Simulasikan capture tanda tangan dengan menggambar ulang
+  if (ketuaData) drawSignature('ketuaCanvas', ketuaData.nama, ketuaData.jabatan);
+  else drawSignature('ketuaCanvas', 'Ketua Koperasi', 'Ketua');
+  
+  if (sekretarisData) drawSignature('sekretarisCanvas', sekretarisData.nama, sekretarisData.jabatan);
+  else drawSignature('sekretarisCanvas', 'Sekretaris', 'Sekretaris');
+  
+  // Tampilkan notifikasi
+  alert('✓ Tanda tangan digital telah digenerate ulang');
+};
+
+// Refresh semua data
+window.refreshData = async function() {
+  document.getElementById('barangBody').innerHTML = '<tr><td colspan="5" class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat ulang...</td></tr>';
+  document.getElementById('jasaBody').innerHTML = '<tr><td colspan="5" class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat ulang...</td></tr>';
+  
+  await Promise.all([loadBarang(), loadJasa(), loadPengurus()]);
+  updateGrandTotal();
+  generateQRCode();
+  
+  // Tampilkan toast sederhana
+  alert('✓ Data berhasil di-refresh dari Firebase');
+};
+
+// Helper functions
+function formatRupiah(angka) {
+  if (!angka) return '0';
+  return new Intl.NumberFormat('id-ID').format(angka);
+}
+
+function escapeHtml(str) {
+  if (!str) return '-';
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
+}
+
+// Logo fallback
+const logoImg = document.getElementById('logoImg');
+if (logoImg) {
+  logoImg.onerror = function() { this.src = 'https://placehold.co/200x200?text=Koperasi'; };
+}
+
+// Inisialisasi
+async function init() {
+  await Promise.all([loadBarang(), loadJasa(), loadPengurus()]);
+  updateGrandTotal();
+  generateQRCode();
+}
+
+init();
+</script>
+</body>
+</html>
