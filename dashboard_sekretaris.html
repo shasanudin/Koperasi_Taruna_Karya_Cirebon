@@ -438,6 +438,21 @@ body {
   gap: 20px;
 }
 
+.item-card {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 15px;
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: #38bdf8;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .sidebar {
@@ -485,6 +500,87 @@ body {
 </style>
 </head>
 <body>
+
+<!-- ========== SCRIPT VALIDASI SESSION (DILETAKAN PALING ATAS) ========== -->
+<script>
+(function() {
+  // Cek session di localStorage
+  const userSession = localStorage.getItem('userSession');
+  const userRole = localStorage.getItem('userRole');
+  
+  // Jika tidak ada session, redirect ke login
+  if (!userSession || !userRole) {
+    window.location.href = 'login.html';
+    return;
+  }
+  
+  try {
+    const session = JSON.parse(userSession);
+    const loginTime = new Date(session.loginTime);
+    const now = new Date();
+    const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
+    
+    // Session expired setelah 8 jam
+    if (hoursDiff > 8) {
+      localStorage.removeItem('userSession');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('userName');
+      window.location.href = 'login.html';
+      return;
+    }
+    
+    // Validasi role harus SEKRETARIS untuk halaman ini
+    if (session.role !== 'SEKRETARIS') {
+      // Redirect ke dashboard sesuai role
+      const roleRedirect = {
+        'KETUA': 'dashboard_ketua.html',
+        'BENDAHARA': 'dashboard_bendahara.html',
+        'PENGURUS': 'dashboard_pengurus.html',
+        'ANGGOTA': 'dashboard_anggota.html'
+      }[session.role];
+      
+      if (roleRedirect) {
+        window.location.href = roleRedirect;
+      } else {
+        window.location.href = 'login.html';
+      }
+      return;
+    }
+    
+    // Tampilkan nama user di navbar setelah DOM siap
+    document.addEventListener('DOMContentLoaded', () => {
+      const userNameSpan = document.getElementById('userNameDisplay');
+      if (userNameSpan) {
+        userNameSpan.innerHTML = `<i class="fas fa-file-alt"></i> ${session.nama || session.email}`;
+      }
+    });
+    
+  } catch(e) {
+    console.error("Session validation error:", e);
+    localStorage.clear();
+    window.location.href = 'login.html';
+  }
+})();
+
+// ========== FUNGSI LOGOUT YANG BENAR ==========
+window.logout = function() {
+  // Hapus semua data dari localStorage
+  localStorage.removeItem('userSession');
+  localStorage.removeItem('userRole');
+  localStorage.removeItem('userName');
+  
+  // Hapus sessionStorage
+  sessionStorage.clear();
+  
+  // Hapus cookies
+  document.cookie.split(";").forEach(function(c) {
+    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+  });
+  
+  // Redirect ke login
+  window.location.href = 'login.html';
+};
+</script>
 
 <div class="topbar">
   <h3><i class="fas fa-file-alt"></i> Dashboard Sekretaris</h3>
@@ -665,29 +761,54 @@ const db = getFirestore(app);
 let currentUser = null;
 let semuaAnggota = [];
 
-// Cek session dan role
+// ========== CEK SESSION DARI FIRESTORE (VALIDASI TAMBAHAN) ==========
 onAuthStateChanged(auth, async (u) => {
+  // Jika tidak ada user auth, redirect ke login
   if (!u) {
-    location.href = "login.html";
+    window.location.href = "login.html";
     return;
   }
   
+  // Ambil data user dari Firestore
   const userQuery = query(collection(db, "users"), where("email", "==", u.email));
   const userSnap = await getDocs(userQuery);
-  if (!userSnap.empty) {
-    currentUser = userSnap.docs[0].data();
-    document.getElementById('userNameDisplay').innerHTML = `<i class="fas fa-file-alt"></i> ${currentUser.nama || currentUser.email}`;
-    
-    if (currentUser.role !== 'SEKRETARIS') {
-      alert('Akses ditolak! Anda bukan Sekretaris Koperasi.');
-      signOut(auth);
-      location.href = "login.html";
-    }
+  
+  if (userSnap.empty) {
+    await signOut(auth);
+    localStorage.clear();
+    window.location.href = "login.html";
+    return;
   }
+  
+  const userData = userSnap.docs[0].data();
+  currentUser = userData;
+  
+  // Validasi status user
+  if (userData.status !== 'active') {
+    await signOut(auth);
+    localStorage.clear();
+    alert('Akun Anda tidak aktif. Hubungi admin.');
+    window.location.href = "login.html";
+    return;
+  }
+  
+  // Validasi role harus SEKRETARIS
+  if (userData.role !== 'SEKRETARIS') {
+    await signOut(auth);
+    localStorage.clear();
+    alert('Akses ditolak! Anda bukan Sekretaris Koperasi.');
+    window.location.href = "login.html";
+    return;
+  }
+  
+  // Update nama di navbar jika belum terisi
+  const userNameSpan = document.getElementById('userNameDisplay');
+  if (userNameSpan && userNameSpan.innerHTML.includes('Loading')) {
+    userNameSpan.innerHTML = `<i class="fas fa-file-alt"></i> ${userData.nama || userData.email}`;
+  }
+  
   loadAll();
 });
-
-window.logout = () => signOut(auth);
 
 // Navigasi
 window.show = (id) => {
