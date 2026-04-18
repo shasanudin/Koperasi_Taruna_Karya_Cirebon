@@ -537,10 +537,10 @@ body {
 </head>
 <body>
 
-<!-- ========== SCRIPT VALIDASI SESSION (DILETAKAN PALING ATAS) ========== -->
+<!-- ========== SCRIPT VALIDASI SESSION ========== -->
 <script>
 (function() {
-  console.log("Checking session...");
+  console.log("Dashboard Ketua - Checking session...");
   
   // Ambil session dari localStorage
   const userSession = localStorage.getItem('userSession');
@@ -575,22 +575,10 @@ body {
       return;
     }
     
-    // Validasi role untuk halaman ini
-    const currentPage = window.location.pathname.split('/').pop();
-    const expectedRole = {
-      'dashboard_ketua.html': 'KETUA',
-      'dashboard_sekretaris.html': 'SEKRETARIS',
-      'dashboard_bendahara.html': 'BENDAHARA',
-      'dashboard_pengurus.html': 'PENGURUS',
-      'dashboard_anggota.html': 'ANGGOTA'
-    }[currentPage];
-    
-    console.log("Current page:", currentPage, "Expected role:", expectedRole, "User role:", session.role);
-    
-    if (expectedRole && session.role !== expectedRole) {
-      console.log("Role mismatch, redirecting");
+    // Validasi role harus KETUA
+    if (session.role !== 'KETUA') {
+      console.log("Role mismatch! Expected KETUA, got", session.role);
       const roleRedirect = {
-        'KETUA': 'dashboard_ketua.html',
         'SEKRETARIS': 'dashboard_sekretaris.html',
         'BENDAHARA': 'dashboard_bendahara.html',
         'PENGURUS': 'dashboard_pengurus.html',
@@ -599,19 +587,21 @@ body {
       
       if (roleRedirect) {
         window.location.replace(roleRedirect);
-        return;
+      } else {
+        window.location.replace('login.html');
       }
+      return;
     }
     
     // Tampilkan nama user di navbar
     document.addEventListener('DOMContentLoaded', () => {
       const userNameSpan = document.getElementById('userNameDisplay');
       if (userNameSpan) {
-        userNameSpan.innerHTML = `<i class="fas fa-user"></i> ${session.nama || session.email}`;
+        userNameSpan.innerHTML = `<i class="fas fa-crown"></i> ${session.nama || session.email}`;
       }
     });
     
-    console.log("Session valid, dashboard loaded");
+    console.log("Session valid for Ketua, dashboard loaded");
     
   } catch(e) {
     console.error("Session validation error:", e);
@@ -622,11 +612,16 @@ body {
 })();
 
 // ========== FUNGSI LOGOUT ==========
-window.logout = async function() {
-  console.log("Logging out...");
+window.logout = function() {
+  console.log("Logging out from Ketua dashboard...");
   try {
-    // Hapus semua storage
+    // Hapus semua data dari localStorage
+    localStorage.removeItem('userSession');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userName');
     localStorage.clear();
+    
+    // Hapus sessionStorage
     sessionStorage.clear();
     
     // Hapus cookies
@@ -653,7 +648,7 @@ window.logout = async function() {
 
 <div class="sidebar">
   <div class="sidebar-logo">
-    <img src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="Logo" onerror="this.src='https://placehold.co/200x200?text=Koperasi'">
+    <img id="sidebarLogo" src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="Logo" onerror="this.src='https://placehold.co/200x200?text=Koperasi'">
     <h4>Koperasi Taruna</h4>
   </div>
   <button onclick="show('stat')" id="btnStat">
@@ -681,7 +676,7 @@ window.logout = async function() {
 
 <div class="main">
 
-<!-- STATISTIK DENGAN DATA LENGKAP -->
+<!-- STATISTIK -->
 <div id="stat" class="card">
   <h3><i class="fas fa-chart-simple"></i> Statistik Koperasi</h3>
   <div class="stats-grid" id="statsGrid">
@@ -758,7 +753,7 @@ window.logout = async function() {
   <div id="listAnggota"></div>
 </div>
 
-<!-- LAPORAN KEUANGAN KHUSUS KETUA -->
+<!-- LAPORAN KEUANGAN -->
 <div id="laporan" class="card" style="display:none">
   <h3><i class="fas fa-file-alt"></i> Laporan Keuangan Koperasi</h3>
   <div class="form-row">
@@ -780,10 +775,10 @@ window.logout = async function() {
   </div>
 </div>
 
-<!-- MANAJEMEN USER KHUSUS KETUA -->
+<!-- MANAJEMEN USER -->
 <div id="users" class="card" style="display:none">
   <h3><i class="fas fa-users-cog"></i> Manajemen User</h3>
-  <button class="btn-simpan" onclick="window.location.href='users.html'"><i class="fas fa-user-plus"></i> Kelola User (Buka Halaman Manajemen)</button>
+  <button class="btn-simpan" onclick="window.location.href='users.html'"><i class="fas fa-user-plus"></i> Kelola User</button>
   <div id="userList" style="margin-top: 20px;"></div>
 </div>
 
@@ -798,57 +793,69 @@ const config = {
   apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
   authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
   projectId: "koperasi-taruna-karya-cirebon",
-  storageBucket: "koperasi-taruna-karya-cirebon.firebasestorage.app"
 };
 
 const app = initializeApp(config);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ========== CEK SESSION DARI FIRESTORE (VALIDASI TAMBAHAN) ==========
+let currentUser = null;
+
+// ========== CEK SESSION DARI FIRESTORE ==========
 onAuthStateChanged(auth, async (u) => {
-  // Jika tidak ada user auth, redirect ke login
+  console.log("onAuthStateChanged triggered, user:", u?.email);
+  
   if (!u) {
-    window.location.href = "login.html";
+    console.log("No Firebase user, redirecting to login");
+    window.location.replace("login.html");
     return;
   }
   
-  // Ambil data user dari Firestore
-  const userQuery = query(collection(db, "users"), where("email", "==", u.email));
-  const userSnap = await getDocs(userQuery);
-  
-  if (userSnap.empty) {
-    // User tidak ditemukan di Firestore
-    await signOut(auth);
-    localStorage.clear();
-    window.location.href = "login.html";
-    return;
-  }
-  
-  const userData = userSnap.docs[0].data();
-  
-  // Validasi status user
-  if (userData.status !== 'active') {
-    await signOut(auth);
-    localStorage.clear();
-    alert('Akun Anda tidak aktif. Hubungi admin.');
-    window.location.href = "login.html";
-    return;
-  }
-  
-  // Validasi role harus KETUA
-  if (userData.role !== 'KETUA') {
-    await signOut(auth);
-    localStorage.clear();
-    alert('Akses ditolak! Anda bukan Ketua Koperasi.');
-    window.location.href = "login.html";
-    return;
-  }
-  
-  // Update nama di navbar jika belum terisi
-  const userNameSpan = document.getElementById('userNameDisplay');
-  if (userNameSpan && userNameSpan.innerHTML.includes('Loading')) {
-    userNameSpan.innerHTML = `<i class="fas fa-crown"></i> ${userData.nama || userData.email}`;
+  try {
+    const userQuery = query(collection(db, "users"), where("email", "==", u.email));
+    const userSnap = await getDocs(userQuery);
+    
+    if (userSnap.empty) {
+      console.log("User not found in Firestore");
+      await signOut(auth);
+      localStorage.clear();
+      window.location.replace("login.html");
+      return;
+    }
+    
+    const userData = userSnap.docs[0].data();
+    currentUser = userData;
+    console.log("User data:", userData);
+    
+    if (userData.status !== 'active') {
+      console.log("User status not active:", userData.status);
+      await signOut(auth);
+      localStorage.clear();
+      alert('Akun Anda tidak aktif. Hubungi admin.');
+      window.location.replace("login.html");
+      return;
+    }
+    
+    if (userData.role !== 'KETUA') {
+      console.log("Role mismatch! Expected KETUA, got", userData.role);
+      await signOut(auth);
+      localStorage.clear();
+      alert('Akses ditolak! Anda bukan Ketua Koperasi.');
+      window.location.replace("login.html");
+      return;
+    }
+    
+    const userNameSpan = document.getElementById('userNameDisplay');
+    if (userNameSpan && userNameSpan.innerHTML.includes('Loading')) {
+      userNameSpan.innerHTML = `<i class="fas fa-crown"></i> ${userData.nama || userData.email}`;
+    }
+    
+    console.log("User validated, loading data...");
+    loadAll();
+    
+  } catch (error) {
+    console.error("Auth state error:", error);
+    window.location.replace("login.html");
   }
 });
 
