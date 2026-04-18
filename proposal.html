@@ -23,7 +23,6 @@ body {
   padding: 40px 20px;
 }
 
-/* Container Proposal */
 .proposal-container {
   max-width: 1100px;
   margin: 0 auto;
@@ -33,7 +32,6 @@ body {
   overflow: hidden;
 }
 
-/* Header Proposal */
 .proposal-header {
   background: linear-gradient(135deg, #0f2b4d 0%, #1e4a76 100%);
   color: white;
@@ -82,12 +80,10 @@ body {
   font-size: 0.8rem;
 }
 
-/* Konten Proposal */
 .proposal-content {
   padding: 40px;
 }
 
-/* Section */
 .section {
   margin-bottom: 40px;
 }
@@ -101,7 +97,6 @@ body {
   margin-bottom: 20px;
 }
 
-/* Tabel Barang & Jasa */
 .table-wrapper {
   overflow-x: auto;
 }
@@ -137,7 +132,6 @@ body {
   color: #059669;
 }
 
-/* Total Section */
 .total-section {
   background: #f1f5f9;
   border-radius: 16px;
@@ -157,7 +151,6 @@ body {
   color: #1e3a8a;
 }
 
-/* Tanda Tangan Digital QR Code */
 .signature-section {
   display: flex;
   flex-wrap: wrap;
@@ -195,10 +188,6 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.qr-signature div {
-  margin: 0 auto;
-}
-
 .signature-name {
   font-weight: 700;
   margin-top: 10px;
@@ -216,7 +205,30 @@ body {
   margin-top: 5px;
 }
 
-/* Tombol Aksi */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #64748b;
+}
+
+.loading i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #94a3b8;
+  background: #f8fafc;
+  border-radius: 16px;
+}
+
+.empty-state i {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
 .action-buttons {
   display: flex;
   justify-content: center;
@@ -250,17 +262,6 @@ body {
   box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
 }
 
-.btn-secondary {
-  background: #f1f5f9;
-  color: #1e293b;
-  border: 1px solid #cbd5e1;
-}
-
-.btn-secondary:hover {
-  background: #e2e8f0;
-  transform: translateY(-2px);
-}
-
 .btn-warning {
   background: linear-gradient(135deg, #f59e0b, #d97706);
   color: white;
@@ -270,32 +271,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* Loading & Empty State */
-.loading {
-  text-align: center;
-  padding: 40px;
-  color: #64748b;
-}
-
-.loading i {
-  font-size: 2rem;
-  margin-bottom: 10px;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 40px;
-  color: #94a3b8;
-  background: #f8fafc;
-  border-radius: 16px;
-}
-
-.empty-state i {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-}
-
-/* Footer */
 .proposal-footer {
   background: #f8fafc;
   padding: 20px 40px;
@@ -305,32 +280,26 @@ body {
   border-top: 1px solid #e2e8f0;
 }
 
-/* Print Styles */
 @media print {
   body {
     background: white;
     padding: 0;
     margin: 0;
   }
-  
   .action-buttons {
     display: none;
   }
-  
   .proposal-container {
     box-shadow: none;
     border-radius: 0;
   }
-  
   .btn, .no-print {
     display: none !important;
   }
-  
   .proposal-header {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-  
   .data-table th {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
@@ -341,20 +310,16 @@ body {
   .proposal-content {
     padding: 20px;
   }
-  
   .proposal-header {
     padding: 25px;
   }
-  
   .signature-section {
     flex-direction: column;
     align-items: center;
   }
-  
   .signature-box {
     width: 100%;
   }
-  
   .section-title {
     font-size: 1.2rem;
   }
@@ -366,7 +331,7 @@ body {
 <div class="proposal-container" id="proposalContainer">
   <div class="proposal-header">
     <div class="logo-proposal">
-      <img id="logoImg" src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="Logo Koperasi" onerror="this.src='https://placehold.co/200x200?text=Koperasi'">
+      <img id="logoImg" src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="Logo" onerror="this.src='https://placehold.co/200x200?text=Koperasi'">
       <div>
         <h1>PROPOSAL PENAWARAN</h1>
         <div class="subtitle">Barang & Jasa Koperasi Taruna Karya Cirebon</div>
@@ -379,7 +344,6 @@ body {
   </div>
 
   <div class="proposal-content">
-    <!-- Pendahuluan -->
     <div class="section">
       <div class="section-title">Latar Belakang</div>
       <p style="line-height: 1.6; color: #334155;">Koperasi Taruna Karya Cirebon hadir sebagai mitra terpercaya dalam memenuhi kebutuhan barang dan jasa berkualitas. Dengan sistem koperasi yang transparan dan menguntungkan, kami menawarkan berbagai produk unggulan serta layanan profesional dari anggota terverifikasi. Proposal ini disusun sebagai bentuk komitmen kami dalam memberikan solusi terbaik bagi mitra dan anggota koperasi.</p>
@@ -389,12 +353,12 @@ body {
     <div class="section">
       <div class="section-title"><i class="fas fa-box"></i> Daftar Barang Unggulan</div>
       <div class="table-wrapper">
-        <table class="data-table" id="barangTable">
+        <table class="data-table">
           <thead>
-            <tr><th>No</th><th>Nama Barang</th><th>Deskripsi</th><th>Harga (Rp)</th><th>Stok</th></tr>
+            <tr><th>No</th><th>Nama Barang</th><th>Harga</th></tr>
           </thead>
           <tbody id="barangBody">
-            <tr><td colspan="5" class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat data barang...</td></tr>
+            <tr><td colspan="3" class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat data barang...</td></tr>
           </tbody>
         </table>
       </div>
@@ -404,12 +368,12 @@ body {
     <div class="section">
       <div class="section-title"><i class="fas fa-briefcase"></i> Daftar Jasa Profesional</div>
       <div class="table-wrapper">
-        <table class="data-table" id="jasaTable">
+        <table class="data-table">
           <thead>
-            <tr><th>No</th><th>Nama Jasa</th><th>Deskripsi</th><th>Harga (Rp)</th><th>Penyedia</th></tr>
+            <tr><th>No</th><th>Nama Jasa</th><th>Deskripsi</th><th>Harga</th></tr>
           </thead>
           <tbody id="jasaBody">
-            <tr><td colspan="5" class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat data jasa...</td></tr>
+            <tr><td colspan="4" class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat data jasa...</td></tr>
           </tbody>
         </table>
       </div>
@@ -448,10 +412,9 @@ body {
       </div>
     </div>
 
-    <!-- Penutup -->
     <div class="section">
       <div class="section-title">Penutup</div>
-      <p style="line-height: 1.6; color: #334155;">Demikian proposal penawaran ini kami sampaikan. Besar harapan kami untuk dapat menjalin kerjasama yang saling menguntungkan. Untuk informasi lebih lanjut, silakan hubungi kontak kami. Terima kasih atas kepercayaan Anda kepada Koperasi Taruna Karya Cirebon.</p>
+      <p style="line-height: 1.6; color: #334155;">Demikian proposal penawaran ini kami sampaikan. Besar harapan kami untuk dapat menjalin kerjasama yang saling menguntungkan. Terima kasih atas kepercayaan Anda kepada Koperasi Taruna Karya Cirebon.</p>
     </div>
   </div>
 
@@ -468,35 +431,196 @@ body {
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-// Firebase Config
-const firebaseConfig = {
+// Firebase Config SAMA PERSIS dengan barang.html dan jasa.html
+const config = {
   apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
   authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
   projectId: "koperasi-taruna-karya-cirebon",
 };
 
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(config);
 const db = getFirestore(app);
 
-// Global Variables
-let barangList = [];
-let jasaList = [];
+// Data
+let semuaBarang = [];
+let semuaJasa = [];
 let ketuaData = null;
 let sekretarisData = null;
 
-// Set tanggal proposal
+// Set tanggal
 document.getElementById('tanggalProposal').innerText = new Date().toLocaleDateString('id-ID', {
   year: 'numeric', month: 'long', day: 'numeric'
 });
 
-// Fungsi generate QR Code di dalam div
+// Fungsi fix gambar SAMA PERSIS dengan barang.html
+function fixImage(url) {
+  if (!url) return "https://via.placeholder.com/300";
+  return url
+    .replace("github.com", "raw.githubusercontent.com")
+    .replace("/blob/", "/");
+}
+
+// Format Rupiah
+function formatRupiah(angka) {
+  if (!angka && angka !== 0) return '0';
+  return new Intl.NumberFormat('id-ID').format(angka);
+}
+
+// ================= LOAD BARANG (SAMA PERSIS DENGAN barang.html) =================
+onSnapshot(collection(db, "barang"), (snap) => {
+  semuaBarang = [];
+  snap.forEach(doc => {
+    const data = doc.data();
+    semuaBarang.push({
+      nama: data.nama,
+      harga: data.harga,
+      gambar: fixImage(data.gambar)
+    });
+  });
+  console.log("Barang loaded:", semuaBarang.length);
+  renderBarang();
+});
+
+// ================= LOAD JASA (SAMA PERSIS DENGAN jasa.html) =================
+onSnapshot(collection(db, "jasa"), (snap) => {
+  semuaJasa = [];
+  snap.forEach(doc => {
+    const data = doc.data();
+    semuaJasa.push({
+      nama: data.nama,
+      harga: data.harga,
+      deskripsi: data.deskripsi || "",
+      gambar: fixImage(data.gambar)
+    });
+  });
+  console.log("Jasa loaded:", semuaJasa.length);
+  renderJasa();
+});
+
+// ================= LOAD PENGURUS =================
+onSnapshot(collection(db, "pengurus"), (snap) => {
+  snap.forEach(doc => {
+    const data = doc.data();
+    if (data.jabatan === "Ketua" || data.jabatan?.toLowerCase() === "ketua") {
+      ketuaData = data;
+      document.getElementById('ketuaNama').innerHTML = `<i class="fas fa-user-check"></i> ${data.nama || 'Tidak tersedia'}`;
+      document.getElementById('ketuaJabatan').innerText = data.jabatan || 'Ketua';
+      
+      const qrText = JSON.stringify({
+        type: "ttd_ketua",
+        nama: data.nama,
+        jabatan: data.jabatan,
+        email: data.email,
+        timestamp: new Date().toISOString()
+      });
+      generateQRCode('ketuaQR', qrText, 120);
+    }
+    if (data.jabatan === "Sekretaris" || data.jabatan?.toLowerCase() === "sekretaris") {
+      sekretarisData = data;
+      document.getElementById('sekretarisNama').innerHTML = `<i class="fas fa-user-check"></i> ${data.nama || 'Tidak tersedia'}`;
+      document.getElementById('sekretarisJabatan').innerText = data.jabatan || 'Sekretaris';
+      
+      const qrText = JSON.stringify({
+        type: "ttd_sekretaris",
+        nama: data.nama,
+        jabatan: data.jabatan,
+        email: data.email,
+        timestamp: new Date().toISOString()
+      });
+      generateQRCode('sekretarisQR', qrText, 120);
+    }
+  });
+});
+
+// Render Tabel Barang
+function renderBarang() {
+  const tbody = document.getElementById('barangBody');
+  if (!semuaBarang.length) {
+    tbody.innerHTML = `<tr><td colspan="3" class="empty-state"><i class="fas fa-box-open"></i> Belum ada data barang<br><small>Silakan tambahkan data di collection "barang" Firestore</small></td></tr>`;
+    document.getElementById('totalBarang').innerHTML = 'Rp 0';
+    return;
+  }
+  
+  let total = 0;
+  let html = '';
+  semuaBarang.forEach((item, index) => {
+    let harga = 0;
+    if (typeof item.harga === 'number') harga = item.harga;
+    else if (typeof item.harga === 'string') harga = parseInt(item.harga.replace(/[^0-9]/g, '')) || 0;
+    total += harga;
+    html += `
+      <tr>
+        <td>${index + 1}</td>
+        <td><strong>${escapeHtml(item.nama)}</strong></td>
+        <td class="price">Rp ${formatRupiah(harga)}</td>
+      </tr>
+    `;
+  });
+  tbody.innerHTML = html;
+  document.getElementById('totalBarang').innerHTML = `Rp ${formatRupiah(total)}`;
+  updateGrandTotal();
+}
+
+// Render Tabel Jasa
+function renderJasa() {
+  const tbody = document.getElementById('jasaBody');
+  if (!semuaJasa.length) {
+    tbody.innerHTML = `<tr><td colspan="4" class="empty-state"><i class="fas fa-briefcase"></i> Belum ada data jasa<br><small>Silakan tambahkan data di collection "jasa" Firestore</small></td></tr>`;
+    document.getElementById('totalJasa').innerHTML = 'Rp 0';
+    return;
+  }
+  
+  let total = 0;
+  let html = '';
+  semuaJasa.forEach((item, index) => {
+    let harga = 0;
+    if (typeof item.harga === 'number') harga = item.harga;
+    else if (typeof item.harga === 'string') harga = parseInt(item.harga.replace(/[^0-9]/g, '')) || 0;
+    total += harga;
+    html += `
+      <tr>
+        <td>${index + 1}</td>
+        <td><strong>${escapeHtml(item.nama)}</strong></td>
+        <td>${escapeHtml(item.deskripsi)}</td>
+        <td class="price">Rp ${formatRupiah(harga)}</td>
+      </tr>
+    `;
+  });
+  tbody.innerHTML = html;
+  document.getElementById('totalJasa').innerHTML = `Rp ${formatRupiah(total)}`;
+  updateGrandTotal();
+}
+
+// Update Grand Total
+function updateGrandTotal() {
+  let totalBarang = 0;
+  let totalJasa = 0;
+  
+  semuaBarang.forEach(item => {
+    let harga = 0;
+    if (typeof item.harga === 'number') harga = item.harga;
+    else if (typeof item.harga === 'string') harga = parseInt(item.harga.replace(/[^0-9]/g, '')) || 0;
+    totalBarang += harga;
+  });
+  
+  semuaJasa.forEach(item => {
+    let harga = 0;
+    if (typeof item.harga === 'number') harga = item.harga;
+    else if (typeof item.harga === 'string') harga = parseInt(item.harga.replace(/[^0-9]/g, '')) || 0;
+    totalJasa += harga;
+  });
+  
+  const grand = totalBarang + totalJasa;
+  document.getElementById('grandTotal').innerHTML = `Rp ${formatRupiah(grand)}`;
+}
+
+// Generate QR Code
 function generateQRCode(divId, text, size = 120) {
   const div = document.getElementById(divId);
   if (!div) return;
   div.innerHTML = '';
-  
   try {
     new QRCode(div, {
       text: text,
@@ -507,249 +631,64 @@ function generateQRCode(divId, text, size = 120) {
       correctLevel: QRCode.CorrectLevel.H
     });
   } catch(e) {
-    console.error("QR Error:", e);
     div.innerHTML = `<div style="width:${size}px;height:${size}px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;border-radius:12px;"><i class="fas fa-qrcode" style="font-size:40px;color:#94a3b8;"></i></div>`;
   }
 }
 
-// Load data barang dari Firestore (collection: barang)
-async function loadBarang() {
-  try {
-    const barangRef = collection(db, "barang");
-    // Coba ambil semua data, filter status jika ada
-    let snapshot;
-    try {
-      const q = query(barangRef, where("status", "==", "approved"));
-      snapshot = await getDocs(q);
-    } catch {
-      // Jika field status tidak ada, ambil semua
-      snapshot = await getDocs(barangRef);
-    }
-    
-    barangList = [];
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      barangList.push({ 
-        id: doc.id, 
-        nama: data.nama || data.name || data.nama_barang || 'Tidak ada nama',
-        deskripsi: data.deskripsi || data.description || '-',
-        harga: data.harga || data.price || 0,
-        stok: data.stok || data.stock || '-'
-      });
-    });
-    
-    console.log("Barang loaded:", barangList.length);
-    renderBarang();
-  } catch (error) {
-    console.error("Error loading barang:", error);
-    document.getElementById('barangBody').innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data barang<br><small>${error.message}</small></td></tr>`;
-  }
-}
-
-// Load data jasa dari Firestore (collection: jasa)
-async function loadJasa() {
-  try {
-    const jasaRef = collection(db, "jasa");
-    let snapshot;
-    try {
-      const q = query(jasaRef, where("status", "==", "approved"));
-      snapshot = await getDocs(q);
-    } catch {
-      snapshot = await getDocs(jasaRef);
-    }
-    
-    jasaList = [];
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      jasaList.push({ 
-        id: doc.id, 
-        nama: data.nama || data.name || data.nama_jasa || 'Tidak ada nama',
-        deskripsi: data.deskripsi || data.description || '-',
-        harga: data.harga || data.price || 0,
-        penyedia: data.penyedia || data.provider || 'Koperasi'
-      });
-    });
-    
-    console.log("Jasa loaded:", jasaList.length);
-    renderJasa();
-  } catch (error) {
-    console.error("Error loading jasa:", error);
-    document.getElementById('jasaBody').innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data jasa<br><small>${error.message}</small></td></tr>`;
-  }
-}
-
-// Load pengurus (Ketua & Sekretaris) dari collection pengurus
-async function loadPengurus() {
-  try {
-    const pengurusRef = collection(db, "pengurus");
-    const snapshot = await getDocs(pengurusRef);
-    
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      if (data.jabatan === "Ketua" || data.jabatan === "KETUA" || data.jabatan?.toLowerCase() === "ketua") {
-        ketuaData = data;
-        document.getElementById('ketuaNama').innerHTML = `<i class="fas fa-user-check"></i> ${data.nama || 'Tidak tersedia'}`;
-        document.getElementById('ketuaJabatan').innerText = data.jabatan || 'Ketua';
-        
-        // Generate QR Code tanda tangan untuk Ketua
-        const qrText = JSON.stringify({
-          type: "ttd_ketua",
-          nama: data.nama,
-          jabatan: data.jabatan,
-          email: data.email,
-          timestamp: new Date().toISOString(),
-          verify: "https://koperasi-taruna-karya.web.app/verify"
-        });
-        generateQRCode('ketuaQR', qrText, 120);
-      }
-      if (data.jabatan === "Sekretaris" || data.jabatan === "SEKRETARIS" || data.jabatan?.toLowerCase() === "sekretaris") {
-        sekretarisData = data;
-        document.getElementById('sekretarisNama').innerHTML = `<i class="fas fa-user-check"></i> ${data.nama || 'Tidak tersedia'}`;
-        document.getElementById('sekretarisJabatan').innerText = data.jabatan || 'Sekretaris';
-        
-        const qrText = JSON.stringify({
-          type: "ttd_sekretaris",
-          nama: data.nama,
-          jabatan: data.jabatan,
-          email: data.email,
-          timestamp: new Date().toISOString(),
-          verify: "https://koperasi-taruna-karya.web.app/verify"
-        });
-        generateQRCode('sekretarisQR', qrText, 120);
-      }
-    });
-    
-    if (!ketuaData) {
-      document.getElementById('ketuaNama').innerHTML = `<i class="fas fa-user-clock"></i> Menunggu data`;
-      generateQRCode('ketuaQR', JSON.stringify({type:"ttd_ketua", status:"pending", message:"Data Ketua belum tersedia"}), 120);
-    }
-    if (!sekretarisData) {
-      document.getElementById('sekretarisNama').innerHTML = `<i class="fas fa-user-clock"></i> Menunggu data`;
-      generateQRCode('sekretarisQR', JSON.stringify({type:"ttd_sekretaris", status:"pending", message:"Data Sekretaris belum tersedia"}), 120);
-    }
-  } catch (error) {
-    console.error("Error loading pengurus:", error);
-  }
-}
-
-// Render tabel barang
-function renderBarang() {
-  const tbody = document.getElementById('barangBody');
-  if (!barangList.length) {
-    tbody.innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-box-open"></i> Belum ada data barang<br><small>Silakan tambahkan data di collection "barang" Firestore</small></td></tr>`;
-    document.getElementById('totalBarang').innerText = 'Rp 0';
-    return 0;
-  }
-  
-  let total = 0;
-  let html = '';
-  barangList.forEach((item, index) => {
-    const harga = Number(item.harga) || 0;
-    total += harga;
-    html += `
-      <tr>
-        <td>${index + 1}</td>
-        <td><strong>${escapeHtml(item.nama)}</strong></td>
-        <td>${escapeHtml(item.deskripsi)}</td>
-        <td class="price">Rp ${formatRupiah(harga)}</td>
-        <td>${escapeHtml(item.stok)}</td>
-      </tr>
-    `;
-  });
-  tbody.innerHTML = html;
-  document.getElementById('totalBarang').innerHTML = `Rp ${formatRupiah(total)}`;
-  return total;
-}
-
-// Render tabel jasa
-function renderJasa() {
-  const tbody = document.getElementById('jasaBody');
-  if (!jasaList.length) {
-    tbody.innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-briefcase"></i> Belum ada data jasa<br><small>Silakan tambahkan data di collection "jasa" Firestore</small></td></tr>`;
-    document.getElementById('totalJasa').innerText = 'Rp 0';
-    return 0;
-  }
-  
-  let total = 0;
-  let html = '';
-  jasaList.forEach((item, index) => {
-    const harga = Number(item.harga) || 0;
-    total += harga;
-    html += `
-      <tr>
-        <td>${index + 1}</td>
-        <td><strong>${escapeHtml(item.nama)}</strong></td>
-        <td>${escapeHtml(item.deskripsi)}</td>
-        <td class="price">Rp ${formatRupiah(harga)}</td>
-        <td>${escapeHtml(item.penyedia)}</td>
-      </tr>
-    `;
-  });
-  tbody.innerHTML = html;
-  document.getElementById('totalJasa').innerHTML = `Rp ${formatRupiah(total)}`;
-  return total;
-}
-
-// Hitung dan update grand total
-function updateGrandTotal() {
-  let totalBarang = 0;
-  let totalJasa = 0;
-  
-  barangList.forEach(item => totalBarang += (Number(item.harga) || 0));
-  jasaList.forEach(item => totalJasa += (Number(item.harga) || 0));
-  
-  const grand = totalBarang + totalJasa;
-  document.getElementById('grandTotal').innerHTML = `Rp ${formatRupiah(grand)}`;
-}
-
-// Generate QR Code Verifikasi Dokumen
+// Generate QR Verifikasi Dokumen
 function generateDocQR() {
+  const totalBarangVal = semuaBarang.reduce((a, b) => {
+    let h = 0;
+    if (typeof b.harga === 'number') h = b.harga;
+    else if (typeof b.harga === 'string') h = parseInt(b.harga.replace(/[^0-9]/g, '')) || 0;
+    return a + h;
+  }, 0);
+  
+  const totalJasaVal = semuaJasa.reduce((a, b) => {
+    let h = 0;
+    if (typeof b.harga === 'number') h = b.harga;
+    else if (typeof b.harga === 'string') h = parseInt(b.harga.replace(/[^0-9]/g, '')) || 0;
+    return a + h;
+  }, 0);
+  
   const docData = {
     document: "Proposal Penawaran Koperasi Taruna Karya Cirebon",
     date: new Date().toISOString(),
     tanggal_proposal: document.getElementById('tanggalProposal').innerText,
-    total_barang: barangList.reduce((a,b) => a + (Number(b.harga) || 0), 0),
-    total_jasa: jasaList.reduce((a,b) => a + (Number(b.harga) || 0), 0),
-    jumlah_barang: barangList.length,
-    jumlah_jasa: jasaList.length,
+    total_barang: totalBarangVal,
+    total_jasa: totalJasaVal,
+    jumlah_barang: semuaBarang.length,
+    jumlah_jasa: semuaJasa.length,
     ketua: ketuaData?.nama || "Tidak tersedia",
-    sekretaris: sekretarisData?.nama || "Tidak tersedia",
-    verify_url: "https://koperasi-taruna-karya.web.app/verify"
+    sekretaris: sekretarisData?.nama || "Tidak tersedia"
   };
-  
   generateQRCode('docQR', JSON.stringify(docData), 120);
 }
 
-// Refresh semua data
-window.refreshData = async function() {
-  document.getElementById('barangBody').innerHTML = '<tr><td colspan="5" class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat ulang...</td></tr>';
-  document.getElementById('jasaBody').innerHTML = '<tr><td colspan="5" class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat ulang...</td></tr>';
+// Refresh Data
+window.refreshData = function() {
+  // Reset loading state
+  document.getElementById('barangBody').innerHTML = '<tr><td colspan="3" class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat ulang...</td></tr>';
+  document.getElementById('jasaBody').innerHTML = '<tr><td colspan="4" class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat ulang...</td></tr>';
   
-  await Promise.all([loadBarang(), loadJasa(), loadPengurus()]);
-  updateGrandTotal();
-  generateDocQR();
-  
-  // Tampilkan notifikasi
-  const toast = document.createElement('div');
-  toast.style.position = 'fixed';
-  toast.style.bottom = '20px';
-  toast.style.right = '20px';
-  toast.style.background = '#059669';
-  toast.style.color = 'white';
-  toast.style.padding = '12px 24px';
-  toast.style.borderRadius = '40px';
-  toast.style.fontWeight = '600';
-  toast.style.zIndex = '9999';
-  toast.innerHTML = '<i class="fas fa-check-circle"></i> Data berhasil di-refresh!';
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
+  // Data akan otomatis refresh karena onSnapshot
+  setTimeout(() => {
+    generateDocQR();
+    const toast = document.createElement('div');
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.right = '20px';
+    toast.style.background = '#059669';
+    toast.style.color = 'white';
+    toast.style.padding = '12px 24px';
+    toast.style.borderRadius = '40px';
+    toast.style.fontWeight = '600';
+    toast.style.zIndex = '9999';
+    toast.innerHTML = '<i class="fas fa-check-circle"></i> Data berhasil di-refresh!';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }, 500);
 };
-
-// Helper functions
-function formatRupiah(angka) {
-  if (!angka && angka !== 0) return '0';
-  return new Intl.NumberFormat('id-ID').format(angka);
-}
 
 function escapeHtml(str) {
   if (!str) return '-';
@@ -761,22 +700,17 @@ function escapeHtml(str) {
   });
 }
 
+// Generate QR Dokumen setelah data load
+setTimeout(() => {
+  generateDocQR();
+}, 2000);
+
 // Logo fallback
 const logoImg = document.getElementById('logoImg');
 if (logoImg) {
   logoImg.onerror = function() { this.src = 'https://placehold.co/200x200?text=Koperasi'; };
 }
-
-// Inisialisasi
-async function init() {
-  await loadBarang();
-  await loadJasa();
-  await loadPengurus();
-  updateGrandTotal();
-  generateDocQR();
-}
-
-init();
 </script>
+
 </body>
 </html>
