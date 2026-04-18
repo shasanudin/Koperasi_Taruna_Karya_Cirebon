@@ -549,8 +549,8 @@ body {
   <div class="form-group">
     <label><i class="fas fa-image"></i> URL Gambar Barang</label>
     <input type="url" id="gambarBarangUrl" placeholder="https://example.com/gambar.jpg">
-    <div class="image-url-preview" id="previewContainer">
-      <img id="imagePreview" src="" alt="Preview Gambar">
+    <div class="image-url-preview" id="previewContainerBarang">
+      <img id="imagePreviewBarang" src="" alt="Preview Gambar">
     </div>
   </div>
   <button class="btn-simpan" onclick="tambahBarang()"><i class="fas fa-save"></i> Simpan Barang</button>
@@ -559,7 +559,7 @@ body {
   <div id="listBarang" class="grid"></div>
 </div>
 
-<!-- JASA -->
+<!-- JASA - DIPERBAIKI -->
 <div id="jasa" class="card" style="display:none">
   <h3><i class="fas fa-plus-circle"></i> Tambah Jasa</h3>
   <div class="form-row">
@@ -571,11 +571,12 @@ body {
       <label><i class="fas fa-rupiah-sign"></i> Harga</label>
       <input id="hargaJasa" placeholder="Rp 150.000">
     </div>
-    <div class="form-group">
-    <label><i class="fas fa-image"></i> URL Gambar Barang</label>
-    <input type="url" id="gambarBarangUrl" placeholder="https://example.com/gambar.jpg">
-    <div class="image-url-preview" id="previewContainer">
-      <img id="imagePreview" src="" alt="Preview Gambar">
+  </div>
+  <div class="form-group">
+    <label><i class="fas fa-image"></i> URL Gambar Jasa</label>
+    <input type="url" id="gambarJasaUrl" placeholder="https://example.com/gambar.jpg">
+    <div class="image-url-preview" id="previewContainerJasa">
+      <img id="imagePreviewJasa" src="" alt="Preview Gambar">
     </div>
   </div>
   <button class="btn-simpan" onclick="tambahJasa()"><i class="fas fa-save"></i> Simpan Jasa</button>
@@ -584,7 +585,7 @@ body {
   <div id="listJasa" class="grid"></div>
 </div>
 
-<!-- APPROVAL -->
+<!-- APPROVAL - DIPERBAIKI -->
 <div id="approval" class="card" style="display:none">
   <h3><i class="fas fa-user-check"></i> Approval Pendaftaran</h3>
   
@@ -624,24 +625,46 @@ const db = getFirestore(app);
 onAuthStateChanged(auth, (u) => { if (!u) location.href = "login.html" });
 window.logout = () => signOut(auth);
 
-/* PREVIEW GAMBAR URL */
-const gambarUrlInput = document.getElementById('gambarBarangUrl');
-const previewContainer = document.getElementById('previewContainer');
-const imagePreview = document.getElementById('imagePreview');
+/* PREVIEW GAMBAR URL UNTUK BARANG */
+const gambarBarangUrlInput = document.getElementById('gambarBarangUrl');
+const previewContainerBarang = document.getElementById('previewContainerBarang');
+const imagePreviewBarang = document.getElementById('imagePreviewBarang');
 
-if (gambarUrlInput) {
-  gambarUrlInput.addEventListener('input', (e) => {
+if (gambarBarangUrlInput) {
+  gambarBarangUrlInput.addEventListener('input', (e) => {
     const url = e.target.value;
     if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
-      imagePreview.src = url;
-      previewContainer.style.display = 'block';
-      imagePreview.onerror = () => {
-        imagePreview.src = '';
-        previewContainer.style.display = 'none';
+      imagePreviewBarang.src = url;
+      previewContainerBarang.style.display = 'block';
+      imagePreviewBarang.onerror = () => {
+        imagePreviewBarang.src = '';
+        previewContainerBarang.style.display = 'none';
       };
     } else {
-      previewContainer.style.display = 'none';
-      imagePreview.src = '';
+      previewContainerBarang.style.display = 'none';
+      imagePreviewBarang.src = '';
+    }
+  });
+}
+
+/* PREVIEW GAMBAR URL UNTUK JASA */
+const gambarJasaUrlInput = document.getElementById('gambarJasaUrl');
+const previewContainerJasa = document.getElementById('previewContainerJasa');
+const imagePreviewJasa = document.getElementById('imagePreviewJasa');
+
+if (gambarJasaUrlInput) {
+  gambarJasaUrlInput.addEventListener('input', (e) => {
+    const url = e.target.value;
+    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+      imagePreviewJasa.src = url;
+      previewContainerJasa.style.display = 'block';
+      imagePreviewJasa.onerror = () => {
+        imagePreviewJasa.src = '';
+        previewContainerJasa.style.display = 'none';
+      };
+    } else {
+      previewContainerJasa.style.display = 'none';
+      imagePreviewJasa.src = '';
     }
   });
 }
@@ -684,8 +707,8 @@ window.tambahBarang = async () => {
   document.getElementById("namaBarang").value = "";
   document.getElementById("hargaBarang").value = "";
   document.getElementById("gambarBarangUrl").value = "";
-  previewContainer.style.display = "none";
-  imagePreview.src = "";
+  previewContainerBarang.style.display = "none";
+  imagePreviewBarang.src = "";
   loadAll();
 }
 
@@ -707,8 +730,9 @@ async function loadBarang() {
   return snap.size;
 }
 
-/* TAMBAH JASA */
+/* TAMBAH JASA - DIPERBAIKI dengan gambar URL */
 window.tambahJasa = async () => {
+  const gambarUrl = document.getElementById("gambarJasaUrl").value;
   const nama = document.getElementById("namaJasa").value;
   const harga = document.getElementById("hargaJasa").value;
   
@@ -719,11 +743,16 @@ window.tambahJasa = async () => {
   
   await addDoc(collection(db, "jasa"), {
     nama: nama,
-    harga: harga
+    harga: harga,
+    gambar: gambarUrl || ""
   });
+  
   alert("Jasa berhasil ditambahkan!");
   document.getElementById("namaJasa").value = "";
   document.getElementById("hargaJasa").value = "";
+  document.getElementById("gambarJasaUrl").value = "";
+  previewContainerJasa.style.display = "none";
+  imagePreviewJasa.src = "";
   loadAll();
 }
 
@@ -735,7 +764,7 @@ async function loadJasa() {
     const j = d.data();
     list.innerHTML += `
       <div class="item-card">
-        <i class="fas fa-briefcase" style="font-size:50px;color:#2563eb;margin:20px auto;display:block;text-align:center"></i>
+        ${j.gambar ? `<img src="${j.gambar}" alt="${j.nama}" onerror="this.src='https://placehold.co/400x300?text=No+Image'">` : '<div style="height:140px;background:#e2e8f0;border-radius:12px;display:flex;align-items:center;justify-content:center"><i class="fas fa-briefcase" style="font-size:40px;color:#2563eb"></i></div>'}
         <b contenteditable="true" onblur="edit('${d.id}','jasa','nama',this.innerText)">${escapeHtml(j.nama)}</b>
         <p contenteditable="true" onblur="edit('${d.id}','jasa','harga',this.innerText)">${escapeHtml(j.harga)}</p>
         <button class="btn-hapus" onclick="hapus('jasa','${d.id}')"><i class="fas fa-trash"></i> Hapus</button>
@@ -766,49 +795,59 @@ window.hapus = async (col, id) => {
   }
 }
 
-/* APPROVAL */
+/* APPROVAL - DIPERBAIKI menampilkan data yang lebih lengkap */
 window.loadApproval = async () => {
   const status = document.getElementById("filterStatus").value;
   
   const pSnap = await getDocs(collection(db, "pengurus"));
   const listPengurus = document.getElementById("listPengurus");
   listPengurus.innerHTML = "";
-  pSnap.forEach(d => {
-    const p = d.data();
-    if (status === "all" || p.status === status) {
-      listPengurus.innerHTML += `
-        <div class="approval-card ${p.status || 'pending'}">
-          <div class="nama"><i class="fas fa-user-tie"></i> ${escapeHtml(p.nama || 'Tidak ada nama')}</div>
-          <div class="detail">Jabatan: ${escapeHtml(p.jabatan || '-')} | Email: ${escapeHtml(p.email || '-')}</div>
-          <div class="status status-${p.status || 'pending'}">${p.status || 'pending'}</div>
-          <div style="margin-top: 10px;">
-            <button class="btn-approve" onclick="approve('pengurus','${d.id}')"><i class="fas fa-check"></i> Approve</button>
-            <button class="btn-reject" onclick="reject('pengurus','${d.id}')"><i class="fas fa-times"></i> Reject</button>
+  if (pSnap.size === 0) {
+    listPengurus.innerHTML = '<div style="padding: 20px; text-align: center; color: #64748b;">Belum ada data pengurus</div>';
+  } else {
+    pSnap.forEach(d => {
+      const p = d.data();
+      if (status === "all" || p.status === status) {
+        listPengurus.innerHTML += `
+          <div class="approval-card ${p.status || 'pending'}">
+            <div class="nama"><i class="fas fa-user-tie"></i> ${escapeHtml(p.nama || 'Tidak ada nama')}</div>
+            <div class="detail">Jabatan: ${escapeHtml(p.jabatan || '-')} | Email: ${escapeHtml(p.email || '-')}</div>
+            <div class="detail">No. HP: ${escapeHtml(p.noHp || '-')} | Alamat: ${escapeHtml(p.alamat || '-')}</div>
+            <div class="status status-${p.status || 'pending'}">${p.status || 'pending'}</div>
+            <div style="margin-top: 10px;">
+              <button class="btn-approve" onclick="approve('pengurus','${d.id}')"><i class="fas fa-check"></i> Approve</button>
+              <button class="btn-reject" onclick="reject('pengurus','${d.id}')"><i class="fas fa-times"></i> Reject</button>
+            </div>
           </div>
-        </div>
-      `;
-    }
-  });
+        `;
+      }
+    });
+  }
   
   const aSnap = await getDocs(collection(db, "anggota"));
   const listAnggota = document.getElementById("listAnggota");
   listAnggota.innerHTML = "";
-  aSnap.forEach(d => {
-    const a = d.data();
-    if (status === "all" || a.status === status) {
-      listAnggota.innerHTML += `
-        <div class="approval-card ${a.status || 'pending'}">
-          <div class="nama"><i class="fas fa-user"></i> ${escapeHtml(a.nama || 'Tidak ada nama')}</div>
-          <div class="detail">WA: ${escapeHtml(a.wa || '-')} | Email: ${escapeHtml(a.email || '-')}</div>
-          <div class="status status-${a.status || 'pending'}">${a.status || 'pending'}</div>
-          <div style="margin-top: 10px;">
-            <button class="btn-approve" onclick="approve('anggota','${d.id}')"><i class="fas fa-check"></i> Approve</button>
-            <button class="btn-reject" onclick="reject('anggota','${d.id}')"><i class="fas fa-times"></i> Reject</button>
+  if (aSnap.size === 0) {
+    listAnggota.innerHTML = '<div style="padding: 20px; text-align: center; color: #64748b;">Belum ada data anggota</div>';
+  } else {
+    aSnap.forEach(d => {
+      const a = d.data();
+      if (status === "all" || a.status === status) {
+        listAnggota.innerHTML += `
+          <div class="approval-card ${a.status || 'pending'}">
+            <div class="nama"><i class="fas fa-user"></i> ${escapeHtml(a.nama || 'Tidak ada nama')}</div>
+            <div class="detail">WA: ${escapeHtml(a.wa || '-')} | Email: ${escapeHtml(a.email || '-')}</div>
+            <div class="detail">Alamat: ${escapeHtml(a.alamat || '-')} | Pekerjaan: ${escapeHtml(a.pekerjaan || '-')}</div>
+            <div class="status status-${a.status || 'pending'}">${a.status || 'pending'}</div>
+            <div style="margin-top: 10px;">
+              <button class="btn-approve" onclick="approve('anggota','${d.id}')"><i class="fas fa-check"></i> Approve</button>
+              <button class="btn-reject" onclick="reject('anggota','${d.id}')"><i class="fas fa-times"></i> Reject</button>
+            </div>
           </div>
-        </div>
-      `;
-    }
-  });
+        `;
+      }
+    });
+  }
 }
 
 window.approve = async (col, id) => {
