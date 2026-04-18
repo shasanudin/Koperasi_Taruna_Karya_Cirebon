@@ -4,13 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Koperasi Taruna Karya Cirebon | Mitra Usaha & Solusi Anda</title>
-  <!-- Font Awesome 6 -->
+  <!-- Font Awesome 6 (gratis, ikon modern) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Google Fonts: Inter + Poppins -->
+  <!-- Google Fonts: Inter + Poppins untuk kesan segar & profesional -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-  <!-- Firebase SDK v9 compat (mendukung config terbaru) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <style>
     * {
       margin: 0;
@@ -117,7 +114,7 @@
       border-color: #2563eb;
     }
 
-    /* Hero Section */
+    /* Hero Section - lebih dramatis & modern */
     .hero {
       background: linear-gradient(125deg, #0f2b4d 0%, #1e4a76 45%, #2563eb 100%);
       position: relative;
@@ -200,6 +197,7 @@
       transform: translateX(5px);
     }
 
+    /* Container umum */
     .container {
       max-width: 1280px;
       margin: 0 auto;
@@ -230,6 +228,7 @@
       margin: 12px auto 0;
     }
 
+    /* Grid card modern */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -280,6 +279,7 @@
       font-weight: 400;
     }
 
+    /* Banner info tambahan (keunggulan) */
     .stats-banner {
       background: linear-gradient(110deg, #f1f5ff, #ffffff);
       border-radius: 48px;
@@ -314,6 +314,7 @@
       margin-top: 8px;
     }
 
+    /* footer modern */
     footer {
       background: #0b1120;
       color: #cbd5e1;
@@ -377,33 +378,19 @@
       font-size: 0.85rem;
     }
 
-    .loading-skeleton {
-      background: #e2e8f0;
-      border-radius: 20px;
-      animation: pulse 1.2s infinite;
-      height: 260px;
-    }
-
-    @keyframes pulse {
-      0% { opacity: 0.6; }
-      50% { opacity: 1; }
-      100% { opacity: 0.6; }
-    }
-
-    .toast-msg {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: #0f172a;
-      color: white;
-      padding: 12px 20px;
+    /* tombol aksi sekunder */
+    .btn-outline-dark {
+      background: transparent;
+      border: 1.5px solid #cbd5e1;
+      padding: 8px 20px;
       border-radius: 40px;
-      font-size: 0.85rem;
-      z-index: 1100;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.2);
-      backdrop-filter: blur(4px);
-      background: rgba(15,23,42,0.9);
-      transition: opacity 0.3s;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .btn-outline-dark:hover {
+      border-color: #2563eb;
+      background: #f1f5f9;
     }
 
     @media (max-width: 680px) {
@@ -426,13 +413,14 @@
 </head>
 <body>
 
+<!-- Navbar dinamis dengan logo dari GitHub (raw) -->
 <div id="navbar"></div>
 
-<!-- Hero Section -->
+<!-- Hero Section dengan ilustrasi visual menarik -->
 <div class="hero">
   <div class="hero-content">
-    <h1 id="dynamicHeroTitle">Koperasi Taruna Karya Cirebon</h1>
-    <p id="dynamicHeroSubtitle"><i class="fas fa-handshake"></i> Solusi kebutuhan barang & jasa untuk anggota | <strong>Sejahtera bersama, maju bersama</strong></p>
+    <h1>Koperasi Taruna Karya Cirebon</h1>
+    <p><i class="fas fa-handshake"></i> Solusi kebutuhan barang & jasa untuk anggota | <strong>Sejahtera bersama, maju bersama</strong></p>
     <a href="join.html" class="btn-glow">
       Gabung Sekarang <i class="fas fa-arrow-right"></i>
     </a>
@@ -444,38 +432,55 @@
   </div>
 </div>
 
+<!-- Konten Utama -->
 <div class="container" id="layanan">
   <div class="section">
     <h2 class="section-title">Layanan Unggulan Kami</h2>
-    <div class="grid" id="servicesGrid">
-      <div class="loading-skeleton"></div>
-      <div class="loading-skeleton"></div>
-      <div class="loading-skeleton"></div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-icon"><i class="fas fa-store"></i></div>
+        <h3>Marketplace Barang</h3>
+        <p>Beli kebutuhan sehari-hari, elektronik, sembako dengan harga anggota dan kualitas terjamin. Nikmati promo eksklusif.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fas fa-briefcase"></i></div>
+        <h3>Marketplace Jasa</h3>
+        <p>Temukan berbagai layanan profesional dari sesama anggota: perbaikan rumah, konsultasi, les, dan banyak lagi.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fas fa-users"></i></div>
+        <h3>Keanggotaan Premium</h3>
+        <p>Gabung dan nikmati manfaat simpan pinjam, bagi hasil, serta akses penuh ke ekosistem koperasi digital.</p>
+      </div>
     </div>
   </div>
 
-  <div class="stats-banner" id="statsBanner">
+  <!-- Statistik / keunggulan interaktif -->
+  <div class="stats-banner">
     <div class="stat-item">
-      <div class="stat-number" id="statMember">-</div>
+      <div class="stat-number">500+</div>
       <div class="stat-label">Anggota Aktif</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number" id="statVolume">-</div>
+      <div class="stat-number">Rp 100 Juta</div>
       <div class="stat-label">Volume Usaha</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number" id="statMitra">-</div>
+      <div class="stat-number">5</div>
       <div class="stat-label">Mitra UMKM</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number" id="statRating">-</div>
+      <div class="stat-number">4.9★</div>
       <div class="stat-label">Kepuasan Anggota</div>
     </div>
   </div>
 
+  <!-- Tambahan section: kenapa memilih kami -->
   <div class="section">
     <h2 class="section-title">Mengapa Bergabung?</h2>
-    <div class="grid" id="whyUsGrid">
+    <div class="grid">
       <div class="card" style="background: linear-gradient(145deg, #ffffff, #fafdff);">
         <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
         <h3>Aman & Terpercaya</h3>
@@ -494,6 +499,7 @@
     </div>
   </div>
 
+  <!-- Ajakan / CTA kedua -->
   <div style="background: linear-gradient(115deg, #eef2ff, #ffffff); border-radius: 48px; padding: 48px 32px; text-align: center; margin-top: 20px;">
     <h2 style="font-size: 1.8rem; font-weight: 800; color:#0f172a;">Siap menjadi bagian dari keluarga besar?</h2>
     <p style="margin-top: 12px; max-width: 600px; margin-left: auto; margin-right: auto; color: #2c3e66;">Daftar sekarang dan rasakan kemudahan bertransaksi di ekosistem koperasi modern.</p>
@@ -503,23 +509,25 @@
   </div>
 </div>
 
+<!-- Footer premium -->
 <footer>
   <div class="footer-content">
     <div class="footer-col">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
-        <img id="footerLogo" src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="logo koperasi" style="height: 38px; width: auto; border-radius: 10px; background: white; padding: 3px;" onerror="this.src='https://placehold.co/200x200?text=Koperasi';">
+        <!-- logo kecil di footer (sama) -->
+        <img id="footerLogo" src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="logo koperasi" style="height: 38px; width: auto; border-radius: 10px; background: white; padding: 3px;">
         <span style="font-weight: 800; font-size: 1.2rem; color:white;">Koperasi Taruna</span>
       </div>
-      <p><i class="fas fa-map-marker-alt"></i> <span id="footerAddress">Jl. Siliwangi No.88, Cirebon, Jawa Barat</span></p>
-      <p><i class="fas fa-envelope"></i> <span id="footerEmail">info@tarunakarya.cirebon.id</span></p>
-      <p><i class="fas fa-phone-alt"></i> <span id="footerPhone">(0231) 567890</span></p>
+      <p><i class="fas fa-map-marker-alt"></i> Jl. Fatahillah, Watubelah, Cirebon, Jawa Barat</p>
+      <p><i class="fas fa-envelope"></i> info@tarunakarya.cirebon.id</p>
+      <p><i class="fas fa-phone-alt"></i> (0231) 567890</p>
     </div>
     <div class="footer-col">
       <h4>Tautan Cepat</h4>
-      <p><a href="#">Tentang Kami</a></p>
-      <p><a href="#">Marketplace Barang</a></p>
-      <p><a href="#">Marketplace Jasa</a></p>
-      <p><a href="#">Karir & Mitra</a></p>
+      <p><a href="kontak.html">Tentang Kami</a></p>
+      <p><a href="barang.html">Marketplace Barang</a></p>
+      <p><a href="jasa.html">Marketplace Jasa</a></p>
+      <p><a href="join.html">Karir & Mitra</a></p>
     </div>
     <div class="footer-col">
       <h4>Layanan Anggota</h4>
@@ -540,229 +548,86 @@
   </div>
 </footer>
 
+<!-- Script untuk memuat navbar + fallback logo jika gambar gagal -->
 <script>
-  // ======================= FIREBASE KONFIGURASI (ASLI DARI USER) =======================
-  const firebaseConfig = {
-    apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
-    authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
-    databaseURL: "https://koperasi-taruna-karya-cirebon-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "koperasi-taruna-karya-cirebon",
-    storageBucket: "koperasi-taruna-karya-cirebon.firebasestorage.app",
-    messagingSenderId: "573396276351",
-    appId: "1:573396276351:web:3fcf1d78bfa5ad9a189b4a",
-    measurementId: "G-RH91DN1KT8"
-  };
-
-  let database = null;
-  let firebaseApp = null;
-  let useFirebase = false;
-
-  try {
-    firebaseApp = firebase.initializeApp(firebaseConfig);
-    database = firebase.database();
-    useFirebase = true;
-    console.log("✅ Firebase connected successfully");
-  } catch (e) {
-    console.error("Firebase init error:", e);
-    useFirebase = false;
-  }
-
-  // Data statis fallback jika firebase tidak memiliki data
-  const staticData = {
-    heroTitle: "Koperasi Taruna Karya Cirebon",
-    heroSub: "<i class='fas fa-handshake'></i> Solusi kebutuhan barang & jasa untuk anggota | <strong>Sejahtera bersama, maju bersama</strong>",
-    services: [
-      { icon: "fa-store", title: "Marketplace Barang", desc: "Beli kebutuhan sehari-hari, elektronik, sembako dengan harga anggota dan kualitas terjamin. Nikmati promo eksklusif." },
-      { icon: "fa-briefcase", title: "Marketplace Jasa", desc: "Temukan berbagai layanan profesional dari sesama anggota: perbaikan rumah, konsultasi, les, dan banyak lagi." },
-      { icon: "fa-users", title: "Keanggotaan Premium", desc: "Gabung dan nikmati manfaat simpan pinjam, bagi hasil, serta akses penuh ke ekosistem koperasi digital." }
-    ],
-    stats: { members: "500+", volume: "Rp 2,8M", partners: "32+", rating: "4.9★" },
-    footer: { address: "Jl. Siliwangi No.88, Cirebon, Jawa Barat", email: "info@tarunakarya.cirebon.id", phone: "(0231) 567890" }
-  };
-
-  function showToast(msg) {
-    let toast = document.querySelector('.toast-msg');
-    if (toast) toast.remove();
-    const div = document.createElement('div');
-    div.className = 'toast-msg';
-    div.innerHTML = `<i class="fas fa-info-circle"></i> ${msg}`;
-    document.body.appendChild(div);
-    setTimeout(() => {
-      div.style.opacity = '0';
-      setTimeout(() => div.remove(), 500);
-    }, 3000);
-  }
-
-  function renderServices(servicesArray) {
-    const container = document.getElementById('servicesGrid');
-    if (!container) return;
-    container.innerHTML = '';
-    servicesArray.forEach(service => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <div class="card-icon"><i class="fas ${service.icon || 'fa-store'}"></i></div>
-        <h3>${escapeHtml(service.title) || 'Layanan'}</h3>
-        <p>${escapeHtml(service.desc) || 'Deskripsi layanan koperasi terbaik untuk anda.'}</p>
-      `;
-      container.appendChild(card);
-    });
-  }
-
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-      if (m === '&') return '&amp;';
-      if (m === '<') return '&lt;';
-      if (m === '>') return '&gt;';
-      return m;
-    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-      return c;
-    });
-  }
-
-  async function loadFirebaseData() {
-    if (!useFirebase || !database) {
-      fallbackToStatic();
-      showToast("📡 Mode statis (Firebase tidak terhubung), gunakan data lokal.");
-      return;
-    }
-
-    try {
-      // Ambil data dari path 'websiteConfig' di Realtime Database
-      const configRef = database.ref('websiteConfig');
-      const snapshot = await configRef.once('value');
-      const data = snapshot.val();
-      
-      if (data) {
-        // Update Hero
-        if (data.heroTitle) document.getElementById('dynamicHeroTitle').innerText = data.heroTitle;
-        if (data.heroSubtitle) document.getElementById('dynamicHeroSubtitle').innerHTML = data.heroSubtitle;
-        
-        // Update Layanan Unggulan (services)
-        if (data.services && Array.isArray(data.services) && data.services.length > 0) {
-          renderServices(data.services);
-        } else {
-          renderServices(staticData.services);
-        }
-        
-        // Update Stats
-        if (data.stats) {
-          document.getElementById('statMember').innerText = data.stats.members || staticData.stats.members;
-          document.getElementById('statVolume').innerText = data.stats.volume || staticData.stats.volume;
-          document.getElementById('statMitra').innerText = data.stats.partners || staticData.stats.partners;
-          document.getElementById('statRating').innerText = data.stats.rating || staticData.stats.rating;
-        } else {
-          setStaticStats();
-        }
-        
-        // Update Footer
-        if (data.footer) {
-          if (data.footer.address) document.getElementById('footerAddress').innerText = data.footer.address;
-          if (data.footer.email) document.getElementById('footerEmail').innerText = data.footer.email;
-          if (data.footer.phone) document.getElementById('footerPhone').innerText = data.footer.phone;
-        } else {
-          setStaticFooter();
-        }
-        showToast("✨ Data berhasil dimuat dari Firebase!");
-      } else {
-        // Jika data kosong di firebase, pakai static
-        fallbackToStatic();
-        showToast("ℹ️ Belum ada data di Firebase, menggunakan konten default.");
-      }
-    } catch (err) {
-      console.error("Error membaca Firebase:", err);
-      fallbackToStatic();
-      showToast("⚠️ Gagal memuat data Firebase, menggunakan data lokal.");
-    }
-  }
-
-  function fallbackToStatic() {
-    document.getElementById('dynamicHeroTitle').innerText = staticData.heroTitle;
-    document.getElementById('dynamicHeroSubtitle').innerHTML = staticData.heroSub;
-    renderServices(staticData.services);
-    setStaticStats();
-    setStaticFooter();
-  }
-
-  function setStaticStats() {
-    document.getElementById('statMember').innerText = staticData.stats.members;
-    document.getElementById('statVolume').innerText = staticData.stats.volume;
-    document.getElementById('statMitra').innerText = staticData.stats.partners;
-    document.getElementById('statRating').innerText = staticData.stats.rating;
-  }
-
-  function setStaticFooter() {
-    document.getElementById('footerAddress').innerText = staticData.footer.address;
-    document.getElementById('footerEmail').innerText = staticData.footer.email;
-    document.getElementById('footerPhone').innerText = staticData.footer.phone;
-  }
-
-  // ======================= LOAD NAVBAR EKSTERNAL =======================
-  function loadNavbar() {
-    return fetch('navbar.html')
-      .then(res => {
-        if (!res.ok) throw new Error('Navbar not found');
-        return res.text();
-      })
-      .then(data => {
-        document.getElementById('navbar').innerHTML = data;
-        ensureNavbarLogo();
-      })
-      .catch(() => {
-        // Fallback navbar jika file navbar.html tidak ada
-        const fallbackNav = `
-          <div class="navbar">
-            <div class="logo-area">
-              <img class="logo-img" id="mainLogoNav" src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="Logo Koperasi" onerror="this.src='https://placehold.co/400x200?text=Koperasi+Logo';">
-              <span class="brand-text">Taruna Karya Cirebon</span>
-            </div>
-            <div class="nav-links">
-              <a href="#"><i class="fas fa-home"></i> Beranda</a>
-              <a href="#layanan"><i class="fas fa-box"></i> Layanan</a>
-              <a href="join.html"><i class="fas fa-user-plus"></i> Keanggotaan</a>
-              <a href="#"><i class="fas fa-store"></i> Marketplace</a>
-              <a href="join.html" class="btn-outline-light"><i class="fas fa-sign-in-alt"></i> Login Anggota</a>
-            </div>
+  // 1. Memuat navbar.html dari repo (perhatikan path relatif, asumsikan di folder yang sama dengan file ini)
+  // Jika tidak ada navbar.html secara lokal, kita buat navbar dinamis sebagai fallback agar tampilan tetap rapi.
+  // TAPI karena pada kode asli ada fetch('navbar.html'), kita akan tetap coba fetch, jika gagal kita buat navbar default dengan logo.
+  fetch('navbar.html')
+    .then(res => {
+      if (!res.ok) throw new Error('Navbar not found');
+      return res.text();
+    })
+    .then(data => {
+      document.getElementById('navbar').innerHTML = data;
+      // setelah navbar dimuat, kita pastikan logo di navbar (jika ada elemen dengan class logo-img) bisa mengarah ke gambar yang benar.
+      // jika navbar.html tidak mengandung logo, kita tetap gunakan logo dari github, opsional.
+      injectNavbarLogoIfMissing();
+    })
+    .catch(() => {
+      // fallback navbar: buat navbar elegan dengan logo bawaan
+      const navbarHtml = `
+        <div class="navbar">
+          <div class="logo-area">
+            <img class="logo-img" id="mainLogoNav" src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="Logo Koperasi" onerror="this.onerror=null; this.src='https://placehold.co/400x200?text=Koperasi+Logo';">
+            <span class="brand-text">Taruna Karya Cirebon</span>
           </div>
-        `;
-        document.getElementById('navbar').innerHTML = fallbackNav;
-        ensureNavbarLogo();
-        console.log("Menggunakan navbar fallback karena navbar.html tidak ditemukan.");
-      });
-  }
+          <div class="nav-links">
+            <a href="#"><i class="fas fa-home"></i> Beranda</a>
+            <a href="jasa.html"><i class="fas fa-box"></i> Layanan</a>
+            <a href="join.html"><i class="fas fa-user-plus"></i> Keanggotaan</a>
+            <a href="barang.html"><i class="fas fa-store"></i> Marketplace</a>
+            <a href="join.html" class="btn-outline-light"><i class="fas fa-sign-in-alt"></i> Login Anggota</a>
+          </div>
+        </div>
+      `;
+      document.getElementById('navbar').innerHTML = navbarHtml;
+    });
 
-  function ensureNavbarLogo() {
-    const navLogo = document.querySelector('#navbar .logo-img');
-    if (navLogo && (!navLogo.src || navLogo.src.includes('null') || navLogo.src.includes('placehold'))) {
-      navLogo.src = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
-      navLogo.onerror = () => { navLogo.src = 'https://placehold.co/200x200?text=Koperasi'; };
-    }
-    // Jika tidak ada logo di navbar, buat elemen logo
-    if (!navLogo) {
+  // fungsi untuk memastikan logo di navbar terisi (jika navbar.html tidak mengandung logo)
+  function injectNavbarLogoIfMissing() {
+    // cek apakah di navbar sudah ada .logo-img
+    const existingLogo = document.querySelector('#navbar .logo-img');
+    if (!existingLogo) {
+      // jika tidak ada logo, tambahkan ke area logo pertama
       const logoArea = document.querySelector('#navbar .logo-area');
       if (logoArea) {
-        const newImg = document.createElement('img');
-        newImg.className = 'logo-img';
-        newImg.src = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
-        newImg.style.height = "48px";
-        newImg.alt = "Logo Koperasi";
-        newImg.onerror = () => { newImg.src = 'https://placehold.co/200x200?text=Koperasi'; };
-        logoArea.insertBefore(newImg, logoArea.firstChild);
+        const imgLogo = document.createElement('img');
+        imgLogo.src = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
+        imgLogo.alt = "Logo Koperasi";
+        imgLogo.className = "logo-img";
+        imgLogo.style.height = "48px";
+        imgLogo.style.width = "auto";
+        imgLogo.style.borderRadius = "12px";
+        imgLogo.style.objectFit = "contain";
+        imgLogo.onerror = () => { imgLogo.src = 'https://placehold.co/200x200?text=Koperasi'; };
+        logoArea.insertBefore(imgLogo, logoArea.firstChild);
+      }
+    } else {
+      // pastikan src logo yang sudah ada menggunakan raw github (perbaiki jika perlu)
+      if (existingLogo.src && !existingLogo.src.includes('raw.githubusercontent.com')) {
+        existingLogo.src = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
       }
     }
-    // Footer logo handling
+    // juga perbaiki footer logo agar selalu valid
     const footerLogo = document.getElementById('footerLogo');
-    if (footerLogo && (!footerLogo.src || footerLogo.src.includes('placehold'))) {
+    if (footerLogo) {
       footerLogo.src = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
+      footerLogo.onerror = () => { footerLogo.src = 'https://placehold.co/200x200?text=Koperasi'; };
     }
   }
 
-  // Inisialisasi semua
-  window.addEventListener('DOMContentLoaded', async () => {
-    await loadNavbar();
-    await loadFirebaseData();
-    // Perbaiki semua logo yang mungkin masih salah
+  // tambahan: setelah fetch selesai, panggil inject juga untuk menangani kasus navbar sudah ada tapi logo kurang
+  window.addEventListener('load', () => {
+    // pengecekan logo utama di navbar secara delay kecil
+    setTimeout(() => {
+      const mainNavImg = document.querySelector('#navbar .logo-img');
+      if (mainNavImg && (!mainNavImg.src || mainNavImg.src.includes('null'))) {
+        mainNavImg.src = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
+      }
+      // juga pastikan hero tetap menarik dan tidak error logo
+    }, 100);
+    // tambahkan event listener untuk semua gambar logo di halaman agar menggunakan raw github url
     document.querySelectorAll('img[src*="koperasi.png"]').forEach(img => {
       if (!img.src.includes('raw.githubusercontent')) {
         img.src = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
