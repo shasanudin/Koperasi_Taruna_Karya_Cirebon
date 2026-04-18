@@ -132,44 +132,24 @@ body {
   color: #059669;
 }
 
-.total-section {
-  background: #f1f5f9;
-  border-radius: 16px;
-  padding: 20px;
-  margin-top: 20px;
-  text-align: right;
-}
-
-.total-section p {
-  font-size: 1.1rem;
-  margin: 5px 0;
-}
-
-.grand-total {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: #1e3a8a;
-}
-
 /* Tanda Tangan Digital - Layout Sejajar */
 .signature-section {
-  margin: 40px 0;
-  padding: 30px 0;
+  margin: 40px 0 20px 0;
+  padding: 30px 0 20px 0;
   border-top: 2px dashed #cbd5e1;
 }
 
 .signature-row {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
-  gap: 50px;
+  gap: 60px;
   margin-bottom: 30px;
 }
 
 .signature-box {
-  flex: 1;
-  min-width: 250px;
-  max-width: 300px;
+  flex: 0 0 auto;
+  min-width: 220px;
   text-align: center;
 }
 
@@ -346,37 +326,27 @@ body {
     print-color-adjust: exact;
   }
   
-  /* Page break: barang dan jasa dipisah */
-  .section:first-of-type {
-    break-inside: avoid;
-  }
-  
-  .section:first-of-type + .section {
-    page-break-before: avoid;
-  }
-  
-  /* Tabel barang dan jasa dipisah halaman jika perlu */
-  #barangBody {
-    break-inside: avoid;
-  }
-  
-  /* Pastikan tanda tangan dan verifikasi sejajar di print */
+  /* Pastikan tanda tangan sejajar di print */
   .signature-row {
-    display: flex;
-    justify-content: center;
-    gap: 50px;
-    break-inside: avoid;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 60px !important;
+    flex-wrap: nowrap !important;
     page-break-inside: avoid;
+    break-inside: avoid;
   }
   
   .signature-box {
-    break-inside: avoid;
+    flex: 0 0 auto !important;
+    width: auto !important;
     page-break-inside: avoid;
+    break-inside: avoid;
   }
   
   .verification-row {
-    break-inside: avoid;
     page-break-inside: avoid;
+    break-inside: avoid;
     margin-top: 20px;
   }
   
@@ -386,19 +356,13 @@ body {
     page-break-inside: avoid;
   }
   
-  .total-section {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-  
-  /* Jika barang banyak, pindah halaman otomatis */
   .section {
     break-inside: avoid;
   }
   
-  /* Header tetap di setiap halaman */
-  .proposal-header {
-    position: running(header);
+  /* Hilangkan total section saat print */
+  .total-section {
+    display: none !important;
   }
 }
 
@@ -478,13 +442,6 @@ body {
       </div>
     </div>
 
-    <!-- Ringkasan Total -->
-    <div class="total-section">
-      <p><strong>Total Nilai Barang:</strong> <span id="totalBarang" class="price">Rp 0</span></p>
-      <p><strong>Total Nilai Jasa:</strong> <span id="totalJasa" class="price">Rp 0</span></p>
-      <p class="grand-total"><strong>Grand Total:</strong> <span id="grandTotal">Rp 0</span></p>
-    </div>
-
     <!-- Tanda Tangan Digital - LAYOUT SEJAJAR (Ketua & Sekretaris) -->
     <div class="signature-section">
       <div class="signature-row">
@@ -505,7 +462,7 @@ body {
         </div>
       </div>
 
-      <!-- Verifikasi Dokumen - DIBawah tanda tangan ketua & sekretaris -->
+      <!-- Verifikasi Dokumen - DI BAWAH tanda tangan ketua & sekretaris -->
       <div class="verification-row">
         <div class="verification-box">
           <h4><i class="fas fa-file-signature"></i> Verifikasi Keaslian Dokumen</h4>
@@ -656,16 +613,12 @@ function renderBarang() {
   const tbody = document.getElementById('barangBody');
   if (!semuaBarang.length) {
     tbody.innerHTML = `<tr><td colspan="3" class="empty-state"><i class="fas fa-box-open"></i> Belum ada data barang<br><small>Silakan tambahkan data di collection "barang" Firestore</small></td></tr>`;
-    document.getElementById('totalBarang').innerHTML = 'Rp 0';
-    updateGrandTotal();
     return;
   }
   
-  let total = 0;
   let html = '';
   semuaBarang.forEach((item, index) => {
     const harga = parseHarga(item.harga);
-    total += harga;
     html += `
       <tr>
         <td>${index + 1}</td>
@@ -675,8 +628,6 @@ function renderBarang() {
     `;
   });
   tbody.innerHTML = html;
-  document.getElementById('totalBarang').innerHTML = `Rp ${formatRupiah(total)}`;
-  updateGrandTotal();
 }
 
 // Render Tabel Jasa
@@ -684,16 +635,12 @@ function renderJasa() {
   const tbody = document.getElementById('jasaBody');
   if (!semuaJasa.length) {
     tbody.innerHTML = `<tr><td colspan="4" class="empty-state"><i class="fas fa-briefcase"></i> Belum ada data jasa<br><small>Silakan tambahkan data di collection "jasa" Firestore</small></td></tr>`;
-    document.getElementById('totalJasa').innerHTML = 'Rp 0';
-    updateGrandTotal();
     return;
   }
   
-  let total = 0;
   let html = '';
   semuaJasa.forEach((item, index) => {
     const harga = parseHarga(item.harga);
-    total += harga;
     html += `
       <tr>
         <td>${index + 1}</td>
@@ -704,20 +651,6 @@ function renderJasa() {
     `;
   });
   tbody.innerHTML = html;
-  document.getElementById('totalJasa').innerHTML = `Rp ${formatRupiah(total)}`;
-  updateGrandTotal();
-}
-
-// Update Grand Total
-function updateGrandTotal() {
-  let totalBarang = 0;
-  let totalJasa = 0;
-  
-  semuaBarang.forEach(item => totalBarang += parseHarga(item.harga));
-  semuaJasa.forEach(item => totalJasa += parseHarga(item.harga));
-  
-  const grand = totalBarang + totalJasa;
-  document.getElementById('grandTotal').innerHTML = `Rp ${formatRupiah(grand)}`;
 }
 
 // Generate QR Code
