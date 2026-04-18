@@ -393,6 +393,21 @@ body {
   margin-top: 20px;
 }
 
+.item-card {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 15px;
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: #8b5cf6;
+}
+
 .notification-item {
   background: #f8fafc;
   border-radius: 12px;
@@ -741,7 +756,6 @@ async function loadKartuPengurus() {
 // Download Kartu sebagai gambar
 window.downloadKartu = async () => {
   const kartuElement = document.getElementById('kartuContent');
-  const originalStyle = kartuElement.style.cssText;
   
   try {
     const canvas = await html2canvas(kartuElement, {
@@ -775,7 +789,7 @@ function renderAnggotaList(data) {
   list.innerHTML = "";
   data.forEach(a => {
     list.innerHTML += `
-      <div class="item-card" style="background:#f8fafc;border-radius:16px;padding:15px;text-align:center">
+      <div class="item-card">
         <i class="fas fa-user-circle" style="font-size:50px;color:#8b5cf6"></i>
         <b>${escapeHtml(a.nama || '-')}</b>
         <p>No Anggota: ${escapeHtml(a.no_anggota || '-')}</p>
@@ -808,7 +822,6 @@ async function loadNotifikasi() {
       </div>
     `;
   });
-  document.getElementById('totalNotifikasi').innerText = snap.size;
 }
 
 // Load SHU Info
@@ -821,10 +834,10 @@ async function loadSHUInfo() {
     const alokasiDiv = document.getElementById('alokasiSHU');
     alokasiDiv.innerHTML = `
       <div class="stats-grid" style="margin-top:15px">
-        <div class="stat-card" style="background:#fef3c7;color:#92400e"><div class="stat-number">${shu.alokasi?.cadangan * 100 || 20}%</div><div class="stat-label">Cadangan</div></div>
-        <div class="stat-card" style="background:#d1fae5;color:#065f46"><div class="stat-number">${shu.alokasi?.jasa_usaha * 100 || 30}%</div><div class="stat-label">Jasa Usaha</div></div>
-        <div class="stat-card" style="background:#e0e7ff;color:#3730a3"><div class="stat-number">${shu.alokasi?.jasa_modal * 100 || 25}%</div><div class="stat-label">Jasa Modal</div></div>
-        <div class="stat-card" style="background:#fce7f3;color:#9d174d"><div class="stat-number">${shu.alokasi?.pengurus * 100 || 10}%</div><div class="stat-label">Pengurus</div></div>
+        <div class="stat-card" style="background:#fef3c7;color:#92400e"><div class="stat-number">${(shu.alokasi?.cadangan || 0.2) * 100}%</div><div class="stat-label">Cadangan</div></div>
+        <div class="stat-card" style="background:#d1fae5;color:#065f46"><div class="stat-number">${(shu.alokasi?.jasa_usaha || 0.3) * 100}%</div><div class="stat-label">Jasa Usaha</div></div>
+        <div class="stat-card" style="background:#e0e7ff;color:#3730a3"><div class="stat-number">${(shu.alokasi?.jasa_modal || 0.25) * 100}%</div><div class="stat-label">Jasa Modal</div></div>
+        <div class="stat-card" style="background:#fce7f3;color:#9d174d"><div class="stat-number">${(shu.alokasi?.pengurus || 0.1) * 100}%</div><div class="stat-label">Pengurus</div></div>
       </div>
     `;
   }
@@ -845,26 +858,45 @@ async function loadDashboardStats() {
   document.getElementById('totalSimpanan').innerHTML = 'Rp 125.500.000';
   document.getElementById('shuTahunIni').innerHTML = 'Rp 48.250.000';
   
-  // Main Chart
-  const ctx = document.getElementById("mainChart").getContext("2d");
-  if (window.mainChart) window.mainChart.destroy();
-  window.mainChart = new Chart(ctx, {
-    type: "bar",
-    data: { labels: ["Barang", "Jasa", "Anggota", "Pengurus"], 
-            datasets: [{ label: "Total Data", data: [barangCount, jasaCount, anggotaCount, pengurusCount], 
-                         backgroundColor: ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6"], borderRadius: 10 }] },
-    options: { responsive: true, maintainAspectRatio: true }
-  });
+  // Main Chart - Perbaikan error destroy
+  const ctx = document.getElementById("mainChart");
+  if (ctx) {
+    if (window.mainChart && typeof window.mainChart.destroy === 'function') {
+      window.mainChart.destroy();
+    }
+    window.mainChart = new Chart(ctx, {
+      type: "bar",
+      data: { 
+        labels: ["Barang", "Jasa", "Anggota", "Pengurus"], 
+        datasets: [{ 
+          label: "Total Data", 
+          data: [barangCount, jasaCount, anggotaCount, pengurusCount], 
+          backgroundColor: ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6"], 
+          borderRadius: 10 
+        }] 
+      },
+      options: { responsive: true, maintainAspectRatio: true }
+    });
+  }
   
-  // Detail Chart
-  const ctx2 = document.getElementById("detailChart").getContext("2d");
-  if (window.detailChart) window.detailChart.destroy();
-  window.detailChart = new Chart(ctx2, {
-    type: "doughnut",
-    data: { labels: ["Simpanan Pokok", "Simpanan Wajib", "Simpanan Sukarela"], 
-            datasets: [{ data: [65, 25, 10], backgroundColor: ["#3b82f6", "#10b981", "#f59e0b"] }] },
-    options: { responsive: true, maintainAspectRatio: true }
-  });
+  // Detail Chart - Perbaikan error destroy
+  const ctx2 = document.getElementById("detailChart");
+  if (ctx2) {
+    if (window.detailChart && typeof window.detailChart.destroy === 'function') {
+      window.detailChart.destroy();
+    }
+    window.detailChart = new Chart(ctx2, {
+      type: "doughnut",
+      data: { 
+        labels: ["Simpanan Pokok", "Simpanan Wajib", "Simpanan Sukarela"], 
+        datasets: [{ 
+          data: [65, 25, 10], 
+          backgroundColor: ["#3b82f6", "#10b981", "#f59e0b"] 
+        }] 
+      },
+      options: { responsive: true, maintainAspectRatio: true }
+    });
+  }
 }
 
 // Helper functions
