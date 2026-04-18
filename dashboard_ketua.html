@@ -540,35 +540,57 @@ body {
 <!-- ========== SCRIPT VALIDASI SESSION (DILETAKAN PALING ATAS) ========== -->
 <script>
 (function() {
-  // Cek session di localStorage
+  console.log("Checking session...");
+  
+  // Ambil session dari localStorage
   const userSession = localStorage.getItem('userSession');
   const userRole = localStorage.getItem('userRole');
   
+  console.log("userSession:", userSession);
+  console.log("userRole:", userRole);
+  
   // Jika tidak ada session, redirect ke login
   if (!userSession || !userRole) {
-    window.location.href = 'login.html';
+    console.log("No session found, redirecting to login");
+    window.location.replace('login.html');
     return;
   }
   
   try {
     const session = JSON.parse(userSession);
+    console.log("Session data:", session);
+    
     const loginTime = new Date(session.loginTime);
     const now = new Date();
     const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
     
+    console.log("Hours since login:", hoursDiff);
+    
     // Session expired setelah 8 jam
     if (hoursDiff > 8) {
-      localStorage.removeItem('userSession');
-      localStorage.removeItem('userRole');
-      localStorage.removeItem('userName');
-      window.location.href = 'login.html';
+      console.log("Session expired");
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.replace('login.html');
       return;
     }
     
-    // Validasi role harus KETUA untuk halaman ini
-    if (session.role !== 'KETUA') {
-      // Redirect ke dashboard sesuai role
+    // Validasi role untuk halaman ini
+    const currentPage = window.location.pathname.split('/').pop();
+    const expectedRole = {
+      'dashboard_ketua.html': 'KETUA',
+      'dashboard_sekretaris.html': 'SEKRETARIS',
+      'dashboard_bendahara.html': 'BENDAHARA',
+      'dashboard_pengurus.html': 'PENGURUS',
+      'dashboard_anggota.html': 'ANGGOTA'
+    }[currentPage];
+    
+    console.log("Current page:", currentPage, "Expected role:", expectedRole, "User role:", session.role);
+    
+    if (expectedRole && session.role !== expectedRole) {
+      console.log("Role mismatch, redirecting");
       const roleRedirect = {
+        'KETUA': 'dashboard_ketua.html',
         'SEKRETARIS': 'dashboard_sekretaris.html',
         'BENDAHARA': 'dashboard_bendahara.html',
         'PENGURUS': 'dashboard_pengurus.html',
@@ -576,45 +598,48 @@ body {
       }[session.role];
       
       if (roleRedirect) {
-        window.location.href = roleRedirect;
-      } else {
-        window.location.href = 'login.html';
+        window.location.replace(roleRedirect);
+        return;
       }
-      return;
     }
     
-    // Tampilkan nama user di navbar setelah DOM siap
+    // Tampilkan nama user di navbar
     document.addEventListener('DOMContentLoaded', () => {
       const userNameSpan = document.getElementById('userNameDisplay');
       if (userNameSpan) {
-        userNameSpan.innerHTML = `<i class="fas fa-crown"></i> ${session.nama || session.email}`;
+        userNameSpan.innerHTML = `<i class="fas fa-user"></i> ${session.nama || session.email}`;
       }
     });
+    
+    console.log("Session valid, dashboard loaded");
     
   } catch(e) {
     console.error("Session validation error:", e);
     localStorage.clear();
-    window.location.href = 'login.html';
+    sessionStorage.clear();
+    window.location.replace('login.html');
   }
 })();
 
-// ========== FUNGSI LOGOUT YANG BENAR ==========
-window.logout = function() {
-  // Hapus semua data dari localStorage
-  localStorage.removeItem('userSession');
-  localStorage.removeItem('userRole');
-  localStorage.removeItem('userName');
-  
-  // Hapus sessionStorage
-  sessionStorage.clear();
-  
-  // Hapus cookies
-  document.cookie.split(";").forEach(function(c) {
-    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-  });
-  
-  // Redirect ke login
-  window.location.href = 'login.html';
+// ========== FUNGSI LOGOUT ==========
+window.logout = async function() {
+  console.log("Logging out...");
+  try {
+    // Hapus semua storage
+    localStorage.clear();
+    sessionStorage.clear();
+    
+    // Hapus cookies
+    document.cookie.split(";").forEach(function(c) {
+      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
+    
+    // Redirect ke login
+    window.location.replace('login.html');
+  } catch(e) {
+    console.error("Logout error:", e);
+    window.location.replace('login.html');
+  }
 };
 </script>
 
