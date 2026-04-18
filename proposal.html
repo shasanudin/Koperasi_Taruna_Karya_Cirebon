@@ -151,20 +151,25 @@ body {
   color: #1e3a8a;
 }
 
+/* Tanda Tangan Digital - Layout Sejajar */
 .signature-section {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 30px;
   margin: 40px 0;
   padding: 30px 0;
   border-top: 2px dashed #cbd5e1;
-  border-bottom: 2px dashed #cbd5e1;
+}
+
+.signature-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 50px;
+  margin-bottom: 30px;
 }
 
 .signature-box {
   flex: 1;
-  min-width: 220px;
+  min-width: 250px;
+  max-width: 300px;
   text-align: center;
 }
 
@@ -205,6 +210,33 @@ body {
   margin-top: 5px;
 }
 
+/* Verifikasi Dokumen - di bawah tanda tangan */
+.verification-row {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.verification-box {
+  display: inline-block;
+  text-align: center;
+}
+
+.verification-box h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 10px;
+}
+
+.verification-box p {
+  font-size: 0.7rem;
+  color: #64748b;
+  margin-top: 8px;
+}
+
+/* Loading & Empty State */
 .loading {
   text-align: center;
   padding: 40px;
@@ -280,29 +312,93 @@ body {
   border-top: 1px solid #e2e8f0;
 }
 
+/* ========== PRINT STYLES ========== */
 @media print {
   body {
     background: white;
     padding: 0;
     margin: 0;
   }
+  
   .action-buttons {
     display: none;
   }
+  
   .proposal-container {
     box-shadow: none;
     border-radius: 0;
+    max-width: 100%;
+    margin: 0;
   }
+  
   .btn, .no-print {
     display: none !important;
   }
+  
   .proposal-header {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    break-inside: avoid;
   }
+  
   .data-table th {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+  }
+  
+  /* Page break: barang dan jasa dipisah */
+  .section:first-of-type {
+    break-inside: avoid;
+  }
+  
+  .section:first-of-type + .section {
+    page-break-before: avoid;
+  }
+  
+  /* Tabel barang dan jasa dipisah halaman jika perlu */
+  #barangBody {
+    break-inside: avoid;
+  }
+  
+  /* Pastikan tanda tangan dan verifikasi sejajar di print */
+  .signature-row {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  
+  .signature-box {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  
+  .verification-row {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-top: 20px;
+  }
+  
+  /* Hindari potongan di tengah tabel */
+  .data-table tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  
+  .total-section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  
+  /* Jika barang banyak, pindah halaman otomatis */
+  .section {
+    break-inside: avoid;
+  }
+  
+  /* Header tetap di setiap halaman */
+  .proposal-header {
+    position: running(header);
   }
 }
 
@@ -313,12 +409,14 @@ body {
   .proposal-header {
     padding: 25px;
   }
-  .signature-section {
+  .signature-row {
     flex-direction: column;
     align-items: center;
+    gap: 30px;
   }
   .signature-box {
     width: 100%;
+    max-width: 280px;
   }
   .section-title {
     font-size: 1.2rem;
@@ -344,13 +442,14 @@ body {
   </div>
 
   <div class="proposal-content">
+    <!-- Latar Belakang -->
     <div class="section">
       <div class="section-title">Latar Belakang</div>
       <p style="line-height: 1.6; color: #334155;">Koperasi Taruna Karya Cirebon hadir sebagai mitra terpercaya dalam memenuhi kebutuhan barang dan jasa berkualitas. Dengan sistem koperasi yang transparan dan menguntungkan, kami menawarkan berbagai produk unggulan serta layanan profesional dari anggota terverifikasi. Proposal ini disusun sebagai bentuk komitmen kami dalam memberikan solusi terbaik bagi mitra dan anggota koperasi.</p>
     </div>
 
     <!-- Daftar Barang -->
-    <div class="section">
+    <div class="section" id="barangSection">
       <div class="section-title"><i class="fas fa-box"></i> Daftar Barang Unggulan</div>
       <div class="table-wrapper">
         <table class="data-table">
@@ -365,7 +464,7 @@ body {
     </div>
 
     <!-- Daftar Jasa -->
-    <div class="section">
+    <div class="section" id="jasaSection">
       <div class="section-title"><i class="fas fa-briefcase"></i> Daftar Jasa Profesional</div>
       <div class="table-wrapper">
         <table class="data-table">
@@ -379,32 +478,44 @@ body {
       </div>
     </div>
 
-    <!-- Tanda Tangan Digital QR CODE -->
+    <!-- Ringkasan Total -->
+    <div class="total-section">
+      <p><strong>Total Nilai Barang:</strong> <span id="totalBarang" class="price">Rp 0</span></p>
+      <p><strong>Total Nilai Jasa:</strong> <span id="totalJasa" class="price">Rp 0</span></p>
+      <p class="grand-total"><strong>Grand Total:</strong> <span id="grandTotal">Rp 0</span></p>
+    </div>
+
+    <!-- Tanda Tangan Digital - LAYOUT SEJAJAR (Ketua & Sekretaris) -->
     <div class="signature-section">
-      <div class="signature-box">
-        <h4><i class="fas fa-qrcode"></i> Tanda Tangan Digital</h4>
-        <div class="qr-signature" id="ketuaQR"></div>
-        <div class="signature-name" id="ketuaNama">Memuat...</div>
-        <div class="signature-jabatan" id="ketuaJabatan">Ketua Koperasi</div>
-        <div class="signature-verified"><i class="fas fa-check-circle"></i> Tervalidasi Digital</div>
+      <div class="signature-row">
+        <div class="signature-box">
+          <h4><i class="fas fa-qrcode"></i> Tanda Tangan Digital</h4>
+          <div class="qr-signature" id="ketuaQR"></div>
+          <div class="signature-name" id="ketuaNama">Memuat...</div>
+          <div class="signature-jabatan" id="ketuaJabatan">Ketua Koperasi</div>
+          <div class="signature-verified"><i class="fas fa-check-circle"></i> Tervalidasi Digital</div>
+        </div>
+
+        <div class="signature-box">
+          <h4><i class="fas fa-qrcode"></i> Tanda Tangan Digital</h4>
+          <div class="qr-signature" id="sekretarisQR"></div>
+          <div class="signature-name" id="sekretarisNama">Memuat...</div>
+          <div class="signature-jabatan" id="sekretarisJabatan">Sekretaris Koperasi</div>
+          <div class="signature-verified"><i class="fas fa-check-circle"></i> Tervalidasi Digital</div>
+        </div>
       </div>
 
-      <div class="signature-box">
-        <h4><i class="fas fa-qrcode"></i> Tanda Tangan Digital</h4>
-        <div class="qr-signature" id="sekretarisQR"></div>
-        <div class="signature-name" id="sekretarisNama">Memuat...</div>
-        <div class="signature-jabatan" id="sekretarisJabatan">Sekretaris Koperasi</div>
-        <div class="signature-verified"><i class="fas fa-check-circle"></i> Tervalidasi Digital</div>
-      </div>
-
-      <div class="signature-box">
-        <h4><i class="fas fa-file-signature"></i> Verifikasi Dokumen</h4>
-        <div class="qr-signature" id="docQR"></div>
-        <div class="signature-name">Scan untuk Verifikasi</div>
-        <div class="signature-jabatan">Keaslian Dokumen</div>
+      <!-- Verifikasi Dokumen - DIBawah tanda tangan ketua & sekretaris -->
+      <div class="verification-row">
+        <div class="verification-box">
+          <h4><i class="fas fa-file-signature"></i> Verifikasi Keaslian Dokumen</h4>
+          <div class="qr-signature" id="docQR"></div>
+          <p>Scan QR Code untuk verifikasi keaslian proposal ini</p>
+        </div>
       </div>
     </div>
 
+    <!-- Penutup -->
     <div class="section">
       <div class="section-title">Penutup</div>
       <p style="line-height: 1.6; color: #334155;">Demikian proposal penawaran ini kami sampaikan. Besar harapan kami untuk dapat menjalin kerjasama yang saling menguntungkan. Terima kasih atas kepercayaan Anda kepada Koperasi Taruna Karya Cirebon.</p>
@@ -412,7 +523,7 @@ body {
   </div>
 
   <div class="proposal-footer">
-    <p>Koperasi Taruna Karya Cirebon - Jl. Fatahillah, Watubelah, Cirebon, Jawa Barat</p>
+    <p>Koperasi Taruna Karya Cirebon - Jl. Siliwangi No.88, Cirebon, Jawa Barat</p>
     <p>Email: info@tarunakarya.cirebon.id | Telp: (0231) 567890</p>
   </div>
 </div>
@@ -426,7 +537,7 @@ body {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-// Firebase Config SAMA PERSIS dengan barang.html dan jasa.html
+// Firebase Config
 const config = {
   apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
   authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
@@ -447,7 +558,7 @@ document.getElementById('tanggalProposal').innerText = new Date().toLocaleDateSt
   year: 'numeric', month: 'long', day: 'numeric'
 });
 
-// Fungsi fix gambar SAMA PERSIS dengan barang.html
+// Fungsi fix gambar
 function fixImage(url) {
   if (!url) return "https://via.placeholder.com/300";
   return url
@@ -461,14 +572,24 @@ function formatRupiah(angka) {
   return new Intl.NumberFormat('id-ID').format(angka);
 }
 
-// ================= LOAD BARANG (SAMA PERSIS DENGAN barang.html) =================
+// Parse harga dari berbagai format
+function parseHarga(harga) {
+  if (typeof harga === 'number') return harga;
+  if (typeof harga === 'string') {
+    let parsed = parseInt(harga.replace(/[^0-9]/g, ''));
+    return isNaN(parsed) ? 0 : parsed;
+  }
+  return 0;
+}
+
+// ================= LOAD BARANG =================
 onSnapshot(collection(db, "barang"), (snap) => {
   semuaBarang = [];
   snap.forEach(doc => {
     const data = doc.data();
     semuaBarang.push({
-      nama: data.nama,
-      harga: data.harga,
+      nama: data.nama || data.name || 'Tidak ada nama',
+      harga: data.harga || data.price || 0,
       gambar: fixImage(data.gambar)
     });
   });
@@ -476,15 +597,15 @@ onSnapshot(collection(db, "barang"), (snap) => {
   renderBarang();
 });
 
-// ================= LOAD JASA (SAMA PERSIS DENGAN jasa.html) =================
+// ================= LOAD JASA =================
 onSnapshot(collection(db, "jasa"), (snap) => {
   semuaJasa = [];
   snap.forEach(doc => {
     const data = doc.data();
     semuaJasa.push({
-      nama: data.nama,
-      harga: data.harga,
-      deskripsi: data.deskripsi || "",
+      nama: data.nama || data.name || 'Tidak ada nama',
+      harga: data.harga || data.price || 0,
+      deskripsi: data.deskripsi || data.description || "",
       gambar: fixImage(data.gambar)
     });
   });
@@ -496,31 +617,34 @@ onSnapshot(collection(db, "jasa"), (snap) => {
 onSnapshot(collection(db, "pengurus"), (snap) => {
   snap.forEach(doc => {
     const data = doc.data();
-    if (data.jabatan === "Ketua" || data.jabatan?.toLowerCase() === "ketua") {
+    const jabatan = (data.jabatan || "").toLowerCase();
+    if (jabatan === "ketua") {
       ketuaData = data;
       document.getElementById('ketuaNama').innerHTML = `<i class="fas fa-user-check"></i> ${data.nama || 'Tidak tersedia'}`;
-      document.getElementById('ketuaJabatan').innerText = data.jabatan || 'Ketua';
+      document.getElementById('ketuaJabatan').innerText = data.jabatan || 'Ketua Koperasi';
       
       const qrText = JSON.stringify({
         type: "ttd_ketua",
         nama: data.nama,
         jabatan: data.jabatan,
-        email: data.email,
-        timestamp: new Date().toISOString()
+        email: data.email || '-',
+        timestamp: new Date().toISOString(),
+        verify: "https://koperasi-taruna-karya.web.app/verify"
       });
       generateQRCode('ketuaQR', qrText, 120);
     }
-    if (data.jabatan === "Sekretaris" || data.jabatan?.toLowerCase() === "sekretaris") {
+    if (jabatan === "sekretaris") {
       sekretarisData = data;
       document.getElementById('sekretarisNama').innerHTML = `<i class="fas fa-user-check"></i> ${data.nama || 'Tidak tersedia'}`;
-      document.getElementById('sekretarisJabatan').innerText = data.jabatan || 'Sekretaris';
+      document.getElementById('sekretarisJabatan').innerText = data.jabatan || 'Sekretaris Koperasi';
       
       const qrText = JSON.stringify({
         type: "ttd_sekretaris",
         nama: data.nama,
         jabatan: data.jabatan,
-        email: data.email,
-        timestamp: new Date().toISOString()
+        email: data.email || '-',
+        timestamp: new Date().toISOString(),
+        verify: "https://koperasi-taruna-karya.web.app/verify"
       });
       generateQRCode('sekretarisQR', qrText, 120);
     }
@@ -533,15 +657,14 @@ function renderBarang() {
   if (!semuaBarang.length) {
     tbody.innerHTML = `<tr><td colspan="3" class="empty-state"><i class="fas fa-box-open"></i> Belum ada data barang<br><small>Silakan tambahkan data di collection "barang" Firestore</small></td></tr>`;
     document.getElementById('totalBarang').innerHTML = 'Rp 0';
+    updateGrandTotal();
     return;
   }
   
   let total = 0;
   let html = '';
   semuaBarang.forEach((item, index) => {
-    let harga = 0;
-    if (typeof item.harga === 'number') harga = item.harga;
-    else if (typeof item.harga === 'string') harga = parseInt(item.harga.replace(/[^0-9]/g, '')) || 0;
+    const harga = parseHarga(item.harga);
     total += harga;
     html += `
       <tr>
@@ -562,15 +685,14 @@ function renderJasa() {
   if (!semuaJasa.length) {
     tbody.innerHTML = `<tr><td colspan="4" class="empty-state"><i class="fas fa-briefcase"></i> Belum ada data jasa<br><small>Silakan tambahkan data di collection "jasa" Firestore</small></td></tr>`;
     document.getElementById('totalJasa').innerHTML = 'Rp 0';
+    updateGrandTotal();
     return;
   }
   
   let total = 0;
   let html = '';
   semuaJasa.forEach((item, index) => {
-    let harga = 0;
-    if (typeof item.harga === 'number') harga = item.harga;
-    else if (typeof item.harga === 'string') harga = parseInt(item.harga.replace(/[^0-9]/g, '')) || 0;
+    const harga = parseHarga(item.harga);
     total += harga;
     html += `
       <tr>
@@ -591,19 +713,8 @@ function updateGrandTotal() {
   let totalBarang = 0;
   let totalJasa = 0;
   
-  semuaBarang.forEach(item => {
-    let harga = 0;
-    if (typeof item.harga === 'number') harga = item.harga;
-    else if (typeof item.harga === 'string') harga = parseInt(item.harga.replace(/[^0-9]/g, '')) || 0;
-    totalBarang += harga;
-  });
-  
-  semuaJasa.forEach(item => {
-    let harga = 0;
-    if (typeof item.harga === 'number') harga = item.harga;
-    else if (typeof item.harga === 'string') harga = parseInt(item.harga.replace(/[^0-9]/g, '')) || 0;
-    totalJasa += harga;
-  });
+  semuaBarang.forEach(item => totalBarang += parseHarga(item.harga));
+  semuaJasa.forEach(item => totalJasa += parseHarga(item.harga));
   
   const grand = totalBarang + totalJasa;
   document.getElementById('grandTotal').innerHTML = `Rp ${formatRupiah(grand)}`;
@@ -630,19 +741,8 @@ function generateQRCode(divId, text, size = 120) {
 
 // Generate QR Verifikasi Dokumen
 function generateDocQR() {
-  const totalBarangVal = semuaBarang.reduce((a, b) => {
-    let h = 0;
-    if (typeof b.harga === 'number') h = b.harga;
-    else if (typeof b.harga === 'string') h = parseInt(b.harga.replace(/[^0-9]/g, '')) || 0;
-    return a + h;
-  }, 0);
-  
-  const totalJasaVal = semuaJasa.reduce((a, b) => {
-    let h = 0;
-    if (typeof b.harga === 'number') h = b.harga;
-    else if (typeof b.harga === 'string') h = parseInt(b.harga.replace(/[^0-9]/g, '')) || 0;
-    return a + h;
-  }, 0);
+  const totalBarangVal = semuaBarang.reduce((a, b) => a + parseHarga(b.harga), 0);
+  const totalJasaVal = semuaJasa.reduce((a, b) => a + parseHarga(b.harga), 0);
   
   const docData = {
     document: "Proposal Penawaran Koperasi Taruna Karya Cirebon",
@@ -653,18 +753,17 @@ function generateDocQR() {
     jumlah_barang: semuaBarang.length,
     jumlah_jasa: semuaJasa.length,
     ketua: ketuaData?.nama || "Tidak tersedia",
-    sekretaris: sekretarisData?.nama || "Tidak tersedia"
+    sekretaris: sekretarisData?.nama || "Tidak tersedia",
+    verify_url: "https://koperasi-taruna-karya.web.app/verify"
   };
   generateQRCode('docQR', JSON.stringify(docData), 120);
 }
 
 // Refresh Data
 window.refreshData = function() {
-  // Reset loading state
   document.getElementById('barangBody').innerHTML = '<tr><td colspan="3" class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat ulang...</td></tr>';
   document.getElementById('jasaBody').innerHTML = '<tr><td colspan="4" class="loading"><i class="fas fa-spinner fa-pulse"></i> Memuat ulang...</td></tr>';
   
-  // Data akan otomatis refresh karena onSnapshot
   setTimeout(() => {
     generateDocQR();
     const toast = document.createElement('div');
