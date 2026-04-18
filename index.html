@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- Google Fonts: Inter + Poppins -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-  <!-- Firebase SDK -->
+  <!-- Firebase SDK v9 compat (mendukung config terbaru) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <style>
@@ -117,7 +117,7 @@
       border-color: #2563eb;
     }
 
-    /* Hero Section - lebih dramatis & modern */
+    /* Hero Section */
     .hero {
       background: linear-gradient(125deg, #0f2b4d 0%, #1e4a76 45%, #2563eb 100%);
       position: relative;
@@ -200,7 +200,6 @@
       transform: translateX(5px);
     }
 
-    /* Container umum */
     .container {
       max-width: 1280px;
       margin: 0 auto;
@@ -231,7 +230,6 @@
       margin: 12px auto 0;
     }
 
-    /* Grid card modern */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -282,7 +280,6 @@
       font-weight: 400;
     }
 
-    /* Banner info tambahan (keunggulan) */
     .stats-banner {
       background: linear-gradient(110deg, #f1f5ff, #ffffff);
       border-radius: 48px;
@@ -317,7 +314,6 @@
       margin-top: 8px;
     }
 
-    /* footer modern */
     footer {
       background: #0b1120;
       color: #cbd5e1;
@@ -381,11 +377,11 @@
       font-size: 0.85rem;
     }
 
-    /* animasi loading */
     .loading-skeleton {
       background: #e2e8f0;
       border-radius: 20px;
       animation: pulse 1.2s infinite;
+      height: 260px;
     }
 
     @keyframes pulse {
@@ -394,18 +390,20 @@
       100% { opacity: 0.6; }
     }
 
-    .btn-outline-dark {
-      background: transparent;
-      border: 1.5px solid #cbd5e1;
-      padding: 8px 20px;
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: white;
+      padding: 12px 20px;
       border-radius: 40px;
-      font-weight: 600;
-      transition: 0.2s;
-    }
-
-    .btn-outline-dark:hover {
-      border-color: #2563eb;
-      background: #f1f5f9;
+      font-size: 0.85rem;
+      z-index: 1100;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+      backdrop-filter: blur(4px);
+      background: rgba(15,23,42,0.9);
+      transition: opacity 0.3s;
     }
 
     @media (max-width: 680px) {
@@ -424,28 +422,10 @@
         padding: 12px 24px;
       }
     }
-
-    /* notifikasi toast */
-    .toast-msg {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: #0f172a;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 40px;
-      font-size: 0.85rem;
-      z-index: 1100;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.2);
-      backdrop-filter: blur(4px);
-      background: rgba(15,23,42,0.9);
-      transition: opacity 0.3s;
-    }
   </style>
 </head>
 <body>
 
-<!-- Navbar placeholder -->
 <div id="navbar"></div>
 
 <!-- Hero Section -->
@@ -464,19 +444,16 @@
   </div>
 </div>
 
-<!-- Konten Utama -->
 <div class="container" id="layanan">
   <div class="section">
     <h2 class="section-title">Layanan Unggulan Kami</h2>
     <div class="grid" id="servicesGrid">
-      <!-- Default card akan diisi dari Firebase, tapi sementara skeleton loading -->
-      <div class="card loading-skeleton" style="height: 260px;"></div>
-      <div class="card loading-skeleton" style="height: 260px;"></div>
-      <div class="card loading-skeleton" style="height: 260px;"></div>
+      <div class="loading-skeleton"></div>
+      <div class="loading-skeleton"></div>
+      <div class="loading-skeleton"></div>
     </div>
   </div>
 
-  <!-- Statistik / keunggulan interaktif (dari Firebase) -->
   <div class="stats-banner" id="statsBanner">
     <div class="stat-item">
       <div class="stat-number" id="statMember">-</div>
@@ -496,7 +473,6 @@
     </div>
   </div>
 
-  <!-- Tambahan section: kenapa memilih kami -->
   <div class="section">
     <h2 class="section-title">Mengapa Bergabung?</h2>
     <div class="grid" id="whyUsGrid">
@@ -518,7 +494,6 @@
     </div>
   </div>
 
-  <!-- Ajakan / CTA kedua -->
   <div style="background: linear-gradient(115deg, #eef2ff, #ffffff); border-radius: 48px; padding: 48px 32px; text-align: center; margin-top: 20px;">
     <h2 style="font-size: 1.8rem; font-weight: 800; color:#0f172a;">Siap menjadi bagian dari keluarga besar?</h2>
     <p style="margin-top: 12px; max-width: 600px; margin-left: auto; margin-right: auto; color: #2c3e66;">Daftar sekarang dan rasakan kemudahan bertransaksi di ekosistem koperasi modern.</p>
@@ -528,7 +503,6 @@
   </div>
 </div>
 
-<!-- Footer premium -->
 <footer>
   <div class="footer-content">
     <div class="footer-col">
@@ -567,45 +541,33 @@
 </footer>
 
 <script>
-  // ======================= KONFIGURASI FIREBASE =======================
-  // Konfigurasi Firebase (gunakan project milik sendiri atau contoh demo, tetapi harus realtime db)
-  // Silakan ganti dengan konfigurasi Firebase Anda yang asli. Di sini kami gunakan config publik demonstrasi (bukan produksi sebenarnya)
-  // Namun agar langsung berfungsi, kita akan membuat koneksi ke database demo dengan aturan baca tulis terbuka? 
-  // Karena tidak ada config bawaan, kita akan membuat fallback data statis jika koneksi gagal, tetapi tetap mendukung Firebase jika config diisi.
-  // Untuk keperluan demo, kita akan gunakan konfigurasi dummy tapi tetap bisa mengambil data dari default (jika tidak terhubung, data statis).
-  // Untuk integrasi nyata, pengguna harus mengganti dengan konfigurasi Firebase mereka sendiri.
-  
+  // ======================= FIREBASE KONFIGURASI (ASLI DARI USER) =======================
   const firebaseConfig = {
-    apiKey: "AIzaSyDummyKeyUntukContohTidakBerfungsi", // Ganti dengan API key real jika ada
-    authDomain: "koperasi-taruna-demo.firebaseapp.com",
-    databaseURL: "https://koperasi-taruna-demo-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "koperasi-taruna-demo",
-    storageBucket: "koperasi-taruna-demo.appspot.com",
-    messagingSenderId: "123456789012",
-    appId: "1:123456789012:web:abc123def456"
+    apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
+    authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
+    databaseURL: "https://koperasi-taruna-karya-cirebon-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "koperasi-taruna-karya-cirebon",
+    storageBucket: "koperasi-taruna-karya-cirebon.firebasestorage.app",
+    messagingSenderId: "573396276351",
+    appId: "1:573396276351:web:3fcf1d78bfa5ad9a189b4a",
+    measurementId: "G-RH91DN1KT8"
   };
-  
-  // Inisialisasi Firebase (jika konfigurasi valid, pakai real data)
+
   let database = null;
   let firebaseApp = null;
   let useFirebase = false;
-  
+
   try {
-    if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "AIzaSyDummyKeyUntukContohTidakBerfungsi") {
-      firebaseApp = firebase.initializeApp(firebaseConfig);
-      database = firebase.database();
-      useFirebase = true;
-      console.log("Firebase connected successfully");
-    } else {
-      console.warn("Firebase config tidak valid, menggunakan data statis fallback.");
-      useFirebase = false;
-    }
+    firebaseApp = firebase.initializeApp(firebaseConfig);
+    database = firebase.database();
+    useFirebase = true;
+    console.log("✅ Firebase connected successfully");
   } catch (e) {
     console.error("Firebase init error:", e);
     useFirebase = false;
   }
-  
-  // Data statis fallback (jika firebase tidak tersedia)
+
+  // Data statis fallback jika firebase tidak memiliki data
   const staticData = {
     heroTitle: "Koperasi Taruna Karya Cirebon",
     heroSub: "<i class='fas fa-handshake'></i> Solusi kebutuhan barang & jasa untuk anggota | <strong>Sejahtera bersama, maju bersama</strong>",
@@ -617,94 +579,7 @@
     stats: { members: "500+", volume: "Rp 2,8M", partners: "32+", rating: "4.9★" },
     footer: { address: "Jl. Siliwangi No.88, Cirebon, Jawa Barat", email: "info@tarunakarya.cirebon.id", phone: "(0231) 567890" }
   };
-  
-  // Fungsi load data dari Firebase atau statis
-  async function loadFirebaseData() {
-    if (useFirebase && database) {
-      try {
-        // Ambil data dari path 'websiteConfig'
-        const configRef = database.ref('websiteConfig');
-        const snapshot = await configRef.once('value');
-        const data = snapshot.val();
-        if (data) {
-          // Update Hero
-          if (data.heroTitle) document.getElementById('dynamicHeroTitle').innerText = data.heroTitle;
-          if (data.heroSubtitle) document.getElementById('dynamicHeroSubtitle').innerHTML = data.heroSubtitle;
-          // Update Layanan Unggulan (services)
-          if (data.services && Array.isArray(data.services)) {
-            renderServices(data.services);
-          } else {
-            renderServices(staticData.services);
-          }
-          // Update Stats
-          if (data.stats) {
-            document.getElementById('statMember').innerText = data.stats.members || staticData.stats.members;
-            document.getElementById('statVolume').innerText = data.stats.volume || staticData.stats.volume;
-            document.getElementById('statMitra').innerText = data.stats.partners || staticData.stats.partners;
-            document.getElementById('statRating').innerText = data.stats.rating || staticData.stats.rating;
-          } else {
-            setStaticStats();
-          }
-          // Update footer
-          if (data.footer) {
-            if (data.footer.address) document.getElementById('footerAddress').innerText = data.footer.address;
-            if (data.footer.email) document.getElementById('footerEmail').innerText = data.footer.email;
-            if (data.footer.phone) document.getElementById('footerPhone').innerText = data.footer.phone;
-          } else {
-            setStaticFooter();
-          }
-          showToast("✅ Data terbaru dari Firebase dimuat!");
-        } else {
-          fallbackToStatic();
-        }
-      } catch (err) {
-        console.error("Error reading Firebase:", err);
-        fallbackToStatic();
-        showToast("⚠️ Gagal memuat Firebase, menggunakan data lokal.");
-      }
-    } else {
-      fallbackToStatic();
-      showToast("📡 Mode offline / statis, silakan konfigurasi Firebase untuk data dinamis.");
-    }
-  }
-  
-  function fallbackToStatic() {
-    document.getElementById('dynamicHeroTitle').innerText = staticData.heroTitle;
-    document.getElementById('dynamicHeroSubtitle').innerHTML = staticData.heroSub;
-    renderServices(staticData.services);
-    setStaticStats();
-    setStaticFooter();
-  }
-  
-  function setStaticStats() {
-    document.getElementById('statMember').innerText = staticData.stats.members;
-    document.getElementById('statVolume').innerText = staticData.stats.volume;
-    document.getElementById('statMitra').innerText = staticData.stats.partners;
-    document.getElementById('statRating').innerText = staticData.stats.rating;
-  }
-  
-  function setStaticFooter() {
-    document.getElementById('footerAddress').innerText = staticData.footer.address;
-    document.getElementById('footerEmail').innerText = staticData.footer.email;
-    document.getElementById('footerPhone').innerText = staticData.footer.phone;
-  }
-  
-  function renderServices(servicesArray) {
-    const container = document.getElementById('servicesGrid');
-    if (!container) return;
-    container.innerHTML = '';
-    servicesArray.forEach(service => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <div class="card-icon"><i class="fas ${service.icon || 'fa-store'}"></i></div>
-        <h3>${service.title || 'Layanan'}</h3>
-        <p>${service.desc || 'Deskripsi layanan koperasi terbaik untuk anda.'}</p>
-      `;
-      container.appendChild(card);
-    });
-  }
-  
+
   function showToast(msg) {
     let toast = document.querySelector('.toast-msg');
     if (toast) toast.remove();
@@ -717,7 +592,112 @@
       setTimeout(() => div.remove(), 500);
     }, 3000);
   }
-  
+
+  function renderServices(servicesArray) {
+    const container = document.getElementById('servicesGrid');
+    if (!container) return;
+    container.innerHTML = '';
+    servicesArray.forEach(service => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="card-icon"><i class="fas ${service.icon || 'fa-store'}"></i></div>
+        <h3>${escapeHtml(service.title) || 'Layanan'}</h3>
+        <p>${escapeHtml(service.desc) || 'Deskripsi layanan koperasi terbaik untuk anda.'}</p>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+      return c;
+    });
+  }
+
+  async function loadFirebaseData() {
+    if (!useFirebase || !database) {
+      fallbackToStatic();
+      showToast("📡 Mode statis (Firebase tidak terhubung), gunakan data lokal.");
+      return;
+    }
+
+    try {
+      // Ambil data dari path 'websiteConfig' di Realtime Database
+      const configRef = database.ref('websiteConfig');
+      const snapshot = await configRef.once('value');
+      const data = snapshot.val();
+      
+      if (data) {
+        // Update Hero
+        if (data.heroTitle) document.getElementById('dynamicHeroTitle').innerText = data.heroTitle;
+        if (data.heroSubtitle) document.getElementById('dynamicHeroSubtitle').innerHTML = data.heroSubtitle;
+        
+        // Update Layanan Unggulan (services)
+        if (data.services && Array.isArray(data.services) && data.services.length > 0) {
+          renderServices(data.services);
+        } else {
+          renderServices(staticData.services);
+        }
+        
+        // Update Stats
+        if (data.stats) {
+          document.getElementById('statMember').innerText = data.stats.members || staticData.stats.members;
+          document.getElementById('statVolume').innerText = data.stats.volume || staticData.stats.volume;
+          document.getElementById('statMitra').innerText = data.stats.partners || staticData.stats.partners;
+          document.getElementById('statRating').innerText = data.stats.rating || staticData.stats.rating;
+        } else {
+          setStaticStats();
+        }
+        
+        // Update Footer
+        if (data.footer) {
+          if (data.footer.address) document.getElementById('footerAddress').innerText = data.footer.address;
+          if (data.footer.email) document.getElementById('footerEmail').innerText = data.footer.email;
+          if (data.footer.phone) document.getElementById('footerPhone').innerText = data.footer.phone;
+        } else {
+          setStaticFooter();
+        }
+        showToast("✨ Data berhasil dimuat dari Firebase!");
+      } else {
+        // Jika data kosong di firebase, pakai static
+        fallbackToStatic();
+        showToast("ℹ️ Belum ada data di Firebase, menggunakan konten default.");
+      }
+    } catch (err) {
+      console.error("Error membaca Firebase:", err);
+      fallbackToStatic();
+      showToast("⚠️ Gagal memuat data Firebase, menggunakan data lokal.");
+    }
+  }
+
+  function fallbackToStatic() {
+    document.getElementById('dynamicHeroTitle').innerText = staticData.heroTitle;
+    document.getElementById('dynamicHeroSubtitle').innerHTML = staticData.heroSub;
+    renderServices(staticData.services);
+    setStaticStats();
+    setStaticFooter();
+  }
+
+  function setStaticStats() {
+    document.getElementById('statMember').innerText = staticData.stats.members;
+    document.getElementById('statVolume').innerText = staticData.stats.volume;
+    document.getElementById('statMitra').innerText = staticData.stats.partners;
+    document.getElementById('statRating').innerText = staticData.stats.rating;
+  }
+
+  function setStaticFooter() {
+    document.getElementById('footerAddress').innerText = staticData.footer.address;
+    document.getElementById('footerEmail').innerText = staticData.footer.email;
+    document.getElementById('footerPhone').innerText = staticData.footer.phone;
+  }
+
   // ======================= LOAD NAVBAR EKSTERNAL =======================
   function loadNavbar() {
     return fetch('navbar.html')
@@ -730,7 +710,7 @@
         ensureNavbarLogo();
       })
       .catch(() => {
-        // Fallback navbar jika navbar.html tidak ada
+        // Fallback navbar jika file navbar.html tidak ada
         const fallbackNav = `
           <div class="navbar">
             <div class="logo-area">
@@ -748,17 +728,17 @@
         `;
         document.getElementById('navbar').innerHTML = fallbackNav;
         ensureNavbarLogo();
+        console.log("Menggunakan navbar fallback karena navbar.html tidak ditemukan.");
       });
   }
-  
+
   function ensureNavbarLogo() {
-    // Pastikan logo di navbar menggunakan raw github
     const navLogo = document.querySelector('#navbar .logo-img');
     if (navLogo && (!navLogo.src || navLogo.src.includes('null') || navLogo.src.includes('placehold'))) {
       navLogo.src = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
       navLogo.onerror = () => { navLogo.src = 'https://placehold.co/200x200?text=Koperasi'; };
     }
-    // jika tidak ada logo, buat
+    // Jika tidak ada logo di navbar, buat elemen logo
     if (!navLogo) {
       const logoArea = document.querySelector('#navbar .logo-area');
       if (logoArea) {
@@ -766,23 +746,23 @@
         newImg.className = 'logo-img';
         newImg.src = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
         newImg.style.height = "48px";
-        newImg.alt = "Logo";
+        newImg.alt = "Logo Koperasi";
         newImg.onerror = () => { newImg.src = 'https://placehold.co/200x200?text=Koperasi'; };
         logoArea.insertBefore(newImg, logoArea.firstChild);
       }
     }
-    // Footer logo sudah ada id
+    // Footer logo handling
     const footerLogo = document.getElementById('footerLogo');
     if (footerLogo && (!footerLogo.src || footerLogo.src.includes('placehold'))) {
       footerLogo.src = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
     }
   }
-  
-  // Initial load
+
+  // Inisialisasi semua
   window.addEventListener('DOMContentLoaded', async () => {
     await loadNavbar();
     await loadFirebaseData();
-    // Perbaiki semua logo tambahan
+    // Perbaiki semua logo yang mungkin masih salah
     document.querySelectorAll('img[src*="koperasi.png"]').forEach(img => {
       if (!img.src.includes('raw.githubusercontent')) {
         img.src = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
