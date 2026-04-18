@@ -2,871 +2,166 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard Admin - Koperasi Taruna Karya Cirebon</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Dashboard Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- Font Awesome 6 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  background: #f0f4f8;
-  overflow-x: hidden;
-}
-
-/* ========== TOPBAR ========== */
-.topbar {
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  color: white;
-  padding: 16px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 260px;
-  z-index: 99;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-}
-
-.topbar h3 {
-  font-size: 1.3rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.topbar h3 i {
-  color: #38bdf8;
-}
-
-.logout-btn {
-  background: rgba(239, 68, 68, 0.9);
-  border: none;
-  padding: 10px 24px;
-  border-radius: 12px;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.9rem;
-}
-
-.logout-btn:hover {
-  background: #dc2626;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
-}
-
-/* ========== SIDEBAR ========== */
-.sidebar {
-  width: 260px;
-  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-  color: white;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  padding: 30px 20px;
-  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
-  z-index: 100;
-  overflow-y: auto;
-}
-
-.sidebar-logo {
-  text-align: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.sidebar-logo img {
-  height: 60px;
-  width: auto;
-  border-radius: 12px;
-  background: white;
-  padding: 8px;
-  margin-bottom: 10px;
-}
-
-.sidebar-logo h4 {
-  font-size: 1rem;
-  color: #94a3b8;
-  font-weight: 500;
-}
-
-.sidebar button {
-  width: 100%;
-  margin-top: 8px;
-  padding: 12px 16px;
-  border: none;
-  background: rgba(255, 255, 255, 0.05);
-  color: #e2e8f0;
-  cursor: pointer;
-  border-radius: 12px;
-  text-align: left;
-  font-size: 0.95rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.sidebar button i {
-  width: 24px;
-  font-size: 1.1rem;
-}
-
-.sidebar button:hover {
-  background: #2563eb;
-  color: white;
-  transform: translateX(5px);
-}
-
-.sidebar button.active {
-  background: #2563eb;
-  color: white;
-}
-
-/* ========== MAIN CONTENT ========== */
-.main {
-  margin-left: 260px;
-  padding: 90px 30px 40px 30px;
-  min-height: 100vh;
-}
-
-/* Card Style */
-.card {
-  background: white;
-  padding: 24px;
-  border-radius: 20px;
-  margin-bottom: 25px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-}
-
-.card h3 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #1e293b;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border-left: 4px solid #2563eb;
-  padding-left: 15px;
-}
-
-.card h4 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 20px 0 15px 0;
-  color: #334155;
-}
-
-/* Grid untuk list */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.item-card {
-  background: #f8fafc;
-  border-radius: 16px;
-  padding: 15px;
-  transition: all 0.3s ease;
-  border: 1px solid #e2e8f0;
-}
-
-.item-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  border-color: #2563eb;
-}
-
-.item-card img {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 12px;
-}
-
-.item-card b {
-  font-size: 1rem;
-  display: block;
-  margin: 8px 0;
-  color: #1e293b;
-}
-
-.item-card p {
-  color: #2563eb;
-  font-weight: 700;
-  font-size: 1.1rem;
-  margin: 8px 0;
-}
-
-.item-card [contenteditable="true"] {
-  background: white;
-  padding: 5px 8px;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  outline: none;
-}
-
-.item-card [contenteditable="true"]:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
-}
-
-/* Form styling */
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 600;
-  color: #334155;
-  font-size: 0.85rem;
-}
-
-.form-group label i {
-  margin-right: 8px;
-  color: #2563eb;
-}
-
-.form-group input, .form-group textarea {
-  width: 100%;
-  padding: 12px 15px;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  transition: all 0.3s;
-  font-family: 'Inter', sans-serif;
-}
-
-.form-group input:focus, .form-group textarea:focus {
-  outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.form-group textarea {
-  resize: vertical;
-  min-height: 80px;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-}
-
-/* Preview Gambar URL */
-.image-url-preview {
-  margin-top: 10px;
-  display: none;
-}
-
-.image-url-preview img {
-  max-width: 100%;
-  max-height: 150px;
-  border-radius: 12px;
-  border: 2px solid #e2e8f0;
-  object-fit: cover;
-}
-
-.btn-simpan {
-  background: linear-gradient(135deg, #2563eb, #1e40af);
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  margin-top: 10px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-simpan:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
-}
-
-/* Tombol action */
-.btn-approve {
-  background: #10b981;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  margin-right: 8px;
-  transition: all 0.2s;
-}
-
-.btn-approve:hover {
-  background: #059669;
-  transform: scale(1.05);
-}
-
-.btn-reject {
-  background: #ef4444;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-reject:hover {
-  background: #dc2626;
-  transform: scale(1.05);
-}
-
-.btn-hapus {
-  background: #ef4444;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 10px;
-  transition: all 0.2s;
-}
-
-.btn-hapus:hover {
-  background: #dc2626;
-}
-
-/* Approval card */
-.approval-card {
-  background: #f8fafc;
-  border-radius: 14px;
-  padding: 15px;
-  margin-bottom: 12px;
-  border-left: 4px solid;
-  transition: all 0.2s;
-}
-
-.approval-card.pending {
-  border-left-color: #f59e0b;
-}
-
-.approval-card.approved {
-  border-left-color: #10b981;
-}
-
-.approval-card.ditolak {
-  border-left-color: #ef4444;
-}
-
-.approval-card .nama {
-  font-weight: 700;
-  font-size: 1rem;
-  color: #1e293b;
-}
-
-.approval-card .detail {
-  font-size: 0.8rem;
-  color: #64748b;
-  margin: 5px 0;
-}
-
-.approval-card .status {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  margin-top: 8px;
-}
-
-.status-pending {
-  background: #fef3c7;
-  color: #d97706;
-}
-
-.status-approved {
-  background: #d1fae5;
-  color: #059669;
-}
-
-.status-ditolak {
-  background: #fee2e2;
-  color: #dc2626;
-}
-
-/* Filter select */
-.filter-select {
-  padding: 10px 15px;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  margin-bottom: 20px;
-  background: white;
-  cursor: pointer;
-}
-
-/* Chart container */
-.chart-container {
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .sidebar {
-    width: 70px;
-    padding: 20px 10px;
-  }
-  
-  .sidebar button span {
-    display: none;
-  }
-  
-  .sidebar button i {
-    margin: 0;
-  }
-  
-  .sidebar-logo h4, .sidebar-logo span {
-    display: none;
-  }
-  
-  .sidebar-logo img {
-    height: 40px;
-  }
-  
-  .topbar {
-    left: 70px;
-  }
-  
-  .main {
-    margin-left: 70px;
-    padding: 80px 20px 30px 20px;
-  }
-  
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .topbar h3 {
-    font-size: 1rem;
-  }
-  
-  .logout-btn span {
-    display: none;
-  }
-  
-  .grid {
-    grid-template-columns: 1fr;
-  }
-}
+body{margin:0;font-family:Arial;background:#f1f5f9}
+.sidebar{width:220px;position:fixed;height:100%;background:#1e293b;color:white;padding:20px}
+.sidebar button{width:100%;margin:5px 0;padding:10px;border:none;background:#334155;color:white;cursor:pointer}
+.main{margin-left:220px;padding:20px}
+.card{background:white;padding:20px;border-radius:10px;margin-bottom:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:15px}
+.item-card{background:#f8fafc;padding:10px;border-radius:10px}
+.item-card img{width:100%;height:120px;object-fit:cover;border-radius:8px}
+button{cursor:pointer}
 </style>
 </head>
+
 <body>
 
-<div class="topbar">
-  <h3><i class="fas fa-chalkboard-user"></i> Dashboard Administrator</h3>
-  <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
-</div>
-
 <div class="sidebar">
-  <div class="sidebar-logo">
-    <img src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="Logo" onerror="this.src='https://placehold.co/200x200?text=Koperasi'">
-    <h4>Koperasi Taruna</h4>
-  </div>
-  <button onclick="show('stat')" id="btnStat">
-    <i class="fas fa-chart-line"></i> <span>Statistik</span>
-  </button>
-  <button onclick="show('barang')" id="btnBarang">
-    <i class="fas fa-box"></i> <span>Kelola Barang</span>
-  </button>
-  <button onclick="show('jasa')" id="btnJasa">
-    <i class="fas fa-briefcase"></i> <span>Kelola Jasa</span>
-  </button>
-  <button onclick="show('approval')" id="btnApproval">
-    <i class="fas fa-user-check"></i> <span>Approval Anggota</span>
-  </button>
+  <button onclick="show('barang')">Barang</button>
+  <button onclick="show('jasa')">Jasa</button>
 </div>
 
 <div class="main">
 
-<!-- STATISTIK -->
-<div id="stat" class="card">
-  <h3><i class="fas fa-chart-simple"></i> Statistik Koperasi</h3>
-  <div class="chart-container">
-    <canvas id="chart"></canvas>
-  </div>
-</div>
+<!-- BARANG -->
+<div id="barang" class="card">
+  <h3>Tambah Barang</h3>
+  <input id="namaBarang" placeholder="Nama"><br><br>
+  <input id="hargaBarang" placeholder="Harga"><br><br>
+  <input id="gambarBarangUrl" placeholder="URL Gambar"><br><br>
+  <button onclick="tambahBarang()">Simpan</button>
 
-<!-- BARANG - Menggunakan Input URL Gambar -->
-<div id="barang" class="card" style="display:none">
-  <h3><i class="fas fa-plus-circle"></i> Tambah Barang</h3>
-  <div class="form-row">
-    <div class="form-group">
-      <label><i class="fas fa-tag"></i> Nama Barang</label>
-      <input id="namaBarang" placeholder="Contoh: Beras 5kg">
-    </div>
-    <div class="form-group">
-      <label><i class="fas fa-rupiah-sign"></i> Harga</label>
-      <input id="hargaBarang" placeholder="Rp 50.000">
-    </div>
-  </div>
-  <div class="form-group">
-    <label><i class="fas fa-image"></i> URL Gambar Barang</label>
-    <input type="url" id="gambarBarangUrl" placeholder="https://example.com/gambar.jpg">
-    <div class="image-url-preview" id="previewContainer">
-      <img id="imagePreview" src="" alt="Preview Gambar">
-    </div>
-  </div>
-  <button class="btn-simpan" onclick="tambahBarang()"><i class="fas fa-save"></i> Simpan Barang</button>
-  
-  <h4 style="margin-top: 30px;"><i class="fas fa-list"></i> Daftar Barang</h4>
   <div id="listBarang" class="grid"></div>
 </div>
 
 <!-- JASA -->
 <div id="jasa" class="card" style="display:none">
-  <h3><i class="fas fa-plus-circle"></i> Tambah Jasa</h3>
-  <div class="form-row">
-    <div class="form-group">
-      <label><i class="fas fa-tag"></i> Nama Jasa</label>
-      <input id="namaJasa" placeholder="Contoh: Service AC">
-    </div>
-    <div class="form-group">
-      <label><i class="fas fa-rupiah-sign"></i> Harga</label>
-      <input id="hargaJasa" placeholder="Rp 150.000">
-    </div>
-    <div class="form-group">
-    <label><i class="fas fa-image"></i> URL Gambar Barang</label>
-    <input type="url" id="gambarBarangUrl" placeholder="https://example.com/gambar.jpg">
-    <div class="image-url-preview" id="previewContainer">
-      <img id="imagePreview" src="" alt="Preview Gambar">
-    </div>
-  </div>
-  <button class="btn-simpan" onclick="tambahJasa()"><i class="fas fa-save"></i> Simpan Jasa</button>
-  
-  <h4 style="margin-top: 30px;"><i class="fas fa-list"></i> Daftar Jasa</h4>
+  <h3>Tambah Jasa</h3>
+
+  <input id="namaJasa" placeholder="Nama jasa"><br><br>
+  <input id="hargaJasa" placeholder="Harga jasa"><br><br>
+
+  <input id="gambarJasaUrl" placeholder="URL gambar jasa"><br>
+  <img id="previewJasa" style="max-width:200px;display:none;margin-top:10px">
+
+  <br><br>
+  <button onclick="tambahJasa()">Simpan</button>
+
   <div id="listJasa" class="grid"></div>
-</div>
-
-<!-- APPROVAL -->
-<div id="approval" class="card" style="display:none">
-  <h3><i class="fas fa-user-check"></i> Approval Pendaftaran</h3>
-  
-  <select id="filterStatus" class="filter-select" onchange="loadApproval()">
-    <option value="all">📋 Semua Status</option>
-    <option value="pending">⏳ Pending</option>
-    <option value="approved">✅ Approved</option>
-    <option value="ditolak">❌ Ditolak</option>
-  </select>
-
-  <h4><i class="fas fa-user-tie"></i> Pengurus</h4>
-  <div id="listPengurus"></div>
-
-  <h4><i class="fas fa-users"></i> Anggota</h4>
-  <div id="listAnggota"></div>
 </div>
 
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const config = {
-  apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
-  authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
-  projectId: "koperasi-taruna-karya-cirebon",
-  storageBucket: "koperasi-taruna-karya-cirebon.firebasestorage.app"
+  apiKey: "API_KEY",
+  authDomain: "PROJECT.firebaseapp.com",
+  projectId: "PROJECT"
 };
 
 const app = initializeApp(config);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* AUTH */
-onAuthStateChanged(auth, (u) => { if (!u) location.href = "login.html" });
-window.logout = () => signOut(auth);
-
-/* PREVIEW GAMBAR URL */
-const gambarUrlInput = document.getElementById('gambarBarangUrl');
-const previewContainer = document.getElementById('previewContainer');
-const imagePreview = document.getElementById('imagePreview');
-
-if (gambarUrlInput) {
-  gambarUrlInput.addEventListener('input', (e) => {
-    const url = e.target.value;
-    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
-      imagePreview.src = url;
-      previewContainer.style.display = 'block';
-      imagePreview.onerror = () => {
-        imagePreview.src = '';
-        previewContainer.style.display = 'none';
-      };
-    } else {
-      previewContainer.style.display = 'none';
-      imagePreview.src = '';
-    }
-  });
+/* NAV */
+window.show = (id)=>{
+  barang.style.display="none";
+  jasa.style.display="none";
+  document.getElementById(id).style.display="block";
 }
 
-/* NAVIGASI */
-window.show = (id) => {
-  ["stat", "barang", "jasa", "approval"].forEach(s => {
-    document.getElementById(s).style.display = "none";
-  });
-  document.getElementById(id).style.display = "block";
-  
-  // Active class pada sidebar
-  document.querySelectorAll('.sidebar button').forEach(btn => {
-    btn.classList.remove('active');
-  });
-  if (id === 'stat') document.getElementById('btnStat').classList.add('active');
-  if (id === 'barang') document.getElementById('btnBarang').classList.add('active');
-  if (id === 'jasa') document.getElementById('btnJasa').classList.add('active');
-  if (id === 'approval') document.getElementById('btnApproval').classList.add('active');
-}
+/* PREVIEW JASA */
+const inputJasa = document.getElementById("gambarJasaUrl");
+const previewJasa = document.getElementById("previewJasa");
 
-/* TAMBAH BARANG - Menggunakan URL Gambar */
-window.tambahBarang = async () => {
-  const gambarUrl = document.getElementById("gambarBarangUrl").value;
-  const nama = document.getElementById("namaBarang").value;
-  const harga = document.getElementById("hargaBarang").value;
-  
-  if (!nama || !harga) {
-    alert("Nama dan harga barang harus diisi!");
-    return;
+inputJasa.addEventListener("input", ()=>{
+  const url = inputJasa.value;
+  if(url.startsWith("http")){
+    previewJasa.src = url;
+    previewJasa.style.display = "block";
+  }else{
+    previewJasa.style.display = "none";
   }
-  
-  await addDoc(collection(db, "barang"), {
-    nama: nama,
-    harga: harga,
-    gambar: gambarUrl || ""
+});
+
+/* TAMBAH BARANG */
+window.tambahBarang = async ()=>{
+  await addDoc(collection(db,"barang"),{
+    nama:namaBarang.value,
+    harga:hargaBarang.value,
+    gambar:gambarBarangUrl.value
   });
-  
-  alert("Barang berhasil ditambahkan!");
-  document.getElementById("namaBarang").value = "";
-  document.getElementById("hargaBarang").value = "";
-  document.getElementById("gambarBarangUrl").value = "";
-  previewContainer.style.display = "none";
-  imagePreview.src = "";
-  loadAll();
+  loadBarang();
 }
 
-async function loadBarang() {
-  const snap = await getDocs(collection(db, "barang"));
-  const list = document.getElementById("listBarang");
-  list.innerHTML = "";
-  snap.forEach(d => {
-    const b = d.data();
-    list.innerHTML += `
+/* LOAD BARANG */
+async function loadBarang(){
+  const snap = await getDocs(collection(db,"barang"));
+  listBarang.innerHTML="";
+  snap.forEach(d=>{
+    const b=d.data();
+    listBarang.innerHTML+=`
       <div class="item-card">
-        ${b.gambar ? `<img src="${b.gambar}" alt="${b.nama}" onerror="this.src='https://placehold.co/400x300?text=No+Image'">` : '<div style="height:140px;background:#e2e8f0;border-radius:12px;display:flex;align-items:center;justify-content:center"><i class="fas fa-image" style="font-size:40px;color:#94a3b8"></i></div>'}
-        <b contenteditable="true" onblur="edit('${d.id}','barang','nama',this.innerText)">${escapeHtml(b.nama)}</b>
-        <p contenteditable="true" onblur="edit('${d.id}','barang','harga',this.innerText)">${escapeHtml(b.harga)}</p>
-        <button class="btn-hapus" onclick="hapus('barang','${d.id}')"><i class="fas fa-trash"></i> Hapus</button>
+        <img src="${b.gambar||'https://via.placeholder.com/200'}">
+        <b>${b.nama}</b>
+        <p>${b.harga}</p>
+        <button onclick="hapus('barang','${d.id}')">Hapus</button>
       </div>
     `;
   });
-  return snap.size;
 }
 
 /* TAMBAH JASA */
-window.tambahJasa = async () => {
-  const nama = document.getElementById("namaJasa").value;
-  const harga = document.getElementById("hargaJasa").value;
-  
-  if (!nama || !harga) {
-    alert("Nama dan harga jasa harus diisi!");
-    return;
-  }
-  
-  await addDoc(collection(db, "jasa"), {
-    nama: nama,
-    harga: harga
+window.tambahJasa = async ()=>{
+  await addDoc(collection(db,"jasa"),{
+    nama:namaJasa.value,
+    harga:hargaJasa.value,
+    gambar:gambarJasaUrl.value
   });
-  alert("Jasa berhasil ditambahkan!");
-  document.getElementById("namaJasa").value = "";
-  document.getElementById("hargaJasa").value = "";
-  loadAll();
+
+  namaJasa.value="";
+  hargaJasa.value="";
+  gambarJasaUrl.value="";
+  previewJasa.style.display="none";
+
+  loadJasa();
 }
 
-async function loadJasa() {
-  const snap = await getDocs(collection(db, "jasa"));
-  const list = document.getElementById("listJasa");
-  list.innerHTML = "";
-  snap.forEach(d => {
-    const j = d.data();
-    list.innerHTML += `
+/* LOAD JASA */
+async function loadJasa(){
+  const snap = await getDocs(collection(db,"jasa"));
+  listJasa.innerHTML="";
+  snap.forEach(d=>{
+    const j=d.data();
+    listJasa.innerHTML+=`
       <div class="item-card">
-        <i class="fas fa-briefcase" style="font-size:50px;color:#2563eb;margin:20px auto;display:block;text-align:center"></i>
-        <b contenteditable="true" onblur="edit('${d.id}','jasa','nama',this.innerText)">${escapeHtml(j.nama)}</b>
-        <p contenteditable="true" onblur="edit('${d.id}','jasa','harga',this.innerText)">${escapeHtml(j.harga)}</p>
-        <button class="btn-hapus" onclick="hapus('jasa','${d.id}')"><i class="fas fa-trash"></i> Hapus</button>
+        <img src="${j.gambar||'https://via.placeholder.com/200'}">
+        <b>${j.nama}</b>
+        <p>${j.harga}</p>
+        <button onclick="hapus('jasa','${d.id}')">Hapus</button>
       </div>
     `;
   });
-  return snap.size;
 }
 
-// Helper function to escape HTML
-function escapeHtml(text) {
-  if (!text) return '';
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
+/* HAPUS */
+window.hapus = async (col,id)=>{
+  await deleteDoc(doc(db,col,id));
+  loadBarang();
+  loadJasa();
 }
 
-/* EDIT */
-window.edit = async (id, col, field, value) => {
-  await updateDoc(doc(db, col, id), { [field]: value });
-}
+loadBarang();
+loadJasa();
 
-/* DELETE */
-window.hapus = async (col, id) => {
-  if (confirm("Yakin ingin menghapus?")) {
-    await deleteDoc(doc(db, col, id));
-    loadAll();
-  }
-}
-
-/* APPROVAL */
-window.loadApproval = async () => {
-  const status = document.getElementById("filterStatus").value;
-  
-  const pSnap = await getDocs(collection(db, "pengurus"));
-  const listPengurus = document.getElementById("listPengurus");
-  listPengurus.innerHTML = "";
-  pSnap.forEach(d => {
-    const p = d.data();
-    if (status === "all" || p.status === status) {
-      listPengurus.innerHTML += `
-        <div class="approval-card ${p.status || 'pending'}">
-          <div class="nama"><i class="fas fa-user-tie"></i> ${escapeHtml(p.nama || 'Tidak ada nama')}</div>
-          <div class="detail">Jabatan: ${escapeHtml(p.jabatan || '-')} | Email: ${escapeHtml(p.email || '-')}</div>
-          <div class="status status-${p.status || 'pending'}">${p.status || 'pending'}</div>
-          <div style="margin-top: 10px;">
-            <button class="btn-approve" onclick="approve('pengurus','${d.id}')"><i class="fas fa-check"></i> Approve</button>
-            <button class="btn-reject" onclick="reject('pengurus','${d.id}')"><i class="fas fa-times"></i> Reject</button>
-          </div>
-        </div>
-      `;
-    }
-  });
-  
-  const aSnap = await getDocs(collection(db, "anggota"));
-  const listAnggota = document.getElementById("listAnggota");
-  listAnggota.innerHTML = "";
-  aSnap.forEach(d => {
-    const a = d.data();
-    if (status === "all" || a.status === status) {
-      listAnggota.innerHTML += `
-        <div class="approval-card ${a.status || 'pending'}">
-          <div class="nama"><i class="fas fa-user"></i> ${escapeHtml(a.nama || 'Tidak ada nama')}</div>
-          <div class="detail">WA: ${escapeHtml(a.wa || '-')} | Email: ${escapeHtml(a.email || '-')}</div>
-          <div class="status status-${a.status || 'pending'}">${a.status || 'pending'}</div>
-          <div style="margin-top: 10px;">
-            <button class="btn-approve" onclick="approve('anggota','${d.id}')"><i class="fas fa-check"></i> Approve</button>
-            <button class="btn-reject" onclick="reject('anggota','${d.id}')"><i class="fas fa-times"></i> Reject</button>
-          </div>
-        </div>
-      `;
-    }
-  });
-}
-
-window.approve = async (col, id) => {
-  await updateDoc(doc(db, col, id), { status: "approved" });
-  loadApproval();
-  loadChart();
-}
-
-window.reject = async (col, id) => {
-  await updateDoc(doc(db, col, id), { status: "ditolak" });
-  loadApproval();
-  loadChart();
-}
-
-/* CHART */
-let chart;
-async function loadChart() {
-  const b = (await getDocs(collection(db, "barang"))).size;
-  const j = (await getDocs(collection(db, "jasa"))).size;
-  const a = (await getDocs(collection(db, "anggota"))).size;
-  const p = (await getDocs(collection(db, "pengurus"))).size;
-  
-  if (chart) chart.destroy();
-  
-  const ctx = document.getElementById("chart").getContext("2d");
-  chart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: ["Barang", "Jasa", "Anggota", "Pengurus"],
-      datasets: [{
-        label: "Total Data",
-        data: [b, j, a, p],
-        backgroundColor: ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6"],
-        borderRadius: 10,
-        barPercentage: 0.6
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      plugins: {
-        legend: {
-          position: 'top',
-        }
-      }
-    }
-  });
-}
-
-/* LOAD ALL */
-async function loadAll() {
-  await loadChart();
-  await loadBarang();
-  await loadJasa();
-  await loadApproval();
-}
-
-loadAll();
 </script>
 
 </body>
