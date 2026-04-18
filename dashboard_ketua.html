@@ -13,7 +13,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
 
 <style>
-/* ========== SEMUA STYLE SAMA SEPERTI SEBELUMNYA ========== */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Inter', sans-serif; background: #f0f4f8; overflow-x: hidden; }
 
@@ -30,13 +29,13 @@ body { font-family: 'Inter', sans-serif; background: #f0f4f8; overflow-x: hidden
   right: 0;
   left: 260px;
   z-index: 99;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 .topbar h3 { font-size: 1.3rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
 .topbar h3 i { color: #fbbf24; }
 .user-info { display: flex; align-items: center; gap: 20px; }
 .user-name { background: rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 30px; font-size: 0.85rem; }
-.logout-btn { background: rgba(239, 68, 68, 0.9); border: none; padding: 10px 24px; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
+.logout-btn { background: rgba(239,68,68,0.9); border: none; padding: 10px 24px; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
 .logout-btn:hover { background: #dc2626; transform: translateY(-2px); }
 
 /* Sidebar */
@@ -77,6 +76,14 @@ body { font-family: 'Inter', sans-serif; background: #f0f4f8; overflow-x: hidden
 .stat-number { font-size: 2rem; font-weight: 800; }
 .stat-label { font-size: 0.8rem; opacity: 0.9; }
 
+/* Grid untuk list */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
+.item-card { background: #f8fafc; border-radius: 16px; padding: 15px; transition: all 0.3s; border: 1px solid #e2e8f0; }
+.item-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-color: #fbbf24; }
+.item-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 12px; margin-bottom: 12px; }
+.item-card b { font-size: 1rem; display: block; margin: 8px 0; color: #1e293b; }
+.item-card p { color: #2563eb; font-weight: 700; font-size: 1.1rem; }
+
 /* Form */
 .form-group { margin-bottom: 15px; }
 .form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: #334155; font-size: 0.85rem; }
@@ -108,82 +115,57 @@ body { font-family: 'Inter', sans-serif; background: #f0f4f8; overflow-x: hidden
   .topbar { left: 70px; }
   .main { margin-left: 70px; padding: 80px 20px 30px 20px; }
   .form-row { grid-template-columns: 1fr; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
-@media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 
-<!-- ========== SCRIPT VALIDASI SESSION ========== -->
+<!-- ========== SCRIPT VALIDASI SESSION SEDERHANA ========== -->
 <script>
 (function() {
-  console.log("Dashboard Ketua - Checking session...");
-  
+  // Ambil session dari localStorage
   const userSession = localStorage.getItem('userSession');
   const userRole = localStorage.getItem('userRole');
   
-  console.log("userSession:", userSession);
-  console.log("userRole:", userRole);
-  
   // Jika tidak ada session, redirect ke login
   if (!userSession || !userRole) {
-    console.log("No session found, redirecting to login");
-    window.location.replace('login.html');
+    window.location.href = 'login.html';
     return;
   }
   
   try {
     const session = JSON.parse(userSession);
-    console.log("Session data:", session);
-    
-    const loginTime = new Date(session.loginTime);
-    const now = new Date();
-    const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
-    
-    // Session expired setelah 8 jam
-    if (hoursDiff > 8) {
-      console.log("Session expired");
-      localStorage.clear();
-      sessionStorage.clear();
-      window.location.replace('login.html');
-      return;
-    }
     
     // Validasi role harus KETUA
     if (session.role !== 'KETUA') {
-      console.log("Role mismatch! Expected KETUA, got", session.role);
+      // Redirect ke dashboard sesuai role
       const roleRedirect = {
         'SEKRETARIS': 'dashboard_sekretaris.html',
         'BENDAHARA': 'dashboard_bendahara.html',
         'PENGURUS': 'dashboard_pengurus.html',
         'ANGGOTA': 'dashboard_anggota.html'
       }[session.role];
-      window.location.replace(roleRedirect || 'login.html');
+      window.location.href = roleRedirect || 'login.html';
       return;
     }
     
-    // Tampilkan nama user
+    // Tampilkan nama user di navbar
     const userNameSpan = document.getElementById('userNameDisplay');
     if (userNameSpan) {
       userNameSpan.innerHTML = `<i class="fas fa-crown"></i> ${session.nama || session.email}`;
     }
     
-    console.log("Session valid for Ketua");
-    
   } catch(e) {
-    console.error("Session validation error:", e);
     localStorage.clear();
-    window.location.replace('login.html');
+    window.location.href = 'login.html';
   }
 })();
 
 // Fungsi Logout
 window.logout = function() {
-  console.log("Logging out...");
   localStorage.clear();
   sessionStorage.clear();
-  window.location.replace('login.html');
+  window.location.href = 'login.html';
 };
 </script>
 
