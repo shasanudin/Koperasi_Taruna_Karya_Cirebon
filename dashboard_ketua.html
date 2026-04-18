@@ -120,32 +120,37 @@ body { font-family: 'Inter', sans-serif; background: #f0f4f8; overflow-x: hidden
 </head>
 <body>
 
-<!-- ========== SCRIPT VALIDASI SESSION SEDERHANA ========== -->
+<!-- ========== SCRIPT VALIDASI SESSION ========== -->
 <script>
 (function() {
   // Ambil session dari localStorage
   const userSession = localStorage.getItem('userSession');
   const userRole = localStorage.getItem('userRole');
   
+  console.log("Session check - userSession:", userSession);
+  console.log("Session check - userRole:", userRole);
+  
   // Jika tidak ada session, redirect ke login
   if (!userSession || !userRole) {
-    window.location.href = 'login.html';
+    console.log("No session, redirect to login");
+    window.location.replace('login.html');
     return;
   }
   
   try {
     const session = JSON.parse(userSession);
+    console.log("Session role:", session.role);
     
     // Validasi role harus KETUA
     if (session.role !== 'KETUA') {
-      // Redirect ke dashboard sesuai role
+      console.log("Wrong role, redirecting");
       const roleRedirect = {
         'SEKRETARIS': 'dashboard_sekretaris.html',
         'BENDAHARA': 'dashboard_bendahara.html',
         'PENGURUS': 'dashboard_pengurus.html',
         'ANGGOTA': 'dashboard_anggota.html'
       }[session.role];
-      window.location.href = roleRedirect || 'login.html';
+      window.location.replace(roleRedirect || 'login.html');
       return;
     }
     
@@ -155,17 +160,21 @@ body { font-family: 'Inter', sans-serif; background: #f0f4f8; overflow-x: hidden
       userNameSpan.innerHTML = `<i class="fas fa-crown"></i> ${session.nama || session.email}`;
     }
     
+    console.log("Session valid, dashboard ready");
+    
   } catch(e) {
+    console.error("Session error:", e);
     localStorage.clear();
-    window.location.href = 'login.html';
+    window.location.replace('login.html');
   }
 })();
 
 // Fungsi Logout
 window.logout = function() {
+  console.log("Logout clicked");
   localStorage.clear();
   sessionStorage.clear();
-  window.location.href = 'login.html';
+  window.location.replace('login.html');
 };
 </script>
 
@@ -245,6 +254,7 @@ window.logout = function() {
 </div>
 
 <script type="module">
+// ========== IMPORT FIREBASE (TANPA AUTH) ==========
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
