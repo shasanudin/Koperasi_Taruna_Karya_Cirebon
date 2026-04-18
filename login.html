@@ -413,11 +413,12 @@
 </div>
 
 <script type="module">
-  // Import Firebase
+  // ==================== IMPOR FIREBASE ====================
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, collection, query, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-  // Firebase Configuration
+  // ==================== FIREBASE CONFIGURATION ====================
   const firebaseConfig = {
     apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
     authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
@@ -432,21 +433,55 @@
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const db = getFirestore(app);
 
-  // DOM Elements
+  // ==================== DEFINISI ROLE & DASHBOARD ====================
+  const ROLE_CONFIG = {
+    'KETUA': {
+      name: 'Ketua Koperasi',
+      dashboard: 'dashboard_ketua.html',
+      level: 1,
+      icon: '👑'
+    },
+    'SEKRETARIS': {
+      name: 'Sekretaris',
+      dashboard: 'dashboard_sekretaris.html',
+      level: 2,
+      icon: '📝'
+    },
+    'BENDAHARA': {
+      name: 'Bendahara',
+      dashboard: 'dashboard_bendahara.html',
+      level: 3,
+      icon: '💰'
+    },
+    'PENGURUS': {
+      name: 'Pengurus',
+      dashboard: 'dashboard_pengurus.html',
+      level: 4,
+      icon: '👥'
+    },
+    'ANGGOTA': {
+      name: 'Anggota',
+      dashboard: 'dashboard_anggota.html',
+      level: 5,
+      icon: '👤'
+    }
+  };
+
+  // ==================== DOM ELEMENTS ====================
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
   const loginForm = document.getElementById('loginForm');
   const loginBtn = document.getElementById('loginBtn');
   const togglePassword = document.getElementById('togglePassword');
 
+  // ==================== FUNGSI UTILITY ====================
+  
   // Fungsi show alert
   function showAlert(message, type = 'error') {
-    // Hapus alert yang sudah ada
     const existingAlert = document.querySelector('.alert');
-    if (existingAlert) {
-      existingAlert.remove();
-    }
+    if (existingAlert) existingAlert.remove();
     
     const alert = document.createElement('div');
     alert.className = `alert ${type}`;
@@ -458,15 +493,8 @@
     
     document.body.appendChild(alert);
     
-    // Event close alert
-    alert.querySelector('.close-alert').addEventListener('click', () => {
-      alert.remove();
-    });
-    
-    // Auto close after 5 seconds
-    setTimeout(() => {
-      if (alert.parentNode) alert.remove();
-    }, 5000);
+    alert.querySelector('.close-alert').addEventListener('click', () => alert.remove());
+    setTimeout(() => { if (alert.parentNode) alert.remove(); }, 5000);
   }
 
   // Toggle Password Visibility
@@ -477,14 +505,82 @@
     togglePassword.classList.toggle('fa-eye-slash');
   });
 
-  // Login Function
+  // ==================== FUNGSI GET USER DATA DARI FIRESTORE ====================
+  async function getUserDataByEmail(email) {
+    try {
+      // Cari user berdasarkan email di collection users
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, where("email", "==", email));
+      const querySnapshot = await getDocs(q);
+      
+      if (!querySnapshot.empty) {
+        const userDoc = querySnapshot.docs[0];
+        return { id: userDoc.id, ...userDoc.data() };
+      }
+      
+      // Coba cari berdasarkan uid (fallback)
+      return null;
+    } catch (error) {
+      console.error("Error getting user data:", error);
+      return null;
+    }
+  }
+
+  async function getUserDataByUid(uid) {
+    try {
+      const userRef = doc(db, "users", uid);
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        return { id: userDoc.id, ...userDoc.data() };
+      }
+      return null;
+    } catch (error) {
+      console.error("Error getting user by uid:", error);
+      return null;
+    }
+  }
+
+  // ==================== UPDATE LAST LOGIN ====================
+  async function updateLastLogin(userId) {
+    try {
+      const userRef = doc(db, "users", userId);
+      await updateDoc(userRef, {
+        lastLogin: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error("Error updating last login:", error);
+    }
+  }
+
+  // ==================== SIMPAN SESSION ====================
+  function saveUserSession(userData) {
+    const sessionData = {
+      uid: userData.uid,
+      email: userData.email,
+      nama: userData.nama,
+      role: userData.role,
+      roleName: ROLE_CONFIG[userData.role]?.name || userData.role,
+      jabatan: userData.jabatan,
+      foto: userData.foto,
+      no_hp: userData.no_hp,
+      loginTime: new Date().toISOString()
+    };
+    
+    localStorage.setItem('userSession', JSON.stringify(sessionData));
+    localStorage.setItem('userRole', userData.role);
+    localStorage.setItem('userName', userData.nama);
+    
+    return sessionData;
+  }
+
+  // ==================== LOGIN HANDLER MULTI USER ====================
   async function handleLogin(e) {
     e.preventDefault();
     
     const email = emailInput.value.trim();
     const password = passwordInput.value;
     
-    // Validasi sederhana
+    // Validasi input
     if (!email || !password) {
       showAlert('Harap isi email dan password dengan benar!', 'error');
       return;
@@ -496,13 +592,60 @@
     loginBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Memproses...';
     
     try {
+      // STEP 1: Autentikasi dengan Firebase Auth
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      console.log('Login berhasil:', userCredential.user.email);
-      showAlert('Login berhasil! Mengalihkan ke dashboard...', 'success');
+      const authUser = userCredential.user;
       
-      // Redirect ke dashboard setelah delay
+      // STEP 2: Ambil data user dari Firestore (collection users)
+      let userData = await getUserDataByEmail(email);
+      
+      if (!userData) {
+        // Jika tidak ditemukan berdasarkan email, coba berdasarkan uid
+        userData = await getUserDataByUid(authUser.uid);
+      }
+      
+      // STEP 3: Validasi user data
+      if (!userData) {
+        await auth.signOut();
+        showAlert('Akun tidak terdaftar di sistem koperasi. Hubungi admin.', 'error');
+        return;
+      }
+      
+      // STEP 4: Cek status akun
+      if (userData.status !== 'active') {
+        await auth.signOut();
+        let statusMsg = userData.status === 'pending' 
+          ? 'Akun Anda masih menunggu verifikasi admin.' 
+          : 'Akun Anda telah dinonaktifkan. Hubungi pengurus.';
+        showAlert(statusMsg, 'error');
+        return;
+      }
+      
+      // STEP 5: Validasi role - pastikan role terdaftar di konfigurasi
+      if (!ROLE_CONFIG[userData.role]) {
+        await auth.signOut();
+        showAlert(`Role "${userData.role}" tidak dikenali. Hubungi admin.`, 'error');
+        return;
+      }
+      
+      // STEP 6: Update last login
+      await updateLastLogin(userData.id);
+      
+      // STEP 7: Simpan session ke localStorage
+      const session = saveUserSession(userData);
+      
+      // STEP 8: Tampilkan pesan sukses dengan informasi role
+      const roleInfo = ROLE_CONFIG[userData.role];
+      showAlert(
+        `Selamat datang, ${userData.nama || userData.role}! ${roleInfo.icon} Anda login sebagai ${roleInfo.name}. Mengalihkan...`, 
+        'success'
+      );
+      
+      console.log(`✅ Login berhasil: ${email} | Role: ${userData.role} | Dashboard: ${roleInfo.dashboard}`);
+      
+      // STEP 9: Redirect ke dashboard sesuai role
       setTimeout(() => {
-        window.location.href = "dashboard.html";
+        window.location.href = roleInfo.dashboard;
       }, 1500);
       
     } catch (error) {
@@ -542,7 +685,35 @@
     }
   }
 
-  // Event listener untuk submit form
+  // ==================== CEK SESSION ACTIVE ====================
+  function checkExistingSession() {
+    const existingSession = localStorage.getItem('userSession');
+    if (existingSession) {
+      try {
+        const session = JSON.parse(existingSession);
+        const loginTime = new Date(session.loginTime);
+        const now = new Date();
+        const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
+        
+        // Jika session kurang dari 8 jam, redirect ke dashboard
+        if (hoursDiff < 8 && session.role && ROLE_CONFIG[session.role]) {
+          console.log(`Session aktif ditemukan untuk ${session.email}, redirect ke dashboard...`);
+          window.location.href = ROLE_CONFIG[session.role].dashboard;
+          return true;
+        } else {
+          // Session expired
+          localStorage.removeItem('userSession');
+          localStorage.removeItem('userRole');
+          localStorage.removeItem('userName');
+        }
+      } catch (e) {
+        localStorage.removeItem('userSession');
+      }
+    }
+    return false;
+  }
+
+  // ==================== EVENT LISTENER ====================
   loginForm.addEventListener('submit', handleLogin);
   
   // Lupa password handler
@@ -551,7 +722,7 @@
     e.preventDefault();
     const email = emailInput.value.trim();
     if (email && email.includes('@')) {
-      showAlert(`Link reset password akan dikirim ke ${email}. Fitur ini segera hadir.`, 'success');
+      showAlert(`Link reset password akan dikirim ke ${email}. Fitur reset password akan segera hadir.`, 'success');
     } else {
       showAlert('Masukkan email Anda terlebih dahulu untuk reset password.', 'error');
     }
@@ -571,6 +742,9 @@
       this.src = 'https://placehold.co/200x200?text=Koperasi+Taruna';
     });
   }
+  
+  // Cek session aktif saat halaman dimuat
+  checkExistingSession();
 </script>
 
 </body>
