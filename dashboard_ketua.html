@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Dashboard Ketua - Koperasi Taruna Karya Cirebon</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -13,19 +13,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ========== SEMUA STYLE SAMA SEPERTI SEBELUMNYA ========== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: #f0f4f8; overflow-x: hidden; }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background: #f0f4f8;
-  overflow-x: hidden;
-}
-
-/* ========== TOPBAR ========== */
+/* Topbar */
 .topbar {
   background: linear-gradient(135deg, #0f172a, #1e293b);
   color: white;
@@ -40,54 +32,14 @@ body {
   z-index: 99;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
+.topbar h3 { font-size: 1.3rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.topbar h3 i { color: #fbbf24; }
+.user-info { display: flex; align-items: center; gap: 20px; }
+.user-name { background: rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 30px; font-size: 0.85rem; }
+.logout-btn { background: rgba(239, 68, 68, 0.9); border: none; padding: 10px 24px; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
+.logout-btn:hover { background: #dc2626; transform: translateY(-2px); }
 
-.topbar h3 {
-  font-size: 1.3rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.topbar h3 i {
-  color: #fbbf24;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.user-name {
-  background: rgba(255,255,255,0.1);
-  padding: 8px 16px;
-  border-radius: 30px;
-  font-size: 0.85rem;
-}
-
-.logout-btn {
-  background: rgba(239, 68, 68, 0.9);
-  border: none;
-  padding: 10px 24px;
-  border-radius: 12px;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.9rem;
-}
-
-.logout-btn:hover {
-  background: #dc2626;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
-}
-
-/* ========== SIDEBAR ========== */
+/* Sidebar */
 .sidebar {
   width: 260px;
   background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
@@ -97,442 +49,68 @@ body {
   top: 0;
   left: 0;
   padding: 30px 20px;
-  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
   z-index: 100;
   overflow-y: auto;
 }
-
-.sidebar-logo {
-  text-align: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.sidebar-logo img {
-  height: 60px;
-  width: auto;
-  border-radius: 12px;
-  background: white;
-  padding: 8px;
-  margin-bottom: 10px;
-}
-
-.sidebar-logo h4 {
-  font-size: 1rem;
-  color: #94a3b8;
-  font-weight: 500;
-}
-
+.sidebar-logo { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.sidebar-logo img { height: 60px; width: auto; border-radius: 12px; background: white; padding: 8px; }
+.sidebar-logo h4 { font-size: 1rem; color: #94a3b8; }
 .sidebar button {
-  width: 100%;
-  margin-top: 8px;
-  padding: 12px 16px;
-  border: none;
-  background: rgba(255, 255, 255, 0.05);
-  color: #e2e8f0;
-  cursor: pointer;
-  border-radius: 12px;
-  text-align: left;
-  font-size: 0.95rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  width: 100%; margin-top: 8px; padding: 12px 16px; border: none;
+  background: rgba(255,255,255,0.05); color: #e2e8f0; cursor: pointer;
+  border-radius: 12px; text-align: left; font-size: 0.95rem;
+  display: flex; align-items: center; gap: 12px; transition: all 0.3s;
 }
+.sidebar button:hover { background: #2563eb; color: white; transform: translateX(5px); }
+.sidebar button.active { background: #2563eb; color: white; }
 
-.sidebar button i {
-  width: 24px;
-  font-size: 1.1rem;
-}
-
-.sidebar button:hover {
-  background: #2563eb;
-  color: white;
-  transform: translateX(5px);
-}
-
-.sidebar button.active {
-  background: #2563eb;
-  color: white;
-}
-
-/* ========== MAIN CONTENT ========== */
-.main {
-  margin-left: 260px;
-  padding: 90px 30px 40px 30px;
-  min-height: 100vh;
-}
-
-/* Card Style */
-.card {
-  background: white;
-  padding: 24px;
-  border-radius: 20px;
-  margin-bottom: 25px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-}
-
-.card h3 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #1e293b;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border-left: 4px solid #fbbf24;
-  padding-left: 15px;
-}
-
-.card h4 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 20px 0 15px 0;
-  color: #334155;
-}
+/* Main */
+.main { margin-left: 260px; padding: 90px 30px 40px 30px; min-height: 100vh; }
+.card { background: white; padding: 24px; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; border-left: 4px solid #fbbf24; padding-left: 15px; }
 
 /* Stats Grid */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
-}
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+.stat-card { background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; padding: 20px; border-radius: 20px; text-align: center; transition: transform 0.3s; }
+.stat-card:hover { transform: translateY(-5px); }
+.stat-card i { font-size: 2rem; margin-bottom: 10px; }
+.stat-number { font-size: 2rem; font-weight: 800; }
+.stat-label { font-size: 0.8rem; opacity: 0.9; }
 
-.stat-card {
-  background: linear-gradient(135deg, #1e3a8a, #2563eb);
-  color: white;
-  padding: 20px;
-  border-radius: 20px;
-  text-align: center;
-  transition: transform 0.3s;
-}
-
-.stat-card:hover {
-  transform: translateY(-5px);
-}
-
-.stat-card i {
-  font-size: 2rem;
-  margin-bottom: 10px;
-}
-
-.stat-number {
-  font-size: 2rem;
-  font-weight: 800;
-}
-
-.stat-label {
-  font-size: 0.8rem;
-  opacity: 0.9;
-}
-
-/* Grid untuk list */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.item-card {
-  background: #f8fafc;
-  border-radius: 16px;
-  padding: 15px;
-  transition: all 0.3s ease;
-  border: 1px solid #e2e8f0;
-}
-
-.item-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  border-color: #fbbf24;
-}
-
-.item-card img {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 12px;
-}
-
-.item-card b {
-  font-size: 1rem;
-  display: block;
-  margin: 8px 0;
-  color: #1e293b;
-}
-
-.item-card p {
-  color: #2563eb;
-  font-weight: 700;
-  font-size: 1.1rem;
-  margin: 8px 0;
-}
-
-.item-card [contenteditable="true"] {
-  background: white;
-  padding: 5px 8px;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  outline: none;
-}
-
-.item-card [contenteditable="true"]:focus {
-  border-color: #fbbf24;
-  box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.1);
-}
-
-/* Form styling */
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 600;
-  color: #334155;
-  font-size: 0.85rem;
-}
-
-.form-group label i {
-  margin-right: 8px;
-  color: #fbbf24;
-}
-
-.form-group input, .form-group textarea, .form-group select {
-  width: 100%;
-  padding: 12px 15px;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  transition: all 0.3s;
-  font-family: 'Inter', sans-serif;
-}
-
-.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-  outline: none;
-  border-color: #fbbf24;
-  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-}
-
-.image-url-preview {
-  margin-top: 10px;
-  display: none;
-}
-
-.image-url-preview img {
-  max-width: 100%;
-  max-height: 150px;
-  border-radius: 12px;
-  border: 2px solid #e2e8f0;
-  object-fit: cover;
-}
-
-.btn-simpan {
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  color: #1e293b;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  margin-top: 10px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-simpan:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(251, 191, 36, 0.3);
-}
-
-.btn-hapus {
-  background: #ef4444;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 10px;
-  transition: all 0.2s;
-}
-
-.btn-hapus:hover {
-  background: #dc2626;
-}
-
-.btn-approve {
-  background: #10b981;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-right: 8px;
-}
-
-.btn-reject {
-  background: #ef4444;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-}
+/* Form */
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: #334155; font-size: 0.85rem; }
+.form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 0.9rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.btn-simpan { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1e293b; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
+.btn-hapus { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 10px; cursor: pointer; width: 100%; margin-top: 10px; }
+.btn-approve { background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; margin-right: 8px; }
+.btn-reject { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
 
 /* Approval card */
-.approval-card {
-  background: #f8fafc;
-  border-radius: 14px;
-  padding: 15px;
-  margin-bottom: 12px;
-  border-left: 4px solid;
-  transition: all 0.2s;
-}
+.approval-card { background: #f8fafc; border-radius: 14px; padding: 15px; margin-bottom: 12px; border-left: 4px solid; }
+.approval-card.pending { border-left-color: #f59e0b; }
+.approval-card.approved { border-left-color: #10b981; }
+.approval-card .nama { font-weight: 700; }
+.approval-card .detail { font-size: 0.8rem; color: #64748b; margin: 5px 0; }
+.status { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; margin-top: 8px; }
+.status-pending { background: #fef3c7; color: #d97706; }
+.status-approved { background: #d1fae5; color: #059669; }
 
-.approval-card.pending {
-  border-left-color: #f59e0b;
-}
+.filter-select { padding: 10px 15px; border: 2px solid #e2e8f0; border-radius: 12px; margin-bottom: 20px; background: white; cursor: pointer; }
+.chart-container { max-width: 500px; margin: 0 auto; }
 
-.approval-card.approved {
-  border-left-color: #10b981;
-}
-
-.approval-card.ditolak {
-  border-left-color: #ef4444;
-}
-
-.approval-card .nama {
-  font-weight: 700;
-  font-size: 1rem;
-  color: #1e293b;
-}
-
-.approval-card .detail {
-  font-size: 0.8rem;
-  color: #64748b;
-  margin: 5px 0;
-}
-
-.approval-card .status {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  margin-top: 8px;
-}
-
-.status-pending {
-  background: #fef3c7;
-  color: #d97706;
-}
-
-.status-approved {
-  background: #d1fae5;
-  color: #059669;
-}
-
-.status-ditolak {
-  background: #fee2e2;
-  color: #dc2626;
-}
-
-.filter-select {
-  padding: 10px 15px;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  margin-bottom: 20px;
-  background: white;
-  cursor: pointer;
-}
-
-.chart-container {
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-/* Tanda Tangan Digital */
-.signature-area {
-  background: #f8fafc;
-  border-radius: 16px;
-  padding: 20px;
-  text-align: center;
-}
-
-.signature-qr {
-  display: inline-block;
-  padding: 15px;
-  background: white;
-  border-radius: 16px;
-  border: 2px solid #e2e8f0;
-  margin: 10px 0;
-}
-
-/* Responsive */
 @media (max-width: 768px) {
-  .sidebar {
-    width: 70px;
-    padding: 20px 10px;
-  }
-  .sidebar button span {
-    display: none;
-  }
-  .sidebar button i {
-    margin: 0;
-  }
-  .sidebar-logo h4, .sidebar-logo span {
-    display: none;
-  }
-  .sidebar-logo img {
-    height: 40px;
-  }
-  .topbar {
-    left: 70px;
-  }
-  .main {
-    margin-left: 70px;
-    padding: 80px 20px 30px 20px;
-  }
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .sidebar { width: 70px; padding: 20px 10px; }
+  .sidebar button span { display: none; }
+  .sidebar button i { margin: 0; }
+  .sidebar-logo h4 { display: none; }
+  .topbar { left: 70px; }
+  .main { margin-left: 70px; padding: 80px 20px 30px 20px; }
+  .form-row { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
-@media (max-width: 480px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-  .topbar h3 {
-    font-size: 1rem;
-  }
-  .user-name {
-    display: none;
-  }
-}
+@media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -542,7 +120,6 @@ body {
 (function() {
   console.log("Dashboard Ketua - Checking session...");
   
-  // Ambil session dari localStorage
   const userSession = localStorage.getItem('userSession');
   const userRole = localStorage.getItem('userRole');
   
@@ -564,8 +141,6 @@ body {
     const now = new Date();
     const hoursDiff = (now - loginTime) / (1000 * 60 * 60);
     
-    console.log("Hours since login:", hoursDiff);
-    
     // Session expired setelah 8 jam
     if (hoursDiff > 8) {
       console.log("Session expired");
@@ -584,57 +159,31 @@ body {
         'PENGURUS': 'dashboard_pengurus.html',
         'ANGGOTA': 'dashboard_anggota.html'
       }[session.role];
-      
-      if (roleRedirect) {
-        window.location.replace(roleRedirect);
-      } else {
-        window.location.replace('login.html');
-      }
+      window.location.replace(roleRedirect || 'login.html');
       return;
     }
     
-    // Tampilkan nama user di navbar
-    document.addEventListener('DOMContentLoaded', () => {
-      const userNameSpan = document.getElementById('userNameDisplay');
-      if (userNameSpan) {
-        userNameSpan.innerHTML = `<i class="fas fa-crown"></i> ${session.nama || session.email}`;
-      }
-    });
+    // Tampilkan nama user
+    const userNameSpan = document.getElementById('userNameDisplay');
+    if (userNameSpan) {
+      userNameSpan.innerHTML = `<i class="fas fa-crown"></i> ${session.nama || session.email}`;
+    }
     
-    console.log("Session valid for Ketua, dashboard loaded");
+    console.log("Session valid for Ketua");
     
   } catch(e) {
     console.error("Session validation error:", e);
     localStorage.clear();
-    sessionStorage.clear();
     window.location.replace('login.html');
   }
 })();
 
-// ========== FUNGSI LOGOUT ==========
+// Fungsi Logout
 window.logout = function() {
-  console.log("Logging out from Ketua dashboard...");
-  try {
-    // Hapus semua data dari localStorage
-    localStorage.removeItem('userSession');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('userName');
-    localStorage.clear();
-    
-    // Hapus sessionStorage
-    sessionStorage.clear();
-    
-    // Hapus cookies
-    document.cookie.split(";").forEach(function(c) {
-      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-    });
-    
-    // Redirect ke login
-    window.location.replace('login.html');
-  } catch(e) {
-    console.error("Logout error:", e);
-    window.location.replace('login.html');
-  }
+  console.log("Logging out...");
+  localStorage.clear();
+  sessionStorage.clear();
+  window.location.replace('login.html');
 };
 </script>
 
@@ -648,30 +197,13 @@ window.logout = function() {
 
 <div class="sidebar">
   <div class="sidebar-logo">
-    <img id="sidebarLogo" src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="Logo" onerror="this.src='https://placehold.co/200x200?text=Koperasi'">
+    <img src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="Logo" onerror="this.src='https://placehold.co/200x200'">
     <h4>Koperasi Taruna</h4>
   </div>
-  <button onclick="show('stat')" id="btnStat">
-    <i class="fas fa-chart-line"></i> <span>Statistik</span>
-  </button>
-  <button onclick="show('barang')" id="btnBarang">
-    <i class="fas fa-box"></i> <span>Kelola Barang</span>
-  </button>
-  <button onclick="show('jasa')" id="btnJasa">
-    <i class="fas fa-briefcase"></i> <span>Kelola Jasa</span>
-  </button>
-  <button onclick="show('approval')" id="btnApproval">
-    <i class="fas fa-user-check"></i> <span>Approval Anggota</span>
-  </button>
-  <button onclick="show('laporan')" id="btnLaporan">
-    <i class="fas fa-file-alt"></i> <span>Laporan Keuangan</span>
-  </button>
-  <button onclick="show('proposal')" id="btnProposal">
-    <i class="fas fa-file-signature"></i> <span>Proposal & TTD</span>
-  </button>
-  <button onclick="show('users')" id="btnUsers">
-    <i class="fas fa-users-cog"></i> <span>Manajemen User</span>
-  </button>
+  <button onclick="show('stat')" id="btnStat"><i class="fas fa-chart-line"></i> <span>Statistik</span></button>
+  <button onclick="show('barang')" id="btnBarang"><i class="fas fa-box"></i> <span>Kelola Barang</span></button>
+  <button onclick="show('jasa')" id="btnJasa"><i class="fas fa-briefcase"></i> <span>Kelola Jasa</span></button>
+  <button onclick="show('approval')" id="btnApproval"><i class="fas fa-user-check"></i> <span>Approval</span></button>
 </div>
 
 <div class="main">
@@ -679,39 +211,25 @@ window.logout = function() {
 <!-- STATISTIK -->
 <div id="stat" class="card">
   <h3><i class="fas fa-chart-simple"></i> Statistik Koperasi</h3>
-  <div class="stats-grid" id="statsGrid">
+  <div class="stats-grid">
     <div class="stat-card"><i class="fas fa-box"></i><div class="stat-number" id="totalBarang">0</div><div class="stat-label">Total Barang</div></div>
     <div class="stat-card"><i class="fas fa-briefcase"></i><div class="stat-number" id="totalJasa">0</div><div class="stat-label">Total Jasa</div></div>
     <div class="stat-card"><i class="fas fa-users"></i><div class="stat-number" id="totalAnggota">0</div><div class="stat-label">Anggota Aktif</div></div>
     <div class="stat-card"><i class="fas fa-user-tie"></i><div class="stat-number" id="totalPengurus">0</div><div class="stat-label">Pengurus</div></div>
-    <div class="stat-card"><i class="fas fa-hand-holding-usd"></i><div class="stat-number" id="totalSimpanan">Rp 0</div><div class="stat-label">Total Simpanan</div></div>
-    <div class="stat-card"><i class="fas fa-chart-line"></i><div class="stat-number" id="totalSHU">Rp 0</div><div class="stat-label">SHU Tahun Ini</div></div>
   </div>
-  <div class="chart-container">
-    <canvas id="chart"></canvas>
-  </div>
+  <div class="chart-container"><canvas id="chart"></canvas></div>
 </div>
 
 <!-- BARANG -->
 <div id="barang" class="card" style="display:none">
   <h3><i class="fas fa-plus-circle"></i> Tambah Barang</h3>
   <div class="form-row">
-    <div class="form-group">
-      <label><i class="fas fa-tag"></i> Nama Barang</label>
-      <input id="namaBarang" placeholder="Contoh: Beras 5kg">
-    </div>
-    <div class="form-group">
-      <label><i class="fas fa-rupiah-sign"></i> Harga</label>
-      <input id="hargaBarang" placeholder="Rp 50.000">
-    </div>
+    <div class="form-group"><label>Nama Barang</label><input id="namaBarang" placeholder="Nama barang"></div>
+    <div class="form-group"><label>Harga</label><input id="hargaBarang" placeholder="Harga"></div>
   </div>
-  <div class="form-group">
-    <label><i class="fas fa-image"></i> URL Gambar Barang</label>
-    <input type="url" id="gambarBarangUrl" placeholder="https://example.com/gambar.jpg">
-    <div class="image-url-preview" id="previewContainerBarang"><img id="imagePreviewBarang" src=""></div>
-  </div>
+  <div class="form-group"><label>URL Gambar</label><input id="gambarBarangUrl" placeholder="https://..."></div>
   <button class="btn-simpan" onclick="tambahBarang()"><i class="fas fa-save"></i> Simpan Barang</button>
-  <h4 style="margin-top: 30px;"><i class="fas fa-list"></i> Daftar Barang</h4>
+  <h4>Daftar Barang</h4>
   <div id="listBarang" class="grid"></div>
 </div>
 
@@ -719,22 +237,12 @@ window.logout = function() {
 <div id="jasa" class="card" style="display:none">
   <h3><i class="fas fa-plus-circle"></i> Tambah Jasa</h3>
   <div class="form-row">
-    <div class="form-group">
-      <label><i class="fas fa-tag"></i> Nama Jasa</label>
-      <input id="namaJasa" placeholder="Contoh: Service AC">
-    </div>
-    <div class="form-group">
-      <label><i class="fas fa-rupiah-sign"></i> Harga</label>
-      <input id="hargaJasa" placeholder="Rp 150.000">
-    </div>
+    <div class="form-group"><label>Nama Jasa</label><input id="namaJasa" placeholder="Nama jasa"></div>
+    <div class="form-group"><label>Harga</label><input id="hargaJasa" placeholder="Harga"></div>
   </div>
-  <div class="form-group">
-    <label><i class="fas fa-image"></i> URL Gambar Jasa</label>
-    <input type="url" id="gambarJasaUrl" placeholder="https://example.com/gambar.jpg">
-    <div class="image-url-preview" id="previewContainerJasa"><img id="imagePreviewJasa" src=""></div>
-  </div>
+  <div class="form-group"><label>URL Gambar</label><input id="gambarJasaUrl" placeholder="https://..."></div>
   <button class="btn-simpan" onclick="tambahJasa()"><i class="fas fa-save"></i> Simpan Jasa</button>
-  <h4 style="margin-top: 30px;"><i class="fas fa-list"></i> Daftar Jasa</h4>
+  <h4>Daftar Jasa</h4>
   <div id="listJasa" class="grid"></div>
 </div>
 
@@ -742,52 +250,21 @@ window.logout = function() {
 <div id="approval" class="card" style="display:none">
   <h3><i class="fas fa-user-check"></i> Approval Pendaftaran</h3>
   <select id="filterStatus" class="filter-select" onchange="loadApproval()">
-    <option value="all">📋 Semua Status</option>
-    <option value="pending">⏳ Pending</option>
-    <option value="approved">✅ Approved</option>
-    <option value="ditolak">❌ Ditolak</option>
+    <option value="all">Semua Status</option>
+    <option value="pending">Pending</option>
+    <option value="approved">Approved</option>
   </select>
-  <h4><i class="fas fa-user-tie"></i> Pengurus</h4>
+  <h4>Pengurus</h4>
   <div id="listPengurus"></div>
-  <h4><i class="fas fa-users"></i> Anggota</h4>
+  <h4>Anggota</h4>
   <div id="listAnggota"></div>
-</div>
-
-<!-- LAPORAN KEUANGAN -->
-<div id="laporan" class="card" style="display:none">
-  <h3><i class="fas fa-file-alt"></i> Laporan Keuangan Koperasi</h3>
-  <div class="form-row">
-    <div class="form-group"><label><i class="fas fa-calendar"></i> Periode</label><select id="periodeLaporan"><option value="2024">2024</option><option value="2025">2025</option></select></div>
-    <div class="form-group"><label><i class="fas fa-chart-pie"></i> Jenis Laporan</label><select id="jenisLaporan"><option value="shu">Laporan SHU</option><option value="simpanan">Laporan Simpanan</option><option value="pinjaman">Laporan Pinjaman</option></select></div>
-  </div>
-  <button class="btn-simpan" onclick="generateLaporan()"><i class="fas fa-print"></i> Cetak Laporan</button>
-  <div id="laporanContent" style="margin-top: 20px; padding: 20px; background: #f8fafc; border-radius: 16px;"></div>
-</div>
-
-<!-- PROPOSAL & TANDA TANGAN DIGITAL -->
-<div id="proposal" class="card" style="display:none">
-  <h3><i class="fas fa-file-signature"></i> Proposal & Tanda Tangan Digital</h3>
-  <div class="signature-area">
-    <h4>Tanda Tangan Digital Ketua</h4>
-    <div class="signature-qr" id="ketuaQR"></div>
-    <p><i class="fas fa-check-circle" style="color:#10b981"></i> QR Code ini adalah bukti keabsahan dokumen resmi koperasi</p>
-    <button class="btn-simpan" onclick="window.open('proposal.html', '_blank')"><i class="fas fa-file-pdf"></i> Buat Proposal Baru</button>
-  </div>
-</div>
-
-<!-- MANAJEMEN USER -->
-<div id="users" class="card" style="display:none">
-  <h3><i class="fas fa-users-cog"></i> Manajemen User</h3>
-  <button class="btn-simpan" onclick="window.location.href='users.html'"><i class="fas fa-user-plus"></i> Kelola User</button>
-  <div id="userList" style="margin-top: 20px;"></div>
 </div>
 
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const config = {
   apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
@@ -796,107 +273,21 @@ const config = {
 };
 
 const app = initializeApp(config);
-const auth = getAuth(app);
 const db = getFirestore(app);
-
-let currentUser = null;
-
-// ========== CEK SESSION DARI FIRESTORE ==========
-onAuthStateChanged(auth, async (u) => {
-  console.log("onAuthStateChanged triggered, user:", u?.email);
-  
-  if (!u) {
-    console.log("No Firebase user, redirecting to login");
-    window.location.replace("login.html");
-    return;
-  }
-  
-  try {
-    const userQuery = query(collection(db, "users"), where("email", "==", u.email));
-    const userSnap = await getDocs(userQuery);
-    
-    if (userSnap.empty) {
-      console.log("User not found in Firestore");
-      await signOut(auth);
-      localStorage.clear();
-      window.location.replace("login.html");
-      return;
-    }
-    
-    const userData = userSnap.docs[0].data();
-    currentUser = userData;
-    console.log("User data:", userData);
-    
-    if (userData.status !== 'active') {
-      console.log("User status not active:", userData.status);
-      await signOut(auth);
-      localStorage.clear();
-      alert('Akun Anda tidak aktif. Hubungi admin.');
-      window.location.replace("login.html");
-      return;
-    }
-    
-    if (userData.role !== 'KETUA') {
-      console.log("Role mismatch! Expected KETUA, got", userData.role);
-      await signOut(auth);
-      localStorage.clear();
-      alert('Akses ditolak! Anda bukan Ketua Koperasi.');
-      window.location.replace("login.html");
-      return;
-    }
-    
-    const userNameSpan = document.getElementById('userNameDisplay');
-    if (userNameSpan && userNameSpan.innerHTML.includes('Loading')) {
-      userNameSpan.innerHTML = `<i class="fas fa-crown"></i> ${userData.nama || userData.email}`;
-    }
-    
-    console.log("User validated, loading data...");
-    loadAll();
-    
-  } catch (error) {
-    console.error("Auth state error:", error);
-    window.location.replace("login.html");
-  }
-});
 
 // Navigasi
 window.show = (id) => {
-  ["stat", "barang", "jasa", "approval", "laporan", "proposal", "users"].forEach(s => {
+  ["stat", "barang", "jasa", "approval"].forEach(s => {
     const el = document.getElementById(s);
     if (el) el.style.display = "none";
   });
   document.getElementById(id).style.display = "block";
-  
   document.querySelectorAll('.sidebar button').forEach(btn => btn.classList.remove('active'));
   if (id === 'stat') document.getElementById('btnStat')?.classList.add('active');
   if (id === 'barang') document.getElementById('btnBarang')?.classList.add('active');
   if (id === 'jasa') document.getElementById('btnJasa')?.classList.add('active');
   if (id === 'approval') document.getElementById('btnApproval')?.classList.add('active');
-  if (id === 'laporan') document.getElementById('btnLaporan')?.classList.add('active');
-  if (id === 'proposal') document.getElementById('btnProposal')?.classList.add('active');
-  if (id === 'users') document.getElementById('btnUsers')?.classList.add('active');
 }
-
-// Preview Gambar
-function setupPreview(inputId, previewId, imgId) {
-  const input = document.getElementById(inputId);
-  const container = document.getElementById(previewId);
-  const img = document.getElementById(imgId);
-  if (input) {
-    input.addEventListener('input', (e) => {
-      const url = e.target.value;
-      if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
-        img.src = url;
-        container.style.display = 'block';
-        img.onerror = () => { container.style.display = 'none'; };
-      } else {
-        container.style.display = 'none';
-      }
-    });
-  }
-}
-setupPreview('gambarBarangUrl', 'previewContainerBarang', 'imagePreviewBarang');
-setupPreview('gambarJasaUrl', 'previewContainerJasa', 'imagePreviewJasa');
 
 // CRUD Barang
 window.tambahBarang = async () => {
@@ -909,7 +300,6 @@ window.tambahBarang = async () => {
   document.getElementById("namaBarang").value = "";
   document.getElementById("hargaBarang").value = "";
   document.getElementById("gambarBarangUrl").value = "";
-  document.getElementById("previewContainerBarang").style.display = "none";
   loadAll();
 }
 
@@ -921,25 +311,9 @@ async function loadBarang() {
     const b = d.data();
     list.innerHTML += `<div class="item-card">
       ${b.gambar ? `<img src="${b.gambar}" onerror="this.src='https://placehold.co/400x300'">` : '<div style="height:140px;background:#e2e8f0;display:flex;align-items:center;justify-content:center"><i class="fas fa-image" style="font-size:40px"></i></div>'}
-      <b contenteditable="true" onblur="edit('${d.id}','barang','nama',this.innerText)">${escapeHtml(b.nama)}</b>
-      <p contenteditable="true" onblur="edit('${d.id}','barang','harga',this.innerText)">${escapeHtml(b.harga)}</p>
-      <button class="btn-hapus" onclick="hapus('barang','${d.id}')"><i class="fas fa-trash"></i> Hapus</button>
-    </div>`;
-  });
-  return snap.size;
-}
-
-async function loadJasa() {
-  const snap = await getDocs(collection(db, "jasa"));
-  const list = document.getElementById("listJasa");
-  list.innerHTML = "";
-  snap.forEach(d => {
-    const j = d.data();
-    list.innerHTML += `<div class="item-card">
-      ${j.gambar ? `<img src="${j.gambar}" onerror="this.src='https://placehold.co/400x300'">` : '<div style="height:140px;background:#e2e8f0;display:flex;align-items:center;justify-content:center"><i class="fas fa-briefcase" style="font-size:40px"></i></div>'}
-      <b contenteditable="true" onblur="edit('${d.id}','jasa','nama',this.innerText)">${escapeHtml(j.nama)}</b>
-      <p contenteditable="true" onblur="edit('${d.id}','jasa','harga',this.innerText)">${escapeHtml(j.harga)}</p>
-      <button class="btn-hapus" onclick="hapus('jasa','${d.id}')"><i class="fas fa-trash"></i> Hapus</button>
+      <b>${escapeHtml(b.nama)}</b>
+      <p>${escapeHtml(b.harga)}</p>
+      <button class="btn-hapus" onclick="hapus('barang','${d.id}')">Hapus</button>
     </div>`;
   });
   return snap.size;
@@ -955,12 +329,23 @@ window.tambahJasa = async () => {
   document.getElementById("namaJasa").value = "";
   document.getElementById("hargaJasa").value = "";
   document.getElementById("gambarJasaUrl").value = "";
-  document.getElementById("previewContainerJasa").style.display = "none";
   loadAll();
 }
 
-window.edit = async (id, col, field, value) => {
-  await updateDoc(doc(db, col, id), { [field]: value });
+async function loadJasa() {
+  const snap = await getDocs(collection(db, "jasa"));
+  const list = document.getElementById("listJasa");
+  list.innerHTML = "";
+  snap.forEach(d => {
+    const j = d.data();
+    list.innerHTML += `<div class="item-card">
+      ${j.gambar ? `<img src="${j.gambar}" onerror="this.src='https://placehold.co/400x300'">` : '<div style="height:140px;background:#e2e8f0;display:flex;align-items:center;justify-content:center"><i class="fas fa-briefcase" style="font-size:40px"></i></div>'}
+      <b>${escapeHtml(j.nama)}</b>
+      <p>${escapeHtml(j.harga)}</p>
+      <button class="btn-hapus" onclick="hapus('jasa','${d.id}')">Hapus</button>
+    </div>`;
+  });
+  return snap.size;
 }
 
 window.hapus = async (col, id) => {
@@ -980,7 +365,7 @@ window.loadApproval = async () => {
     const p = d.data();
     if (status === "all" || p.status === status) {
       listPengurus.innerHTML += `<div class="approval-card ${p.status || 'pending'}">
-        <div class="nama"><i class="fas fa-user-tie"></i> ${escapeHtml(p.nama || '-')}</div>
+        <div class="nama">${escapeHtml(p.nama || '-')}</div>
         <div class="detail">Jabatan: ${escapeHtml(p.jabatan || '-')} | Email: ${escapeHtml(p.email || '-')}</div>
         <div class="status status-${p.status || 'pending'}">${p.status || 'pending'}</div>
         <div><button class="btn-approve" onclick="approve('pengurus','${d.id}')">Approve</button>
@@ -996,7 +381,7 @@ window.loadApproval = async () => {
     const a = d.data();
     if (status === "all" || a.status === status) {
       listAnggota.innerHTML += `<div class="approval-card ${a.status || 'pending'}">
-        <div class="nama"><i class="fas fa-user"></i> ${escapeHtml(a.nama || '-')}</div>
+        <div class="nama">${escapeHtml(a.nama || '-')}</div>
         <div class="detail">WA: ${escapeHtml(a.wa || '-')} | Email: ${escapeHtml(a.email || '-')}</div>
         <div class="status status-${a.status || 'pending'}">${a.status || 'pending'}</div>
         <div><button class="btn-approve" onclick="approve('anggota','${d.id}')">Approve</button>
@@ -1018,14 +403,7 @@ window.reject = async (col, id) => {
   loadAll();
 }
 
-// Laporan
-window.generateLaporan = () => {
-  const periode = document.getElementById('periodeLaporan').value;
-  const jenis = document.getElementById('jenisLaporan').value;
-  document.getElementById('laporanContent').innerHTML = `<div style="text-align:center;padding:40px"><i class="fas fa-file-pdf fa-3x" style="color:#2563eb"></i><p>Laporan ${jenis} periode ${periode} sedang diproses.<br>Fitur export PDF akan segera hadir.</p></div>`;
-}
-
-// Chart & Stats
+// Chart
 let chart;
 async function loadChart() {
   const b = (await getDocs(collection(db, "barang"))).size;
@@ -1037,14 +415,14 @@ async function loadChart() {
   document.getElementById('totalJasa').innerText = j;
   document.getElementById('totalAnggota').innerText = a;
   document.getElementById('totalPengurus').innerText = p;
-  document.getElementById('totalSimpanan').innerHTML = 'Rp 125.500.000';
-  document.getElementById('totalSHU').innerHTML = 'Rp 48.250.000';
   
   if (chart) chart.destroy();
   const ctx = document.getElementById("chart").getContext("2d");
   chart = new Chart(ctx, {
     type: "bar",
-    data: { labels: ["Barang", "Jasa", "Anggota", "Pengurus"], datasets: [{ label: "Total Data", data: [b, j, a, p], backgroundColor: ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6"], borderRadius: 10 }] },
+    data: { labels: ["Barang", "Jasa", "Anggota", "Pengurus"], 
+            datasets: [{ label: "Total Data", data: [b, j, a, p], 
+                         backgroundColor: ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6"], borderRadius: 10 }] },
     options: { responsive: true, maintainAspectRatio: true }
   });
 }
@@ -1059,18 +437,6 @@ async function loadAll() {
 }
 
 loadAll();
-
-// QR Code untuk Tanda Tangan Digital
-setTimeout(() => {
-  const ketuaQR = document.getElementById('ketuaQR');
-  if (ketuaQR) {
-    ketuaQR.innerHTML = `<div style="width:120px;height:120px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;border-radius:12px;flex-direction:column">
-      <i class="fas fa-qrcode" style="font-size:50px;color:#2563eb"></i>
-      <span style="font-size:10px">Tanda Tangan Digital</span>
-    </div>`;
-  }
-}, 1000);
 </script>
-
 </body>
 </html>
