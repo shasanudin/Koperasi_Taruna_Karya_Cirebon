@@ -252,6 +252,119 @@ body {
   min-height: 80px;
 }
 
+/* Role & Jabatan Group */
+.role-group {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
+}
+
+.role-group label.role-label {
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+.role-options {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.role-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 40px;
+  background: white;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.role-option input {
+  width: auto;
+  margin: 0;
+  accent-color: #2563eb;
+}
+
+.role-option.selected {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.role-option i {
+  font-size: 1.2rem;
+  color: #2563eb;
+}
+
+/* Jabatan Group (hidden by default) */
+.jabatan-group {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
+  display: none;
+}
+
+.jabatan-group.show {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.jabatan-group label {
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+.jabatan-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.jabatan-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.jabatan-option input {
+  width: auto;
+  margin: 0;
+  accent-color: #2563eb;
+}
+
+.jabatan-option.selected {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.jabatan-option i {
+  font-size: 1.1rem;
+  color: #2563eb;
+  width: 24px;
+}
+
 /* File upload styling */
 .file-upload {
   position: relative;
@@ -310,13 +423,6 @@ body {
   display: none;
 }
 
-/* Row untuk role & jabatan */
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
 /* Tombol submit */
 .btn-submit {
   width: 100%;
@@ -343,6 +449,12 @@ body {
 
 .btn-submit:active {
   transform: translateY(0);
+}
+
+.btn-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* Info tambahan */
@@ -444,9 +556,8 @@ footer {
     transform: rotate(-45deg) translate(6px, -6px);
   }
   
-  .form-row {
+  .jabatan-options {
     grid-template-columns: 1fr;
-    gap: 0;
   }
   
   .card-header h2 {
@@ -465,6 +576,11 @@ footer {
   
   .card-body {
     padding: 20px;
+  }
+  
+  .role-options {
+    flex-direction: column;
+    gap: 10px;
   }
 }
 </style>
@@ -532,6 +648,50 @@ footer {
           <textarea id="alamat" placeholder="Masukkan alamat lengkap"></textarea>
         </div>
 
+        <!-- Role Selection - Dipertegas -->
+        <div class="role-group">
+          <label class="role-label"><i class="fas fa-user-tag"></i> Pilih Status Keanggotaan</label>
+          <div class="role-options">
+            <label class="role-option" id="roleAnggotaLabel">
+              <input type="radio" name="role" value="anggota" checked>
+              <i class="fas fa-user"></i>
+              <span>Anggota Biasa</span>
+            </label>
+            <label class="role-option" id="rolePengurusLabel">
+              <input type="radio" name="role" value="pengurus">
+              <i class="fas fa-user-tie"></i>
+              <span>Pengurus Koperasi</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Jabatan Selection (Hanya muncul jika pilih Pengurus) -->
+        <div class="jabatan-group" id="jabatanGroup">
+          <label><i class="fas fa-briefcase"></i> Pilih Jabatan Pengurus</label>
+          <div class="jabatan-options">
+            <label class="jabatan-option">
+              <input type="radio" name="jabatan" value="Ketua">
+              <i class="fas fa-crown"></i>
+              <span>Ketua</span>
+            </label>
+            <label class="jabatan-option">
+              <input type="radio" name="jabatan" value="Sekretaris">
+              <i class="fas fa-file-alt"></i>
+              <span>Sekretaris</span>
+            </label>
+            <label class="jabatan-option">
+              <input type="radio" name="jabatan" value="Bendahara">
+              <i class="fas fa-calculator"></i>
+              <span>Bendahara</span>
+            </label>
+            <label class="jabatan-option">
+              <input type="radio" name="jabatan" value="Pengurus Lainnya">
+              <i class="fas fa-users"></i>
+              <span>Pengurus Lainnya</span>
+            </label>
+          </div>
+        </div>
+
         <div class="form-group">
           <label><i class="fas fa-camera"></i> Foto Diri</label>
           <div class="file-upload">
@@ -543,27 +703,6 @@ footer {
           </div>
           <div class="preview-container">
             <img id="preview" alt="Preview Foto">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label><i class="fas fa-tag"></i> Role</label>
-            <select id="role">
-              <option value="anggota">Anggota</option>
-              <option value="pengurus">Pengurus</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label><i class="fas fa-briefcase"></i> Jabatan</label>
-            <select id="jabatan">
-              <option value="">- Pilih Jabatan -</option>
-              <option>Ketua</option>
-              <option>Sekretaris</option>
-              <option>Bendahara</option>
-              <option>Anggota Pengurus</option>
-            </select>
           </div>
         </div>
 
@@ -607,10 +746,16 @@ const BRANCH = "main";
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* PREVIEW FOTO */
+// DOM Elements
 const fotoInput = document.getElementById('foto');
 const preview = document.getElementById('preview');
+const roleRadios = document.querySelectorAll('input[name="role"]');
+const jabatanGroup = document.getElementById('jabatanGroup');
+const jabatanRadios = document.querySelectorAll('input[name="jabatan"]');
+const roleOptions = document.querySelectorAll('.role-option');
+const jabatanOptions = document.querySelectorAll('.jabatan-option');
 
+// Preview Foto
 fotoInput.addEventListener("change", () => {
   if (fotoInput.files && fotoInput.files[0]) {
     const reader = new FileReader();
@@ -622,7 +767,61 @@ fotoInput.addEventListener("change", () => {
   }
 });
 
-/* UPLOAD KE GITHUB */
+// Toggle Jabatan Group based on Role Selection
+function toggleJabatanGroup() {
+  const selectedRole = document.querySelector('input[name="role"]:checked').value;
+  if (selectedRole === 'pengurus') {
+    jabatanGroup.classList.add('show');
+    // Set required attribute for jabatan
+    jabatanRadios.forEach(radio => radio.required = true);
+  } else {
+    jabatanGroup.classList.remove('show');
+    // Remove required attribute for jabatan
+    jabatanRadios.forEach(radio => radio.required = false);
+    // Uncheck all jabatan radios
+    jabatanRadios.forEach(radio => radio.checked = false);
+  }
+}
+
+// Update role option styling
+function updateRoleStyle() {
+  roleOptions.forEach(opt => opt.classList.remove('selected'));
+  const selectedValue = document.querySelector('input[name="role"]:checked').value;
+  if (selectedValue === 'anggota') {
+    document.getElementById('roleAnggotaLabel').classList.add('selected');
+  } else {
+    document.getElementById('rolePengurusLabel').classList.add('selected');
+  }
+}
+
+// Update jabatan option styling
+function updateJabatanStyle() {
+  jabatanOptions.forEach(opt => opt.classList.remove('selected'));
+  const selectedJabatan = document.querySelector('input[name="jabatan"]:checked');
+  if (selectedJabatan) {
+    const parentLabel = selectedJabatan.closest('.jabatan-option');
+    if (parentLabel) parentLabel.classList.add('selected');
+  }
+}
+
+// Add event listeners for role radio buttons
+roleRadios.forEach(radio => {
+  radio.addEventListener('change', () => {
+    toggleJabatanGroup();
+    updateRoleStyle();
+  });
+});
+
+// Add event listeners for jabatan radio buttons
+jabatanRadios.forEach(radio => {
+  radio.addEventListener('change', updateJabatanStyle);
+});
+
+// Initial setup
+toggleJabatanGroup();
+updateRoleStyle();
+
+// Upload ke GitHub
 async function uploadToGitHub(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -661,7 +860,7 @@ async function uploadToGitHub(file) {
   });
 }
 
-/* SUBMIT FORM */
+// Submit Form
 const form = document.getElementById('form');
 
 form.addEventListener("submit", async (e) => {
@@ -678,28 +877,46 @@ form.addEventListener("submit", async (e) => {
     
     const fotoURL = await uploadToGitHub(file);
     
+    const selectedRole = document.querySelector('input[name="role"]:checked').value;
+    const selectedJabatan = document.querySelector('input[name="jabatan"]:checked')?.value || null;
+    
+    // Validasi: Jika role Pengurus, jabatan harus dipilih
+    if (selectedRole === 'pengurus' && !selectedJabatan) {
+      throw new Error("Silakan pilih jabatan untuk Pengurus");
+    }
+    
     const data = {
       nama: document.getElementById('nama').value,
       email: document.getElementById('email').value,
       wa: document.getElementById('wa').value,
       alamat: document.getElementById('alamat').value,
-      role: document.getElementById('role').value,
-      jabatan: document.getElementById('jabatan').value || null,
+      role: selectedRole,
+      jabatan: selectedJabatan,
       foto: fotoURL,
       status: "pending",
-      createdAt: new Date()
+      createdAt: new Date().toISOString()
     };
     
     if (data.role === "anggota") {
+      // Generate nomor anggota otomatis
+      const anggotaSnapshot = await getDocs(collection(db, "anggota"));
+      const jumlahAnggota = anggotaSnapshot.size;
+      data.no_anggota = `KTK-${String(jumlahAnggota + 1).padStart(4, '0')}`;
       await addDoc(collection(db, "anggota"), data);
+      alert(`🎉 Pendaftaran sebagai Anggota berhasil!\nNomor Anggota: ${data.no_anggota}\n\nAdmin akan segera memproses data Anda.`);
     } else {
       await addDoc(collection(db, "pengurus"), data);
+      alert("🎉 Pendaftaran sebagai Pengurus berhasil! Admin akan segera memproses data Anda.");
     }
     
-    alert("🎉 Pendaftaran berhasil! Admin akan segera memproses data Anda.");
     form.reset();
     preview.style.display = "none";
     preview.src = "";
+    
+    // Reset role to default (Anggota)
+    document.querySelector('input[name="role"][value="anggota"]').checked = true;
+    toggleJabatanGroup();
+    updateRoleStyle();
     
   } catch (err) {
     alert("❌ Error: " + err.message);
@@ -710,7 +927,7 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-/* NAVBAR MOBILE MENU */
+// NAVBAR MOBILE MENU
 const hamburger = document.getElementById('hamburger');
 const menu = document.getElementById('menu');
 const overlay = document.getElementById('overlay');
