@@ -1,153 +1,718 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>Marketplace Jasa</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Marketplace Jasa | Koperasi Taruna Karya Cirebon</title>
+  <!-- Font Awesome 6 (gratis, ikon modern) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts: Inter + Poppins untuk kesan segar & profesional -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<style>
-body{margin:0;font-family:Arial;background:#f1f5f9}
-.container{padding:20px}
-h2{margin-bottom:10px}
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      scroll-behavior: smooth;
+      line-height: 1.5;
+    }
 
-.search-box{margin-bottom:20px}
-.search-box input{
-  width:100%;padding:10px;border-radius:8px;border:1px solid #ccc
-}
+    /* Navbar styling premium - konsisten dengan index */
+    .navbar {
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+      padding: 16px 32px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1px solid #e2e8f0;
+    }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-  gap:20px
-}
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-.card{
-  background:white;border-radius:10px;padding:15px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.1);
-  transition:0.3s
-}
-.card:hover{transform:translateY(-5px)}
+    .logo-img {
+      height: 48px;
+      width: auto;
+      border-radius: 14px;
+      object-fit: contain;
+      background: #ffffff;
+      padding: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      transition: transform 0.2s ease;
+    }
 
-.card img{
-  width:100%;height:150px;object-fit:cover;border-radius:8px
-}
+    .logo-img:hover {
+      transform: scale(1.03);
+    }
 
-.price{color:#16a34a;font-weight:bold}
-.desc{font-size:14px;color:#555}
+    .brand-text {
+      font-weight: 800;
+      font-size: 1.35rem;
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+    }
 
-button{
-  margin-top:10px;width:100%;padding:10px;
-  border:none;border-radius:6px;background:#25D366;color:white;cursor:pointer
-}
-</style>
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 600;
+      color: #1e293b;
+      transition: 0.2s;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-links a i {
+      font-size: 0.9rem;
+      color: #3b82f6;
+    }
+
+    .nav-links a:hover {
+      color: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline-light {
+      background: white;
+      border: 1.5px solid #2563eb;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-weight: 700;
+      color: #2563eb;
+      transition: all 0.25s;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-outline-light:hover {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+
+    /* Container utama */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    /* Header section dengan gradient */
+    .page-header {
+      background: linear-gradient(115deg, #eef2ff, #ffffff);
+      border-radius: 28px;
+      padding: 40px 32px;
+      margin-bottom: 32px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+      border: 1px solid #e2edff;
+    }
+
+    .page-header h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 12px;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+
+    .page-header p {
+      color: #475569;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Search box modern */
+    .search-wrapper {
+      position: relative;
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+
+    .search-wrapper i {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 1.1rem;
+    }
+
+    #search {
+      width: 100%;
+      padding: 16px 20px 16px 50px;
+      border-radius: 60px;
+      border: 2px solid #e2e8f0;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      background: white;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+
+    #search:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 8px 24px rgba(37,99,235,0.12);
+    }
+
+    #search::placeholder {
+      color: #94a3b8;
+    }
+
+    /* Grid card modern */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 28px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 12px 28px -8px rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.04);
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 28px 36px -12px rgba(37,99,235,0.18);
+      border-color: #d9e6ff;
+    }
+
+    .card-img-container {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      background: #f1f5f9;
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .card:hover img {
+      transform: scale(1.05);
+    }
+
+    .card-body {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #0f172a;
+    }
+
+    .card .category-badge {
+      display: inline-block;
+      background: #eef2ff;
+      color: #2563eb;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      width: fit-content;
+    }
+
+    .card .desc {
+      font-size: 0.9rem;
+      color: #64748b;
+      line-height: 1.6;
+      margin-bottom: 16px;
+      flex: 1;
+    }
+
+    .card .price {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #16a34a;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .card .price i {
+      font-size: 1rem;
+      color: #16a34a;
+    }
+
+    .btn-wa {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 40px;
+      background: #25D366;
+      color: white;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s;
+      font-family: 'Inter', sans-serif;
+      box-shadow: 0 6px 16px rgba(37,211,102,0.2);
+    }
+
+    .btn-wa:hover {
+      background: #1ea84c;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(37,211,102,0.3);
+    }
+
+    .btn-wa i {
+      font-size: 1.2rem;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      grid-column: 1 / -1;
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      color: #cbd5e1;
+      margin-bottom: 16px;
+    }
+
+    .empty-state p {
+      color: #64748b;
+      font-size: 1.1rem;
+    }
+
+    /* Toast message */
+    .toast-message {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1e293b;
+      color: white;
+      padding: 14px 24px;
+      border-radius: 40px;
+      font-weight: 500;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.3s;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .toast-message.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Footer */
+    footer {
+      background: #0b1120;
+      color: #cbd5e1;
+      padding: 48px 24px 32px;
+      border-top-left-radius: 36px;
+      border-top-right-radius: 36px;
+      margin-top: 60px;
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    .footer-col h4 {
+      color: white;
+      margin-bottom: 18px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .footer-col p, .footer-col a {
+      color: #94a3b8;
+      text-decoration: none;
+      line-height: 1.8;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    .social-icons a {
+      background: #1e293b;
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 30px;
+      transition: 0.2s;
+      color: #cbd5e1;
+    }
+
+    .social-icons a:hover {
+      background: #2563eb;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 32px;
+      border-top: 1px solid #1e293b;
+      margin-top: 32px;
+      font-size: 0.85rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 680px) {
+      .navbar {
+        flex-direction: column;
+        align-items: center;
+        padding: 16px;
+      }
+      
+      .nav-links {
+        gap: 16px;
+      }
+      
+      .page-header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .container {
+        padding: 24px 16px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
+<!-- Navbar -->
 <div id="navbar"></div>
 
-<div class="container">
-  <h2>Marketplace Jasa</h2>
-
-  <div class="search-box">
-    <input type="text" id="search" placeholder="Cari jasa...">
-  </div>
-
-  <div class="grid" id="service-list"></div>
+<!-- Toast untuk feedback -->
+<div id="liveToast" class="toast-message">
+  <i class="fas fa-check-circle"></i> <span id="toastText"></span>
 </div>
 
+<!-- Konten Utama -->
+<div class="container">
+  <!-- Header Halaman -->
+  <div class="page-header">
+    <h1><i class="fas fa-briefcase" style="margin-right: 8px;"></i> Marketplace Jasa</h1>
+    <p>Temukan berbagai layanan profesional dari anggota koperasi kami. Semua jasa terverifikasi dan terpercaya.</p>
+  </div>
+
+  <!-- Search Box Modern -->
+  <div class="search-wrapper">
+    <i class="fas fa-search"></i>
+    <input type="text" id="search" placeholder="Cari jasa yang Anda butuhkan...">
+  </div>
+
+  <!-- Grid Jasa -->
+  <div class="grid" id="service-list">
+    <!-- Konten akan diisi oleh JavaScript -->
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-content">
+    <div class="footer-col">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+        <img src="https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png" alt="logo" style="height: 38px; width: auto; border-radius: 10px; background: white; padding: 3px;" onerror="this.src='https://placehold.co/200x200?text=Koperasi'">
+        <span style="font-weight: 800; font-size: 1.2rem; color:white;">Koperasi Taruna</span>
+      </div>
+      <p><i class="fas fa-map-marker-alt"></i> Jl. Fatahillah, Watubelah, Cirebon</p>
+      <p><i class="fas fa-envelope"></i> info@tarunakarya.cirebon.id</p>
+      <p><i class="fas fa-phone-alt"></i> (0231) 567890</p>
+    </div>
+    <div class="footer-col">
+      <h4>Tautan Cepat</h4>
+      <p><a href="index.html">Beranda</a></p>
+      <p><a href="barang.html">Marketplace Barang</a></p>
+      <p><a href="jasa.html">Marketplace Jasa</a></p>
+      <p><a href="join.html">Keanggotaan</a></p>
+    </div>
+    <div class="footer-col">
+      <h4>Layanan Anggota</h4>
+      <p><a href="#">Simpanan Sukarela</a></p>
+      <p><a href="#">Pinjaman Anggota</a></p>
+      <p><a href="#">Bantuan & FAQ</a></p>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-whatsapp"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="copyright">
+    <p>© 2026 Koperasi Taruna Karya Cirebon | Berbadan Hukum & Diawasi</p>
+    <p style="margin-top: 6px; font-size: 0.75rem;">Membangun kemandirian ekonomi berbasis gotong royong</p>
+  </div>
+</footer>
+
+<!-- Firebase SDK -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+  import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 
-/* ================= NAVBAR ================= */
-fetch('navbar.html')
-.then(res=>res.text())
-.then(data=>navbar.innerHTML=data);
+  /* ================= FIREBASE CONFIG ================= */
+  const firebaseConfig = {
+    apiKey: "AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
+    authDomain: "koperasi-taruna-karya-cirebon.firebaseapp.com",
+    projectId: "koperasi-taruna-karya-cirebon",
+  };
 
-/* ================= NOMOR WA ================= */
-const noWA = "6288214940995"; // GANTI
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
 
-/* ================= FIREBASE ================= */
-const config = {
-  apiKey:"AIzaSyCSnm-XNRBB1478FUbbL7OpmgX3FUpNtag",
-  authDomain:"koperasi-taruna-karya-cirebon.firebaseapp.com",
-  projectId:"koperasi-taruna-karya-cirebon",
-};
+  /* ================= NOMOR WHATSAPP ================= */
+  const noWA = "6288214940995"; // Ganti dengan nomor resmi koperasi
 
-const app = initializeApp(config);
-const db = getFirestore(app);
+  /* ================= TOAST FUNCTION ================= */
+  function showToast(message, isSuccess = true) {
+    const toast = document.getElementById('liveToast');
+    const toastText = document.getElementById('toastText');
+    const icon = toast.querySelector('i');
+    if (toast && toastText) {
+      toastText.textContent = message;
+      icon.className = isSuccess ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+  }
 
-/* ================= FIX GAMBAR ================= */
-function fixImage(url){
-  if(!url) return "https://via.placeholder.com/300";
+  /* ================= FIX GAMBAR ================= */
+  function fixImage(url) {
+    if (!url) return "https://placehold.co/400x300/e2e8f0/64748b?text=Belum+Ada+Gambar";
+    
+    return url
+      .replace("github.com", "raw.githubusercontent.com")
+      .replace("/blob/", "/");
+  }
 
-  return url
-    .replace("github.com","raw.githubusercontent.com")
-    .replace("/blob/","/");
-}
+  /* ================= NAVBAR SETUP ================= */
+  function setupNavbar(user = null) {
+    const navbarContainer = document.getElementById('navbar');
+    const logoUrl = "https://raw.githubusercontent.com/shasanudin/Koperasi_Taruna_Karya_Cirebon/main/images/logo/koperasi.png";
+    
+    let authLink = '';
+    if (user) {
+      authLink = `
+        <a href="#" id="logoutButton" class="btn-outline-light"><i class="fas fa-sign-out-alt"></i> Keluar</a>
+        <span style="font-weight:600; color:#1e3a8a; margin-left:8px;"><i class="fas fa-user-circle"></i> ${user.email || 'Anggota'}</span>
+      `;
+    } else {
+      authLink = `<a href="join.html" class="btn-outline-light"><i class="fas fa-sign-in-alt"></i> Login Anggota</a>`;
+    }
 
-/* ================= DATA ================= */
-let semuaJasa = [];
-const list = document.getElementById("service-list");
+    navbarContainer.innerHTML = `
+      <div class="navbar">
+        <div class="logo-area">
+          <a href="index.html" style="display:flex; align-items:center; gap:12px; text-decoration:none;">
+            <img class="logo-img" src="${logoUrl}" alt="Logo Koperasi" onerror="this.onerror=null; this.src='https://placehold.co/400x200?text=Koperasi';">
+            <span class="brand-text">Taruna Karya Cirebon</span>
+          </a>
+        </div>
+        <div class="nav-links">
+          <a href="index.html"><i class="fas fa-home"></i> Beranda</a>
+          <a href="jasa.html" style="color:#2563eb;"><i class="fas fa-briefcase"></i> Jasa</a>
+          <a href="barang.html"><i class="fas fa-store"></i> Barang</a>
+          <a href="join.html"><i class="fas fa-user-plus"></i> Keanggotaan</a>
+          ${authLink}
+        </div>
+      </div>
+    `;
 
-/* ================= REALTIME ================= */
-onSnapshot(collection(db,"jasa"), (snap)=>{
-  semuaJasa = [];
+    // Event listener untuk logout
+    const logoutBtn = document.getElementById('logoutButton');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        signOut(auth).then(() => {
+          showToast('Anda telah logout.');
+          setupNavbar(null);
+        }).catch((error) => {
+          showToast('Gagal logout: ' + error.message, false);
+        });
+      });
+    }
+  }
 
-  snap.forEach(doc=>{
-    const data = doc.data();
+  // Inisialisasi navbar
+  setupNavbar(null);
 
-    semuaJasa.push({
-      nama: data.nama,
-      harga: data.harga, // STRING (sesuai DB kamu)
-      deskripsi: data.deskripsi || "",
-      gambar: fixImage(data.gambar)
-    });
+  // Pantau status autentikasi
+  onAuthStateChanged(auth, (user) => {
+    setupNavbar(user);
   });
 
-  tampilkanJasa(semuaJasa);
-});
+  /* ================= DATA JASA ================= */
+  let semuaJasa = [];
+  const list = document.getElementById("service-list");
+  const searchInput = document.getElementById("search");
 
-/* ================= RENDER ================= */
-function tampilkanJasa(data){
-  list.innerHTML = "";
+  /* ================= REALTIME LISTENER ================= */
+  onSnapshot(collection(db, "jasa"), (snap) => {
+    semuaJasa = [];
 
-  data.forEach(j=>{
+    snap.forEach(doc => {
+      const data = doc.data();
 
-    const pesan = encodeURIComponent(
-`Halo, saya tertarik dengan jasa berikut:
+      semuaJasa.push({
+        id: doc.id,
+        nama: data.nama || 'Jasa Tanpa Nama',
+        harga: data.harga || 'Hubungi untuk harga',
+        deskripsi: data.deskripsi || 'Tidak ada deskripsi',
+        gambar: fixImage(data.gambar),
+        kategori: data.kategori || 'Umum'
+      });
+    });
 
-Nama: ${j.nama}
-Harga: ${j.harga}
-Deskripsi: ${j.deskripsi}`
-    );
-
-    list.innerHTML += `
-      <div class="card">
-        <img src="${j.gambar}" onerror="this.src='https://via.placeholder.com/300'">
-        <h3>${j.nama}</h3>
-        <p class="desc">${j.deskripsi}</p>
-        <p class="price">${j.harga}</p>
-
-        <a href="https://wa.me/${noWA}?text=${pesan}" target="_blank">
-          <button>Pesan via WhatsApp</button>
-        </a>
+    tampilkanJasa(semuaJasa);
+    
+    if (semuaJasa.length > 0) {
+      showToast(`Menampilkan ${semuaJasa.length} layanan jasa`);
+    }
+  }, (error) => {
+    console.error("Error mengambil data:", error);
+    showToast('Gagal memuat data jasa. Silakan coba lagi.', false);
+    list.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p>Gagal memuat data. Periksa koneksi Anda.</p>
       </div>
     `;
   });
-}
 
-/* ================= SEARCH ================= */
-search.addEventListener("input", function(){
-  const keyword = this.value.toLowerCase();
+  /* ================= RENDER JASA ================= */
+  function tampilkanJasa(data) {
+    list.innerHTML = "";
 
-  const hasil = semuaJasa.filter(j =>
-    j.nama.toLowerCase().includes(keyword)
-  );
+    if (data.length === 0) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-search"></i>
+          <p>Tidak ada jasa yang ditemukan.</p>
+        </div>
+      `;
+      return;
+    }
 
-  tampilkanJasa(hasil);
-});
+    data.forEach(j => {
+      const pesan = encodeURIComponent(
+        `Halo, saya tertarik dengan jasa berikut dari Koperasi Taruna Karya:\n\n📋 Nama Jasa: ${j.nama}\n💰 Harga: ${j.harga}\n📝 Deskripsi: ${j.deskripsi}\n\nMohon informasi lebih lanjut. Terima kasih.`
+      );
+
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="card-img-container">
+          <img src="${j.gambar}" alt="${j.nama}" onerror="this.src='https://placehold.co/400x300/e2e8f0/64748b?text=Gambar+Tidak+Tersedia'">
+        </div>
+        <div class="card-body">
+          ${j.kategori ? `<span class="category-badge"><i class="fas fa-tag"></i> ${j.kategori}</span>` : ''}
+          <h3>${j.nama}</h3>
+          <p class="desc">${j.deskripsi}</p>
+          <p class="price"><i class="fas fa-tag"></i> ${j.harga}</p>
+          <a href="https://wa.me/${noWA}?text=${pesan}" target="_blank" class="btn-wa">
+            <i class="fab fa-whatsapp"></i> Pesan via WhatsApp
+          </a>
+        </div>
+      `;
+      
+      list.appendChild(card);
+    });
+  }
+
+  /* ================= SEARCH FUNCTIONALITY ================= */
+  searchInput.addEventListener("input", function() {
+    const keyword = this.value.toLowerCase().trim();
+
+    const hasil = semuaJasa.filter(j =>
+      j.nama.toLowerCase().includes(keyword) ||
+      j.deskripsi.toLowerCase().includes(keyword) ||
+      (j.kategori && j.kategori.toLowerCase().includes(keyword))
+    );
+
+    tampilkanJasa(hasil);
+  });
+
+  /* ================= INITIAL LOAD ================= */
+  console.log('🚀 Marketplace Jasa siap!');
 </script>
 
 </body>
